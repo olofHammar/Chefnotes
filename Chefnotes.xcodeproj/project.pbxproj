@@ -27,6 +27,14 @@
 		E4B484F625C9F847001028EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B484F525C9F847001028EB /* GoogleService-Info.plist */; };
 		E4B4852F25CA0D2E001028EB /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4852E25CA0D2E001028EB /* LogInView.swift */; };
 		E4B4853425CA0E18001028EB /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4853325CA0E18001028EB /* SignUpView.swift */; };
+		E4CDD33E25CB1DCA005BDE2F /* CustomColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD33D25CB1DCA005BDE2F /* CustomColors.swift */; };
+		E4CDD34325CB1E2B005BDE2F /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD34225CB1E2B005BDE2F /* Category.swift */; };
+		E4CDD34B25CB2046005BDE2F /* CategoryBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */; };
+		E4CDD35025CB2064005BDE2F /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */; };
+		E4CDD35525CB21E6005BDE2F /* RecipeBrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD35425CB21E6005BDE2F /* RecipeBrowseView.swift */; };
+		E4CDD35A25CB2274005BDE2F /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD35925CB2274005BDE2F /* RecipeView.swift */; };
+		E4CDD36225CB24FF005BDE2F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36125CB24FF005BDE2F /* SettingsView.swift */; };
+		E4CDD36725CB2843005BDE2F /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36625CB2843005BDE2F /* CircleImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +87,14 @@
 		E4B484F525C9F847001028EB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4B4852E25CA0D2E001028EB /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		E4B4853325CA0E18001028EB /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		E4CDD33D25CB1DCA005BDE2F /* CustomColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColors.swift; sourceTree = "<group>"; };
+		E4CDD34225CB1E2B005BDE2F /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBrowser.swift; sourceTree = "<group>"; };
+		E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
+		E4CDD35425CB21E6005BDE2F /* RecipeBrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeBrowseView.swift; sourceTree = "<group>"; };
+		E4CDD35925CB2274005BDE2F /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
+		E4CDD36125CB24FF005BDE2F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E4CDD36625CB2843005BDE2F /* CircleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +152,10 @@
 			isa = PBXGroup;
 			children = (
 				E4A28E7325CA9D0800331B25 /* AuthTextField.swift */,
+				E4CDD35925CB2274005BDE2F /* RecipeView.swift */,
+				E4CDD36625CB2843005BDE2F /* CircleImageView.swift */,
+				E4CDD35425CB21E6005BDE2F /* RecipeBrowseView.swift */,
+				E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */,
 			);
 			path = DesignViews;
 			sourceTree = "<group>";
@@ -144,6 +164,8 @@
 			isa = PBXGroup;
 			children = (
 				E4B484C925C9F7B5001028EB /* ContentView.swift */,
+				E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */,
+				E4CDD36125CB24FF005BDE2F /* SettingsView.swift */,
 				E4A28EB825CAD00800331B25 /* NewPostView.swift */,
 				E4A28E6D25CA244100331B25 /* HomeNavigationView.swift */,
 				E4A28EA425CACE4C00331B25 /* TabViews */,
@@ -156,6 +178,8 @@
 			isa = PBXGroup;
 			children = (
 				E4A28E9125CAAC8500331B25 /* SessionStore.swift */,
+				E4CDD33D25CB1DCA005BDE2F /* CustomColors.swift */,
+				E4CDD34225CB1E2B005BDE2F /* Category.swift */,
 				E4A28E9925CAAD1300331B25 /* CurrentUser.swift */,
 			);
 			path = StructsAndClasses;
@@ -481,10 +505,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4CDD35A25CB2274005BDE2F /* RecipeView.swift in Sources */,
+				E4CDD34B25CB2046005BDE2F /* CategoryBrowser.swift in Sources */,
 				E4A28E6E25CA244100331B25 /* HomeNavigationView.swift in Sources */,
+				E4CDD33E25CB1DCA005BDE2F /* CustomColors.swift in Sources */,
 				E4A28E9225CAAC8500331B25 /* SessionStore.swift in Sources */,
+				E4CDD34325CB1E2B005BDE2F /* Category.swift in Sources */,
 				E4A28EAF25CACEC000331B25 /* AddView.swift in Sources */,
+				E4CDD35025CB2064005BDE2F /* CategoryListView.swift in Sources */,
+				E4CDD36725CB2843005BDE2F /* CircleImageView.swift in Sources */,
 				E4A28EB925CAD00800331B25 /* NewPostView.swift in Sources */,
+				E4CDD35525CB21E6005BDE2F /* RecipeBrowseView.swift in Sources */,
 				E4B4853425CA0E18001028EB /* SignUpView.swift in Sources */,
 				E4B4852F25CA0D2E001028EB /* LogInView.swift in Sources */,
 				E4A28E9A25CAAD1300331B25 /* CurrentUser.swift in Sources */,
@@ -493,6 +524,7 @@
 				E4B484C825C9F7B5001028EB /* ChefnotesApp.swift in Sources */,
 				E4A28EA725CACE9400331B25 /* MyBookView.swift in Sources */,
 				E4A28EB425CACEDC00331B25 /* SearchView.swift in Sources */,
+				E4CDD36225CB24FF005BDE2F /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
