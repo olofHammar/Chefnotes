@@ -10,7 +10,6 @@ import SwiftUI
 struct HomeNavigationView: View {
     
     @State private var selectedIndex = 0
-    @State private var showModally = false
     
     var body: some View {
         ZStack{
@@ -22,11 +21,11 @@ struct HomeNavigationView: View {
                         
                     }
                     .tag(0)
-                AddView(showModally: self.$showModally)
+                AddView()
                     .tabItem {
                         Image(systemName: "plus.circle")
                         Text("Add recipe")
-
+                        
                     }
                     .tag(1)
                 SearchView()
@@ -36,13 +35,7 @@ struct HomeNavigationView: View {
                         
                     }
                     .tag(2)
-            }.disabled(showModally)
-            /*
-            if showModally {
-                NewPostView(showModally: self.$showModally)
-                    .transition(.move(edge: .bottom)).animation(.default)
             }
- */
         }
     }
 }

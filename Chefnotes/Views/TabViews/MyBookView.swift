@@ -14,15 +14,15 @@ struct MyBookView: View {
     }
     
     @EnvironmentObject var env: GlobalEnviroment
-
+    
     var body: some View {
         NavigationView {
-        VStack{
-            Text("Login successful!")
-            Text("Welcome \(self.env.currentUser.firstName) \(self.env.currentUser.lastName)")
-            
-        }
-        .navigationBarTitle("My Book")
+            VStack{
+                Text("Login successful!")
+                Text("Welcome \(self.env.currentUser.firstName) \(self.env.currentUser.lastName)")
+                
+            }
+            .navigationBarTitle("My Book")
         }
     }
 }
