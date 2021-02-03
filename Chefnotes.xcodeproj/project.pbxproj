@@ -10,6 +10,14 @@
 		27546687C01B0501AC0CF10A /* Pods_Chefnotes_ChefnotesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94695E79D0ED9B7B40F307F8 /* Pods_Chefnotes_ChefnotesUITests.framework */; };
 		7FD228E81568D2AC1E7BAC69 /* Pods_ChefnotesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62EE407D64FC36E1A99FB8A0 /* Pods_ChefnotesTests.framework */; };
 		874E593D2CD98546A34D0FA0 /* Pods_Chefnotes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47C18132194440E5D943F035 /* Pods_Chefnotes.framework */; };
+		E4A28E6E25CA244100331B25 /* HomeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A28E6D25CA244100331B25 /* HomeNavigationView.swift */; };
+		E4A28E7425CA9D0800331B25 /* AuthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A28E7325CA9D0800331B25 /* AuthTextField.swift */; };
+		E4A28E9225CAAC8500331B25 /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A28E9125CAAC8500331B25 /* SessionStore.swift */; };
+		E4A28E9A25CAAD1300331B25 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A28E9925CAAD1300331B25 /* CurrentUser.swift */; };
+		E4A28EA725CACE9400331B25 /* MyBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A28EA625CACE9400331B25 /* MyBookView.swift */; };
+		E4A28EAF25CACEC000331B25 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A28EAE25CACEC000331B25 /* AddView.swift */; };
+		E4A28EB425CACEDC00331B25 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A28EB325CACEDC00331B25 /* SearchView.swift */; };
+		E4A28EB925CAD00800331B25 /* NewPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A28EB825CAD00800331B25 /* NewPostView.swift */; };
 		E4B484C825C9F7B5001028EB /* ChefnotesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B484C725C9F7B5001028EB /* ChefnotesApp.swift */; };
 		E4B484CA25C9F7B5001028EB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B484C925C9F7B5001028EB /* ContentView.swift */; };
 		E4B484CC25C9F7B6001028EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4B484CB25C9F7B6001028EB /* Assets.xcassets */; };
@@ -17,6 +25,8 @@
 		E4B484DA25C9F7B7001028EB /* ChefnotesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B484D925C9F7B7001028EB /* ChefnotesTests.swift */; };
 		E4B484E525C9F7B7001028EB /* ChefnotesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B484E425C9F7B7001028EB /* ChefnotesUITests.swift */; };
 		E4B484F625C9F847001028EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B484F525C9F847001028EB /* GoogleService-Info.plist */; };
+		E4B4852F25CA0D2E001028EB /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4852E25CA0D2E001028EB /* LogInView.swift */; };
+		E4B4853425CA0E18001028EB /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4853325CA0E18001028EB /* SignUpView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +56,14 @@
 		94695E79D0ED9B7B40F307F8 /* Pods_Chefnotes_ChefnotesUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chefnotes_ChefnotesUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F62C73C4C03E381D58FB671 /* Pods-ChefnotesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChefnotesTests.debug.xcconfig"; path = "Target Support Files/Pods-ChefnotesTests/Pods-ChefnotesTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C32F766D69E71D14B2D7DE50 /* Pods-Chefnotes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chefnotes.debug.xcconfig"; path = "Target Support Files/Pods-Chefnotes/Pods-Chefnotes.debug.xcconfig"; sourceTree = "<group>"; };
+		E4A28E6D25CA244100331B25 /* HomeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationView.swift; sourceTree = "<group>"; };
+		E4A28E7325CA9D0800331B25 /* AuthTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTextField.swift; sourceTree = "<group>"; };
+		E4A28E9125CAAC8500331B25 /* SessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
+		E4A28E9925CAAD1300331B25 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
+		E4A28EA625CACE9400331B25 /* MyBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookView.swift; sourceTree = "<group>"; };
+		E4A28EAE25CACEC000331B25 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
+		E4A28EB325CACEDC00331B25 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		E4A28EB825CAD00800331B25 /* NewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostView.swift; sourceTree = "<group>"; };
 		E4B484C425C9F7B5001028EB /* Chefnotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chefnotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B484C725C9F7B5001028EB /* ChefnotesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChefnotesApp.swift; sourceTree = "<group>"; };
 		E4B484C925C9F7B5001028EB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -59,6 +77,8 @@
 		E4B484E425C9F7B7001028EB /* ChefnotesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChefnotesUITests.swift; sourceTree = "<group>"; };
 		E4B484E625C9F7B7001028EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4B484F525C9F847001028EB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E4B4852E25CA0D2E001028EB /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
+		E4B4853325CA0E18001028EB /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +132,54 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E4A28E7225CA9CDB00331B25 /* DesignViews */ = {
+			isa = PBXGroup;
+			children = (
+				E4A28E7325CA9D0800331B25 /* AuthTextField.swift */,
+			);
+			path = DesignViews;
+			sourceTree = "<group>";
+		};
+		E4A28E8F25CAAC4A00331B25 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E4B484C925C9F7B5001028EB /* ContentView.swift */,
+				E4A28EB825CAD00800331B25 /* NewPostView.swift */,
+				E4A28E6D25CA244100331B25 /* HomeNavigationView.swift */,
+				E4A28EA425CACE4C00331B25 /* TabViews */,
+				E4A28EA525CACE6A00331B25 /* SignUpLogInViews */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E4A28E9025CAAC6600331B25 /* StructsAndClasses */ = {
+			isa = PBXGroup;
+			children = (
+				E4A28E9125CAAC8500331B25 /* SessionStore.swift */,
+				E4A28E9925CAAD1300331B25 /* CurrentUser.swift */,
+			);
+			path = StructsAndClasses;
+			sourceTree = "<group>";
+		};
+		E4A28EA425CACE4C00331B25 /* TabViews */ = {
+			isa = PBXGroup;
+			children = (
+				E4A28EA625CACE9400331B25 /* MyBookView.swift */,
+				E4A28EB325CACEDC00331B25 /* SearchView.swift */,
+				E4A28EAE25CACEC000331B25 /* AddView.swift */,
+			);
+			path = TabViews;
+			sourceTree = "<group>";
+		};
+		E4A28EA525CACE6A00331B25 /* SignUpLogInViews */ = {
+			isa = PBXGroup;
+			children = (
+				E4B4853325CA0E18001028EB /* SignUpView.swift */,
+				E4B4852E25CA0D2E001028EB /* LogInView.swift */,
+			);
+			path = SignUpLogInViews;
+			sourceTree = "<group>";
+		};
 		E4B484BB25C9F7B5001028EB = {
 			isa = PBXGroup;
 			children = (
@@ -138,7 +206,9 @@
 			isa = PBXGroup;
 			children = (
 				E4B484C725C9F7B5001028EB /* ChefnotesApp.swift */,
-				E4B484C925C9F7B5001028EB /* ContentView.swift */,
+				E4A28E9025CAAC6600331B25 /* StructsAndClasses */,
+				E4A28E7225CA9CDB00331B25 /* DesignViews */,
+				E4A28E8F25CAAC4A00331B25 /* Views */,
 				E4B484CB25C9F7B6001028EB /* Assets.xcassets */,
 				E4B484D025C9F7B6001028EB /* Info.plist */,
 				E4B484F525C9F847001028EB /* GoogleService-Info.plist */,
@@ -411,8 +481,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4A28E6E25CA244100331B25 /* HomeNavigationView.swift in Sources */,
+				E4A28E9225CAAC8500331B25 /* SessionStore.swift in Sources */,
+				E4A28EAF25CACEC000331B25 /* AddView.swift in Sources */,
+				E4A28EB925CAD00800331B25 /* NewPostView.swift in Sources */,
+				E4B4853425CA0E18001028EB /* SignUpView.swift in Sources */,
+				E4B4852F25CA0D2E001028EB /* LogInView.swift in Sources */,
+				E4A28E9A25CAAD1300331B25 /* CurrentUser.swift in Sources */,
+				E4A28E7425CA9D0800331B25 /* AuthTextField.swift in Sources */,
 				E4B484CA25C9F7B5001028EB /* ContentView.swift in Sources */,
 				E4B484C825C9F7B5001028EB /* ChefnotesApp.swift in Sources */,
+				E4A28EA725CACE9400331B25 /* MyBookView.swift in Sources */,
+				E4A28EB425CACEDC00331B25 /* SearchView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
