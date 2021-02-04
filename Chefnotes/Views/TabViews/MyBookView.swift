@@ -44,17 +44,15 @@ struct MyBookView: View {
                 
                 HStack {
                     Text("Favorites")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .subtitleFontStyle()
                     Button(action: {
                         //TODO
                     }) {
                         Text("See all")
-                            .font(.subheadline)
-                    }
+                        
+                    }.smallTextButtonStyle()
                 }
-                .padding(.horizontal)
+                .padding(.leading)
                 .background(grayBlue)
                 
                 ScrollView(.horizontal) {
@@ -71,7 +69,6 @@ struct MyBookView: View {
                             .frame(width: 125, height: 300)
                         }
                     }
-                    .background(Color.white)
                     .padding(.top, 50)
                 }
                 .background(Color.white)
@@ -79,15 +76,13 @@ struct MyBookView: View {
                 
                 HStack {
                     Text("Categories")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .subtitleFontStyle()
                     Button(action: {
                         //TODO
                     }) {
                         Text("See all")
-                            .font(.subheadline)
-                    }
+                        
+                    }.smallTextButtonStyle()
                 }.padding(.horizontal)
                 
                 List {
@@ -96,12 +91,7 @@ struct MyBookView: View {
                             CategoryListView(category: cat)
                         }
                     }
-                }.frame(height: 400)
-                .overlay(RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.gray, lineWidth: 0.5))
-                .cornerRadius(12)
-                .shadow(radius: 5)
-                .padding()
+                }.categoryListPadding()
                 Spacer()
             }
             .navigationBarItems(trailing:
@@ -109,11 +99,8 @@ struct MyBookView: View {
                                     }) {
                                         NavigationLink(destination: SettingsView()) {
                                             Image(systemName: "person.circle")
-                                                .resizable()
-                                                .frame(width: 27, height: 27)
-                                                .padding(.top, 5)
-                                                .scaledToFit()
-                                                }
+                                                .personSettingsImageStyle()
+                                        }
                                         
                                     })
             .navigationBarTitle("My Book", displayMode: .large)
