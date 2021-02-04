@@ -10,8 +10,9 @@ import SwiftUI
 struct RecipeView: View {
     
     var favorite: FavoriteRecipe
-
+    
     var body: some View {
+        
         VStack {
             favorite.image
                 .resizable()

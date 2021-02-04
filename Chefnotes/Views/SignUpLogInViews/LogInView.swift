@@ -11,38 +11,79 @@ import SPAlert
 
 struct LogInView: View {
     
+    init() {
+        UINavigationBar.appearance().backgroundColor = UIColor(grayBlue)
+    }
+    
     @EnvironmentObject var env: GlobalEnviroment
+    @EnvironmentObject var session: SessionStore
     @State var email: String = ""
     @State var password: String = ""
+    @State private var signUpVisible = false
     @State private var isLoggedIn = false
     
     
     var body: some View {
         
-        NavigationView{
-            VStack{
-                
-                AuthTextField(placeHolder: "E-mail", text: $email)
-                
-                AuthTextField(placeHolder: "Password", text: $password)
-                
-                NavigationLink(
+        NavigationView {
+            ZStack {
+                grayBlue
+            VStack {
+                ZStack {
+                    CircleImageView(image: Image("aubergine"))
+                        .frame(width: 200)
                     
-                    destination: ContentView(),
-                    isActive: $isLoggedIn) {
-                    Button(action: {
-                        signIn(email: email, password: password)
-                    }) {
-                        Text("Sign In")
+                Image("chefnotes_logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 300, height: 250)
+                }
+                Form {
+                    Section {
+                        TextField("Enter E-mail", text: $email)
+                        SecureField("Enter password", text: $password)
                     }
-                    }
+                }
+                VStack {
+                Button(action: {
+                    signIn(email: email, password: password)
+                }) {
+                    Text("Log in")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(width: 250, height: 50)
+                        
+                }
+                .background(Color.blue)
+                .cornerRadius(8)
+                .padding(2)
+                
+                Button(action: {
+                    self.signUpVisible.toggle()
+                }) {
+                        Text("Or click here to sign up")
+                            .font(.footnote)
+                }
+                .background(Color.clear)
+                .foregroundColor(.blue)
+                .sheet(isPresented: $signUpVisible, content:
+                        {
+                            SignUpView()
+                        })
+                }
+                .padding(.bottom, 40)
+                
+                
             }
-            
+            }
+            .navigationBarTitle("Log in")
+        
+                
         }
     }
     
     func signIn(email: String, password: String) {
-        
+        session.listen()
         Auth.auth().signIn(withEmail: email, password: password) { user, error in
             
             if let err = error {
@@ -67,6 +108,7 @@ struct LogInView: View {
                                     email: document.data()["email"] as? String ?? "")
                             }
                             isLoggedIn = true
+                            
                         }
                     }
                 }

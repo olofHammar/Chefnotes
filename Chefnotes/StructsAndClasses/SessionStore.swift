@@ -39,6 +39,7 @@ class SessionStore: ObservableObject {
     func unbind () {
         if let handle = handle {
             Auth.auth().removeStateDidChangeListener(handle)
+            print("unbound")
         }
     }
     

@@ -113,7 +113,7 @@ struct MyBookView: View {
                                                 .frame(width: 27, height: 27)
                                                 .padding(.top, 5)
                                                 .scaledToFit()
-                                        }
+                                                }
                                         
                                     })
             .navigationBarTitle("My Book", displayMode: .large)
