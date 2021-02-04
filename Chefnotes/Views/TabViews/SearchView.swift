@@ -18,6 +18,8 @@ struct SearchView: View {
                     Text("This is SearchView")
                     Button(action: {
                         session.signOut()
+                        session.unbind()
+                        print(self.session.session ?? "nil")
                     }){
                         Text("Sign Out")
                     }

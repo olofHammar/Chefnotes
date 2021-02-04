@@ -32,9 +32,9 @@
 		E4CDD34B25CB2046005BDE2F /* CategoryBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */; };
 		E4CDD35025CB2064005BDE2F /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */; };
 		E4CDD35525CB21E6005BDE2F /* RecipeBrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD35425CB21E6005BDE2F /* RecipeBrowseView.swift */; };
-		E4CDD35A25CB2274005BDE2F /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD35925CB2274005BDE2F /* RecipeView.swift */; };
 		E4CDD36225CB24FF005BDE2F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36125CB24FF005BDE2F /* SettingsView.swift */; };
 		E4CDD36725CB2843005BDE2F /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36625CB2843005BDE2F /* CircleImageView.swift */; };
+		E4CDD36F25CB2E51005BDE2F /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,9 +92,9 @@
 		E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBrowser.swift; sourceTree = "<group>"; };
 		E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
 		E4CDD35425CB21E6005BDE2F /* RecipeBrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeBrowseView.swift; sourceTree = "<group>"; };
-		E4CDD35925CB2274005BDE2F /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		E4CDD36125CB24FF005BDE2F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E4CDD36625CB2843005BDE2F /* CircleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
+		E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,7 +152,6 @@
 			isa = PBXGroup;
 			children = (
 				E4A28E7325CA9D0800331B25 /* AuthTextField.swift */,
-				E4CDD35925CB2274005BDE2F /* RecipeView.swift */,
 				E4CDD36625CB2843005BDE2F /* CircleImageView.swift */,
 				E4CDD35425CB21E6005BDE2F /* RecipeBrowseView.swift */,
 				E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */,
@@ -166,6 +165,7 @@
 				E4B484C925C9F7B5001028EB /* ContentView.swift */,
 				E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */,
 				E4CDD36125CB24FF005BDE2F /* SettingsView.swift */,
+				E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */,
 				E4A28EB825CAD00800331B25 /* NewPostView.swift */,
 				E4A28E6D25CA244100331B25 /* HomeNavigationView.swift */,
 				E4A28EA425CACE4C00331B25 /* TabViews */,
@@ -505,7 +505,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4CDD35A25CB2274005BDE2F /* RecipeView.swift in Sources */,
 				E4CDD34B25CB2046005BDE2F /* CategoryBrowser.swift in Sources */,
 				E4A28E6E25CA244100331B25 /* HomeNavigationView.swift in Sources */,
 				E4CDD33E25CB1DCA005BDE2F /* CustomColors.swift in Sources */,
@@ -520,6 +519,7 @@
 				E4B4852F25CA0D2E001028EB /* LogInView.swift in Sources */,
 				E4A28E9A25CAAD1300331B25 /* CurrentUser.swift in Sources */,
 				E4A28E7425CA9D0800331B25 /* AuthTextField.swift in Sources */,
+				E4CDD36F25CB2E51005BDE2F /* RecipeView.swift in Sources */,
 				E4B484CA25C9F7B5001028EB /* ContentView.swift in Sources */,
 				E4B484C825C9F7B5001028EB /* ChefnotesApp.swift in Sources */,
 				E4A28EA725CACE9400331B25 /* MyBookView.swift in Sources */,
