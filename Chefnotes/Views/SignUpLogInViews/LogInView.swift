@@ -28,57 +28,44 @@ struct LogInView: View {
         NavigationView {
             ZStack {
                 grayBlue
-            VStack {
-                ZStack {
-                    CircleImageView(image: Image("aubergine"))
-                        .frame(width: 200)
-                    
-                Image("chefnotes_logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 300, height: 250)
-                }
-                Form {
-                    Section {
-                        TextField("Enter E-mail", text: $email)
-                        SecureField("Enter password", text: $password)
-                    }
-                }
                 VStack {
-                Button(action: {
-                    signIn(email: email, password: password)
-                }) {
-                    Text("Log in")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(width: 250, height: 50)
+                    ZStack {
+                        CircleImageView(image: Image("aubergine"))
+                            .frame(width: 200)
                         
+                        Image("chefnotes_logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 300, height: 250)
+                    }
+                    Form {
+                        Section {
+                            TextField("Enter E-mail", text: $email)
+                            SecureField("Enter password", text: $password)
+                        }
+                    }
+                    VStack {
+                        
+                        Button(action: {
+                            signIn(email: email, password: password)
+                        }){Text("Log in")}
+                        .blueButtonStyle()
+                        .padding(2)
+                        
+                        Button(action: {
+                            self.signUpVisible.toggle()
+                        }) {Text("Or click here to sign up").font(.footnote)}
+                        .background(Color.clear)
+                        .foregroundColor(.blue)
+                        .sheet(isPresented: $signUpVisible, content:
+                                {
+                                    SignUpView()
+                                })
+                    }
+                    .padding(.bottom, 40)
                 }
-                .background(Color.blue)
-                .cornerRadius(8)
-                .padding(2)
-                
-                Button(action: {
-                    self.signUpVisible.toggle()
-                }) {
-                        Text("Or click here to sign up")
-                            .font(.footnote)
-                }
-                .background(Color.clear)
-                .foregroundColor(.blue)
-                .sheet(isPresented: $signUpVisible, content:
-                        {
-                            SignUpView()
-                        })
-                }
-                .padding(.bottom, 40)
-                
-                
-            }
             }
             .navigationBarTitle("Log in")
-        
-                
         }
     }
     
@@ -113,13 +100,10 @@ struct LogInView: View {
                     }
                 }
             }
-        
-            
-            
             guard user != nil else { return }
         }
-        }
     }
+}
 
 
 struct LogInView_Previews: PreviewProvider {

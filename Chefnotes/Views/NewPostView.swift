@@ -13,189 +13,131 @@ var mockDataCooking : [String] = ["Koka potatis", "Stek tomater", "Krydda med sa
 struct NewPostView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @State var showSheet = false
+    @State var halfModalShown = false
+    @State var title = ""
+    @State var author = ""
+    @State var category = ""
+    @State var ingredients = [String]()
+    @State var steps = [String]()
+    @State var serves = 0
+    @State var categoryOptionTag: Int = 0
+    var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish", "Seafood", "Baking", "Deserts"]
     
     var body: some View {
-        ZStack {
-            ZStack{
-                ScrollView{
-                    VStack{
-                        Spacer()
-                        HStack {
-
-                            CircleImageView(image: Image("camera_blue"))
-                                .frame(width: 80)
-                            Text("Add image")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Spacer()
         
+        
+        NavigationView {
+            ZStack {
+                grayBlue
+                VStack {
+                    Form {
+                        Section(header: Text("Enter title")) {
+                            TextField("Add title", text: $title)
                         }
-                        .background(Color.white)
-                        .shadow(radius: 2)
-                        
-                        ZStack {
-                            Image("default_image")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 300)
-                            Button(action:{}) {
-                                Image(systemName: "plus.circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: UIScreen.main.bounds.size.width/7)
-                                    .background(Color.white)
-                                    .cornerRadius(40)
-                                    .padding(.leading, 290)
-                                    .padding(.top, 290)
-                            }
-                        }
-                        .padding(.bottom)
-                        .frame(width: UIScreen.main.bounds.size.width/1.1)
-                        .overlay(RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.gray, lineWidth: 0.5))
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        .shadow(radius: 3)
-                        Spacer()
-                        HStack {
-                            CircleImageView(image: Image("beetroot"))
-                                .frame(width: 70)
-                            Text("Add ingredients")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Spacer()
-                            Button(action: {
-                                //self.halfModalShown.toggle()
-                            }) {
-                                Image(systemName: "plus.circle")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                    .padding()
-                            }
-                            //Spacer()
-                        }
-                        .frame(width: UIScreen.main.bounds.size.width)
-                        .background(Color.white)
-                        .shadow(radius: 2)
-                        .padding(.top, 50)
-                        
-                        Spacer()
-                        
-                        VStack{
-                            
-                        VStack{
-                            ScrollView{
-                                 
-                                ForEach(mockData, id: \.self) { item in
-                                    HStack{
-                                        Image(systemName: "circle.fill")
-                                            .resizable()
-                                            .frame(width: 10, height: 10)
-                                        Text(item)
-                                        Spacer()
+                        Section(header: Text("Add image")) {
+                            ZStack {
+                                Button(action: { showActionSheet() }) {
+                                    ZStack {
+                                        Image("default_image")
+                                            .newRecipeImageStyle()
+                                        Image(systemName: "plus.circle.fill")
+                                            .newRecipePlusButtonImageStyle()
                                     }
-                                    .padding(.leading, 50)
-                                }.frame(width: UIScreen.main.bounds.size.width-45)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                .actionSheet(isPresented: $showSheet) {
+                                    ActionSheet(title: Text("Add a picture to your post"), message: nil, buttons: [
+                                        .default(Text("Camera"), action: {
+                                            //self.showImagePicker = true
+                                            //self.sourceType = .camera
+                                        }),
+                                        .default(Text("Library"), action: {
+                                            //self.showImagePicker = true
+                                            //self.sourceType = .photoLibrary
+                                        }),
+                                        .cancel()
+                                    ])
+                                }
+                                
                             }
-                            .frame(height: UIScreen.main.bounds.size.height/4)
-                            .padding()
+                            .padding(.leading,43)
+                            .padding(.vertical)
                         }
-                        .frame(width: UIScreen.main.bounds.size.width/1.1)
-                        .overlay(RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.gray, lineWidth: 0.5))
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        .shadow(radius: 3)
-                        
-                        }.padding(.top)
-                        
-                        HStack {
-                            CircleImageView(image: Image("cooking"))
-                                .frame(width: 80)
+                        Section(header: Text("Select category")) {
+                            HStack {
+                                Picker("Category", selection: $categoryOptionTag) {
+                                    Text("Basics").tag(0)
+                                    Text("Starters").tag(1)
+                                    Text("Snacks").tag(2)
+                                    Text("Vegetarian").tag(3)
+                                    Text("Meat").tag(4)
+                                    Text("Fish").tag(5)
+                                    Text("Seafood").tag(6)
+                                    Text("Baking").tag(7)
+                                    Text("Deserts").tag(8)
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                Spacer()
+                                Text(categoryOptions[categoryOptionTag])
+                            }
+                        }
+                        Section(header: Text("Add ingredients")) {
+                            
+                            ScrollView() {
+                                
+                                ForEach(categoryOptions, id: \.self) { item in
+                                    Text("250 g \(item)")
+                                        .padding()
+                                    
+                                };frame(width: 340)
+                            }.frame(height: 250)
+                        }
+                        Button(action: { }) {
+                            Text("Add ingredients")
+                        }
+                        Section(header: Text("Add steps")) {
+                            
+                            ScrollView() {
+                                
+                                ForEach(categoryOptions, id: \.self) { item in
+                                    Text("250 g \(item)")
+                                        .padding()
+                                    
+                                };frame(width: 340)
+                            }.frame(height: 250)
+                        }
+                        Button(action: { }) {
                             Text("Add steps")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Spacer()
-                            Button(action: {
-                                //self.halfModalShown.toggle()
-                            }) {
-                                Image(systemName: "plus.circle")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                    .padding()
-                            }
                         }
-                        .frame(width: UIScreen.main.bounds.size.width)
-                        .background(Color.white)
-                        .shadow(radius: 2)
-                        .padding(.top, 50)
-
-                        VStack{
-                            
-                        VStack{
-                            Group{
-                                 
-                                ForEach(mockDataCooking, id: \.self) { item in
-                                    Text(item)
-                                }
-                            }.padding()
-                        }
-                        .frame(width: UIScreen.main.bounds.size.width/1.1)
-                        .overlay(RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.gray, lineWidth: 0.5))
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        .shadow(radius: 3)
-                            
-                            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
-                                HStack{
+                        Section {
+                            Button (action: {
+                                        category = categoryOptions[categoryOptionTag]
+                                        print(category) }) {
                                 Text("Save Recipe")
-                                    .fontWeight(.semibold)
-                                    .padding()
-                                }
-                                .frame(width: UIScreen.main.bounds.size.width/1.1,
-                                       height: 50)
-                                .background(costumOrange)
-                                .foregroundColor(.white)
-                                .cornerRadius(5)
-                            }.padding(.top)
-                            .padding(.bottom)
-                        }.padding(.top)
-
-                        Spacer()
-                        
-                    }.padding(.top, 12)
+                            }
+                            .blueButtonStyle()
+                            .listRowBackground(grayBlue)
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                        }
+                    }
                     
                 }
-                VStack{
-                    Button(action: { dismissModal() }) {
-                        
-                        ZStack{
-                            Image(systemName: "x.circle")
-                                .foregroundColor(costumDarkGray)
-                                .font(.system(size: 40))
-                            
-                            Image(systemName: "x.circle.fill")
-                                .foregroundColor(.white)
-                                .font(.system(size: 41))
-                                .shadow(radius: 4)
-                        }
-                        .padding()
-                        
-                    }.padding(.leading, UIScreen.main.bounds.size.width/1.2)
-                    .padding(.bottom, UIScreen.main.bounds.size.height/1.15)
-                }
             }
+            .navigationBarTitle("Write recipe")
+            .navigationBarItems(trailing:
+                                    Button(action: {dismissModal()}) {
+                                        Image(systemName: "x.circle.fill")
+                                            .personSettingsImageStyle()
+                                    })
         }
-        .background(grayBlue)
-        .padding(.top, 1)
     }
     
     private func dismissModal() {
         presentationMode.wrappedValue.dismiss()
+    }
+    private func showActionSheet() {
+        showSheet.toggle()
     }
 }
 

@@ -24,49 +24,39 @@ struct SignUpView: View {
         NavigationView {
             ZStack {
                 grayBlue
-            VStack{
-                Form {
-                    Section {
-                        TextField("First name", text: $firstName)
-                        TextField("Last name", text: $lastName)
+                VStack{
+                    Form {
+                        Section {
+                            TextField("First name", text: $firstName)
+                            TextField("Last name", text: $lastName)
+                        }
+                        Section {
+                            TextField("E-mail", text: $email)
+                        }
+                        Section(footer: Text("Your password must be at least six figures long")) {
+                            SecureField("Create password", text: $password)
+                        }
                     }
-                    Section {
-                        TextField("E-mail", text: $email)
-                    }
-                    Section(footer: Text("Your password must be at least six figures long")) {
-                        SecureField("Create password", text: $password)
-                    }
+                    Button(action: {saveUserInAuth(email: email, password: password)})
+                        {Text("Sign up")}
+                        .blueButtonStyle()
+                        .padding(.bottom, 40)
                 }
-                Button(action: {
-                    
-                    saveUserInAuth(email: email, password: password)
-                    
-                }) {
-                    Text("Sign up")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(width: 250, height: 50)
-                        
-                }
-                .background(Color.blue)
-                .cornerRadius(8)
-                .padding(50)
-            }
             }
             .navigationBarTitle("Create Account")
         }
-
+        
     }
     func saveUserInAuth(email: String, password: String) {
-
+        
         session.unbind()
         print(self.session.session ?? "empty")
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-
+            
             if let err = error{
-
+                
                 let alertView = SPAlertView(title: "Error ", message: "\(err.localizedDescription)", preset: SPAlertIconPreset.error)
-
+                
                 alertView.present(duration: 3)
                 return
             }
@@ -78,7 +68,7 @@ struct SignUpView: View {
     }
     
     func saveUserToFirestore() {
-
+        
         let dataToSave: [String:Any] = [
             "id":Auth.auth().currentUser?.uid ?? "",
             "firstName":self.firstName,
@@ -88,17 +78,17 @@ struct SignUpView: View {
         ]
         print("Setting ref")
         self.docRef =
-    Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")")
-
+            Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")")
+        
         print("Setting data")
-
+        
         self.docRef.setData(dataToSave) { (error) in
             if let error = error {
                 print("error = \(error)")
             }
             else {
                 let alertView = SPAlertView(title: "Account created succefully", message: "Go to back to login to enter your account", preset: SPAlertIconPreset.done)
-
+                
                 alertView.present(duration: 3)
                 print("no error")
                 firstName = ""
@@ -113,7 +103,7 @@ struct SignUpView: View {
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
         SignUpView()
-            
-            
+        
+        
     }
 }
