@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+import Combine
 
 //MARK ---------------------------> Buttons
 extension Button {
@@ -72,7 +72,7 @@ extension Image {
     }
 }
 
-//MARK ---------------------------> Image
+//MARK ---------------------------> List
 
 extension List {
     
@@ -86,3 +86,63 @@ extension List {
             .padding()
     }
 }
+
+//MARK ---------------------------> Keyboard
+struct KeyboardAwareModifier: ViewModifier {
+    @State private var keyboardHeight: CGFloat = 0
+    
+    private var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
+        Publishers.Merge(
+            NotificationCenter.default
+                .publisher(for: UIResponder.keyboardWillShowNotification)
+                .compactMap { $0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue }
+                .map { $0.cgRectValue.height },
+            NotificationCenter.default
+                .publisher(for: UIResponder.keyboardWillHideNotification)
+                .map { _ in CGFloat(0) }
+        ).eraseToAnyPublisher()
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .padding(.bottom, keyboardHeight)
+            .onReceive(keyboardHeightPublisher) { self.keyboardHeight = $0 }
+    }
+}
+
+extension View {
+    func KeyboardAwarePadding() -> some View {
+        ModifiedContent(content: self, modifier: KeyboardAwareModifier())
+    }
+}
+
+//MARK ---------------------------> Double
+extension Double {
+    var stringWithoutZeroFractions: String {
+        return truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) :String(self)
+    }
+}
+
+//MARK ---------------------------> Array
+extension Array where Element == Step {
+    func formatForFirebase() -> [[String:Any]] {
+        var returnVal: [[String:Any]] = []
+        for element in self {
+            returnVal.append(element.dictionary)
+        }
+        
+        return returnVal
+    }
+}
+
+extension Array where Element == Ingredient {
+    func formatForFirebase() -> [[String:Any]] {
+        var returnVal: [[String:Any]] = []
+        for element in self {
+            returnVal.append(element.dictionary)
+        }
+        
+        return returnVal
+    }
+}
+
