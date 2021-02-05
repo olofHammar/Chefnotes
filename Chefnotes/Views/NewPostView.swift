@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PartialSheet
 
 var mockData : [String] = ["200 g Tomater", "70 g Potatis", "12 g Persilja", "10 g Salt", "200 g Tomater", "70 g Potatis", "12 g Persilja", "10 g Salt", "200 g Tomater", "70 g Potatis", "12 g Persilja", "10 g Salt"]
 var mockDataCooking : [String] = ["Koka potatis", "Stek tomater", "Krydda med salt och persilja"]
@@ -13,8 +14,9 @@ var mockDataCooking : [String] = ["Koka potatis", "Stek tomater", "Krydda med sa
 struct NewPostView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @State var showModal = false
+    @State var halfModalHeight: CGFloat = 380
     @State var showSheet = false
-    @State var halfModalShown = false
     @State var title = ""
     @State var author = ""
     @State var category = ""
@@ -22,14 +24,11 @@ struct NewPostView: View {
     @State var steps = [String]()
     @State var serves = 0
     @State var categoryOptionTag: Int = 0
-    var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish", "Seafood", "Baking", "Deserts"]
+    var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
     
     var body: some View {
-        
-        
-        NavigationView {
+        NavigationView{
             ZStack {
-                grayBlue
                 VStack {
                     Form {
                         Section(header: Text("Enter title")) {
@@ -85,15 +84,20 @@ struct NewPostView: View {
                         Section(header: Text("Add ingredients")) {
                             
                             ScrollView() {
-                                
-                                ForEach(categoryOptions, id: \.self) { item in
+                                if ingredients.count > 0 {
+                                ForEach(ingredients, id: \.self) { item in
                                     Text("250 g \(item)")
                                         .padding()
                                     
                                 };frame(width: 340)
-                            }.frame(height: 250)
+                                }
+                                else {
+                                    Text("Ingredients list is empty")
+                                        .padding()
+                                }
+                            }.frame(height: 200)
                         }
-                        Button(action: { }) {
+                        Button(action: { self.showModal.toggle()}) {
                             Text("Add ingredients")
                         }
                         Section(header: Text("Add steps")) {
@@ -105,7 +109,7 @@ struct NewPostView: View {
                                         .padding()
                                     
                                 };frame(width: 340)
-                            }.frame(height: 250)
+                            }.frame(height: 200)
                         }
                         Button(action: { }) {
                             Text("Add steps")
@@ -121,17 +125,22 @@ struct NewPostView: View {
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         }
                     }
-                    
+                }
+                HalfModalView(isShown: $showModal) {
+                    Text("Half modal")
                 }
             }
-            .navigationBarTitle("Write recipe")
-            .navigationBarItems(trailing:
-                                    Button(action: {dismissModal()}) {
-                                        Image(systemName: "x.circle.fill")
-                                            .personSettingsImageStyle()
-                                    })
+            .navigationTitle("Write recipe")
+            .navigationBarItems(trailing: Button(action: {dismissModal()}) {
+                Image(systemName: "x.circle")
+                    .personSettingsImageStyle()
+                    .padding(.bottom, 2)
+            })
         }
+            
+
     }
+    
     
     private func dismissModal() {
         presentationMode.wrappedValue.dismiss()
