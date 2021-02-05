@@ -48,7 +48,8 @@ struct Ingredient: Identifiable {
     var id = UUID()
     var name: String
     var amount: Double
-    var amountUnit: IngredientUnit
+    var amountUnit: String
+        //IngredientUnit
     var orderNumber: Int
     
     var dictionary: [String: Any] {
@@ -56,7 +57,7 @@ struct Ingredient: Identifiable {
             "id" : id.uuidString,
             "name" : name,
             "amount" : amount,
-            "amountUnit" : amountUnit.rawValue,
+            "amountUnit" : amountUnit,
             "orderNumber" : orderNumber
         ]
     }
@@ -75,4 +76,8 @@ struct Step: Identifiable {
             "orderNumber" : orderNumber
         ]
     }
+}
+
+enum newStepOrIngredient {
+    case Step, Ingredient
 }

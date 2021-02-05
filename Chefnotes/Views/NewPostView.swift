@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import PartialSheet
+import SPAlert
 
 var mockData : [String] = ["200 g Tomater", "70 g Potatis", "12 g Persilja", "10 g Salt", "200 g Tomater", "70 g Potatis", "12 g Persilja", "10 g Salt", "200 g Tomater", "70 g Potatis", "12 g Persilja", "10 g Salt"]
 var mockDataCooking : [String] = ["Koka potatis", "Stek tomater", "Krydda med salt och persilja"]
@@ -14,17 +14,27 @@ var mockDataCooking : [String] = ["Koka potatis", "Stek tomater", "Krydda med sa
 struct NewPostView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @State var showModal = false
-    @State var halfModalHeight: CGFloat = 380
+    
     @State var showSheet = false
+    @State var showHalfModal = false
+    @State var halfModalTitle = ""
+    @State var halfModalPlaceHolder = ""
+    @State var halfModalHeight: CGFloat = 380
+    
     @State var title = ""
     @State var author = ""
     @State var category = ""
-    @State var ingredients = [String]()
-    @State var steps = [String]()
-    @State var serves = 0
+    @State var ingredients = [Ingredient]()
+    @State var steps = [Step]()
+    @State var serves = 1
+    
     @State var categoryOptionTag: Int = 0
     var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
+    var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
+    @State var halfModalTextFieldOneVal = ""
+    @State var halfModalTextFieldTwoVal = ""
+    @State var newItemType: newStepOrIngredient = .Step
+    @State var ingredientUnitIndex = 0
     
     var body: some View {
         NavigationView{
@@ -81,15 +91,20 @@ struct NewPostView: View {
                                 Text(categoryOptions[categoryOptionTag])
                             }
                         }
+                        Section(header: Text("Select number of servings")) {
+                            Stepper(value: $serves, in: 1...100) {
+                                Text("Serves: \(serves)")
+                            }
+                        }
                         Section(header: Text("Add ingredients")) {
                             
                             ScrollView() {
                                 if ingredients.count > 0 {
-                                ForEach(ingredients, id: \.self) { item in
-                                    Text("250 g \(item)")
-                                        .padding()
-                                    
-                                };frame(width: 340)
+                                    ForEach(ingredients.reversed(), id: \.id) { ingredient in
+                                        Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
+                                            .padding()
+                                        
+                                    };frame(width: 340)
                                 }
                                 else {
                                     Text("Ingredients list is empty")
@@ -97,7 +112,9 @@ struct NewPostView: View {
                                 }
                             }.frame(height: 200)
                         }
-                        Button(action: { self.showModal.toggle()}) {
+                        Button(action: {
+                                self.updateHalfModal(placeHolder: "Enter ingredient", itemType: .Ingredient, height: UIScreen.main.bounds.size.height)
+                                self.showHalfModal.toggle()}) {
                             Text("Add ingredients")
                         }
                         Section(header: Text("Add steps")) {
@@ -116,8 +133,11 @@ struct NewPostView: View {
                         }
                         Section {
                             Button (action: {
-                                        category = categoryOptions[categoryOptionTag]
-                                        print(category) }) {
+                                category = categoryOptions[categoryOptionTag]
+                                print(category)
+                                print(amountUnit[ingredientUnitIndex])
+                                print(ingredients.count)
+                            }) {
                                 Text("Save Recipe")
                             }
                             .blueButtonStyle()
@@ -126,8 +146,47 @@ struct NewPostView: View {
                         }
                     }
                 }
-                HalfModalView(isShown: $showModal) {
-                    Text("Half modal")
+                HalfModalView(isShown: $showHalfModal) {
+                    VStack {
+                        Form {
+                            Section(header: Text("Enter ingredients")) {
+                                HStack {
+                                    TextField("Quantity", text: $halfModalTextFieldOneVal)
+                                        .keyboardType(.decimalPad)
+                                    
+                                    Picker("Unit", selection: $ingredientUnitIndex) {
+                                        Text("g").tag(0)
+                                        Text("kg").tag(1)
+                                        Text("ml").tag(2)
+                                        Text("l").tag(3)
+                                        Text("tsp").tag(4)
+                                        Text("tbs").tag(5)
+                                        Text("psc").tag(6)
+                                        Text("sprigs").tag(7)
+                                    }
+                                    .pickerStyle(MenuPickerStyle())
+                                    Spacer()
+                                    Text(amountUnit[ingredientUnitIndex])
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                
+                                TextField("Ingredient", text: $halfModalTextFieldTwoVal)
+                            }
+                            Button(action: {self.addNewItem()}) {
+                                Text("Add ingredient")
+                            }
+                            Section {
+                                Button (action: {
+                                    self.hideModal()
+                                }) {
+                                    Text("Done")
+                                }
+                                .blueButtonStyle()
+                                .listRowBackground(grayBlue)
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                            }
+                        }
+                    }.edgesIgnoringSafeArea(.all)
                 }
             }
             .navigationTitle("Write recipe")
@@ -137,16 +196,80 @@ struct NewPostView: View {
                     .padding(.bottom, 2)
             })
         }
-            
-
+        
+        
     }
     
     
     private func dismissModal() {
         presentationMode.wrappedValue.dismiss()
     }
+    
     private func showActionSheet() {
         showSheet.toggle()
+    }
+    
+    func updateHalfModal(placeHolder: String, itemType: newStepOrIngredient, height: CGFloat) {
+        
+        halfModalTextFieldOneVal = ""
+        halfModalTextFieldTwoVal = ""
+        halfModalPlaceHolder = placeHolder
+        newItemType = itemType
+        halfModalHeight = height
+    }
+    
+    func clearHalfModal() {
+        halfModalTextFieldOneVal = ""
+        halfModalTextFieldTwoVal = ""
+    }
+    
+    func possibleStringToDouble(_ stringToValidate: String) -> Double? {
+        
+        let val = Double(stringToValidate) ?? nil
+        
+        if let val = val {
+            return val
+        }
+        else {
+            return nil
+        }
+    }
+    
+    func hideModal() {
+        
+        UIApplication.shared.endEditing()
+        showHalfModal = false
+    }
+    private func addNewItem() {
+        if halfModalTextFieldTwoVal == "" {
+            let alertView = SPAlertView(title: newItemType == .Step ? "Please add a step" : "Please add a ingredient", message: "Check that no fields are left blank" , preset: SPAlertIconPreset.error)
+            
+            alertView.present(duration: 3)
+        }
+        else {
+            if newItemType == .Step {
+                steps.append(Step(description: halfModalTextFieldTwoVal, orderNumber: steps.count))
+                hideModal()
+            }
+            else if newItemType == .Ingredient {
+                
+                if let amount = possibleStringToDouble(halfModalTextFieldOneVal) {
+                    /*
+                     let thisIngredientUnit = IngredientUnit.allCases[ingredientUnitIndex]
+                     */
+                    ingredients.append(Ingredient(name: halfModalTextFieldTwoVal,
+                                                  amount: amount,
+                                                  amountUnit: amountUnit[ingredientUnitIndex],
+                                                  orderNumber: ingredients.count))
+                    //hideModal()
+                    clearHalfModal()
+                }
+                else {
+                    let alertView = SPAlertView(title: "Check the amount", message: "Please enter a number", preset: SPAlertIconPreset.error)
+                    alertView.present(duration: 3)
+                }
+            }
+        }
     }
 }
 
