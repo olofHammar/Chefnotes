@@ -38,7 +38,6 @@ struct NewPostView: View {
     @State var categoryOptionTag: Int = 0
     var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
     var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
-
     
     var body: some View {
         NavigationView{
@@ -46,7 +45,7 @@ struct NewPostView: View {
                 VStack {
                     Form {
                         Section(header: Text("Enter title")) {
-                            TextField("Add title", text: $title)
+                            TextField("Add title", text: $title).KeyboardAwarePadding()
                         }
                         Section(header: Text("Add image"), footer: Text("Click the default-image to select new image.")) {
                             ZStack {
@@ -88,8 +87,8 @@ struct NewPostView: View {
                                     Text("Snacks").tag(2)
                                     Text("Vegetarian").tag(3)
                                     Text("Meat").tag(4)
-                                    Text("Fish").tag(5)
-                                    Text("Seafood").tag(6)
+                                    Text("Fish & Seafood").tag(5)
+                                    Text("Pasta").tag(6)
                                     Text("Baking").tag(7)
                                     Text("Deserts").tag(8)
                                 }
@@ -147,7 +146,7 @@ struct NewPostView: View {
                             Text("Add steps")
                         }
                         Section {
-                            Button (action: { saveRecipePost()
+                            Button (action: { uploadImage()
                                 print(env.currentUser.id)
                             }) {
                                 Text("Save Recipe")
@@ -224,7 +223,7 @@ struct NewPostView: View {
                                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                             }
                         }
-                    }.edgesIgnoringSafeArea(.all)
+                    }
                 }
             }
             .navigationTitle("Write recipe")
@@ -234,8 +233,6 @@ struct NewPostView: View {
                     .padding(.bottom, 2)
             })
         }
-        
-        
     }
     
     
@@ -308,9 +305,36 @@ struct NewPostView: View {
         categoryOptionTag = 0
         ingredientUnitIndex = 0
     }
-    private func saveRecipePost() {
-        //let imageUrl = Storage.storage
-        let newRecipePost = RecipePost(title: title, steps: self.steps, ingredients: self.ingredients, serves: serves, author: "\(self.env.currentUser.firstName) \(self.env.currentUser.lastName)", authorId: Auth.auth().currentUser?.uid ?? "", category: categoryOptions[categoryOptionTag], image: Image("pizza"))
+    private func uploadImage() {
+        
+        let storageRef = Storage.storage().reference()
+        let imageUrl = UUID().uuidString
+        var data = NSData()
+        data = image!.jpegData(compressionQuality: 0.8)! as NSData
+        let filePath = storageRef.child(imageUrl)
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpg"
+
+        _ = filePath.putData(data as Data, metadata: metaData){(metaData,error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }else{
+                filePath.downloadURL (completion: {(url, error) in
+                    if url != nil {
+                        print("Nu är vi här")
+                        self.saveRecipePost(imageUrl: (url?.absoluteString)!)
+                    }
+                    else {
+                        print("Error")
+                    }
+                })
+            }
+        }
+    }
+    private func saveRecipePost(imageUrl: String) {
+
+        let newRecipePost = RecipePost(title: title, steps: self.steps, ingredients: self.ingredients, serves: serves, author: "\(self.env.currentUser.firstName) \(self.env.currentUser.lastName)", authorId: Auth.auth().currentUser?.uid ?? "", category: categoryOptions[categoryOptionTag], image: imageUrl)
 
         fireStoreSubmitData(docRefString: "recipe/\(newRecipePost.id)", dataToSave: newRecipePost.dictionary, completion: {_ in })
         clearPostView()

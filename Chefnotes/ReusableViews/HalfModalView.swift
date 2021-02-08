@@ -61,7 +61,6 @@ struct HalfModalView<Content:View>: View {
                         .shadow(radius: 5)
                     self.content()
                         .padding()
-                        .padding(.bottom, 65)
                         .frame(width: UIScreen.main.bounds.size.width, height: modalHeight)
                         .clipped()
                     if isNear_tabView {

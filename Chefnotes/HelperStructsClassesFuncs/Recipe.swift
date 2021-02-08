@@ -22,7 +22,7 @@ struct RecipePost: Identifiable {
     var author: String
     var authorId : String
     var category: String
-    var image: Image
+    var image: String
     
     var dictionary: [String: Any] {
         return [
@@ -33,7 +33,8 @@ struct RecipePost: Identifiable {
             "serves" : serves,
             "author" : author,
             "authorId" : authorId,
-            "category" : category
+            "category" : category,
+            "image" : image
         ]
     }
 }
