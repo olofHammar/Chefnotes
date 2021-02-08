@@ -15,6 +15,7 @@ struct RecipePost: Identifiable {
     var id = UUID()
     var steps: [Step]
     var ingredients: [Ingredient]
+    var serves: Int
     var author: String
     var description: String
     var category: String
@@ -25,6 +26,7 @@ struct RecipePost: Identifiable {
             "id" : id.uuidString,
             "steps" : steps.formatForFirebase(),
             "ingredients" : ingredients.formatForFirebase(),
+            "serves" : serves,
             "author" : author,
             "description" : description,
             "category" : category

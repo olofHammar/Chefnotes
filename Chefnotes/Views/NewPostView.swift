@@ -19,7 +19,7 @@ struct NewPostView: View {
     @State var showHalfModal = false
     @State var halfModalTitle = ""
     @State var halfModalPlaceHolder = ""
-    @State var halfModalHeight: CGFloat = 380
+    @State var halfModalHeight: CGFloat = 400
     
     @State var title = ""
     @State var author = ""
@@ -107,35 +107,48 @@ struct NewPostView: View {
                                     };frame(width: 340)
                                 }
                                 else {
-                                    Text("Ingredients list is empty")
+                                    Text("List is empty")
                                         .padding()
                                 }
                             }.frame(height: 200)
                         }
                         Button(action: {
-                                self.updateHalfModal(placeHolder: "Enter ingredient", itemType: .Ingredient, height: UIScreen.main.bounds.size.height)
+                                self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: UIScreen.main.bounds.size.height)
                                 self.showHalfModal.toggle()}) {
                             Text("Add ingredients")
                         }
                         Section(header: Text("Add steps")) {
                             
                             ScrollView() {
-                                
-                                ForEach(categoryOptions, id: \.self) { item in
-                                    Text("250 g \(item)")
+                                if steps.count > 0 {
+                                ForEach(steps.reversed(), id: \.id) { thisStep in
+                                    Text("\(thisStep.orderNumber+1) " + thisStep.description)
                                         .padding()
-                                    
+                                
                                 };frame(width: 340)
+                                }
+                                else {
+                                    Text("List is empty")
+                                        .padding()
+                                }
                             }.frame(height: 200)
                         }
-                        Button(action: { }) {
+                        Button(action: {
+                            self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: UIScreen.main.bounds.size.height)
+                            self.showHalfModal.toggle()
+                        }) {
                             Text("Add steps")
                         }
                         Section {
                             Button (action: {
                                 category = categoryOptions[categoryOptionTag]
+                                print(title)
                                 print(category)
-                                print(amountUnit[ingredientUnitIndex])
+                                print(serves)
+                                print(ingredients[0])
+                                print(ingredients[1])
+                                print(steps[0])
+                                print(steps[1])
                                 print(ingredients.count)
                             }) {
                                 Text("Save Recipe")
@@ -149,31 +162,42 @@ struct NewPostView: View {
                 HalfModalView(isShown: $showHalfModal) {
                     VStack {
                         Form {
-                            Section(header: Text("Enter ingredients")) {
-                                HStack {
-                                    TextField("Quantity", text: $halfModalTextFieldOneVal)
-                                        .keyboardType(.decimalPad)
-                                    
-                                    Picker("Unit", selection: $ingredientUnitIndex) {
-                                        Text("g").tag(0)
-                                        Text("kg").tag(1)
-                                        Text("ml").tag(2)
-                                        Text("l").tag(3)
-                                        Text("tsp").tag(4)
-                                        Text("tbs").tag(5)
-                                        Text("psc").tag(6)
-                                        Text("sprigs").tag(7)
+                            if newItemType == .Ingredient {
+                                Section(header: Text("Enter \(self.halfModalPlaceHolder)")) {
+                                    HStack {
+                                        TextField("Quantity", text: $halfModalTextFieldOneVal)
+                                            .keyboardType(.decimalPad)
+                                        
+                                        Picker("Unit", selection: $ingredientUnitIndex) {
+                                            Text("g").tag(0)
+                                            Text("kg").tag(1)
+                                            Text("ml").tag(2)
+                                            Text("l").tag(3)
+                                            Text("tsp").tag(4)
+                                            Text("tbs").tag(5)
+                                            Text("psc").tag(6)
+                                            Text("sprigs").tag(7)
+                                        }
+                                        .pickerStyle(MenuPickerStyle())
+                                        Spacer()
+                                        Text(amountUnit[ingredientUnitIndex])
+                                            .padding()
                                     }
                                     .pickerStyle(MenuPickerStyle())
-                                    Spacer()
-                                    Text(amountUnit[ingredientUnitIndex])
+                                    TextField("\(self.halfModalPlaceHolder)", text: $halfModalTextFieldTwoVal)
                                 }
-                                .pickerStyle(MenuPickerStyle())
+                            }
+                            else if newItemType == .Step {
+                                TextField("\(self.halfModalPlaceHolder)", text: $halfModalTextFieldTwoVal)
                                 
-                                TextField("Ingredient", text: $halfModalTextFieldTwoVal)
                             }
                             Button(action: {self.addNewItem()}) {
-                                Text("Add ingredient")
+                                if newItemType == .Ingredient {
+                                    Text("Add ingredient")
+                                }
+                                else {
+                                    Text("Add step")
+                                }
                             }
                             Section {
                                 Button (action: {
@@ -204,11 +228,9 @@ struct NewPostView: View {
     private func dismissModal() {
         presentationMode.wrappedValue.dismiss()
     }
-    
     private func showActionSheet() {
         showSheet.toggle()
     }
-    
     func updateHalfModal(placeHolder: String, itemType: newStepOrIngredient, height: CGFloat) {
         
         halfModalTextFieldOneVal = ""
@@ -217,12 +239,10 @@ struct NewPostView: View {
         newItemType = itemType
         halfModalHeight = height
     }
-    
     func clearHalfModal() {
         halfModalTextFieldOneVal = ""
         halfModalTextFieldTwoVal = ""
     }
-    
     func possibleStringToDouble(_ stringToValidate: String) -> Double? {
         
         let val = Double(stringToValidate) ?? nil
@@ -234,7 +254,6 @@ struct NewPostView: View {
             return nil
         }
     }
-    
     func hideModal() {
         
         UIApplication.shared.endEditing()
@@ -249,7 +268,7 @@ struct NewPostView: View {
         else {
             if newItemType == .Step {
                 steps.append(Step(description: halfModalTextFieldTwoVal, orderNumber: steps.count))
-                hideModal()
+                clearHalfModal()
             }
             else if newItemType == .Ingredient {
                 
@@ -261,7 +280,6 @@ struct NewPostView: View {
                                                   amount: amount,
                                                   amountUnit: amountUnit[ingredientUnitIndex],
                                                   orderNumber: ingredients.count))
-                    //hideModal()
                     clearHalfModal()
                 }
                 else {
