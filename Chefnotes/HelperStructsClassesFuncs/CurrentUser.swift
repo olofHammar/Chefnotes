@@ -12,6 +12,7 @@ import Firebase
 
 class CurrentUser: Identifiable {
     
+    
     var id = UUID()
     var firstName: String
     var lastName: String

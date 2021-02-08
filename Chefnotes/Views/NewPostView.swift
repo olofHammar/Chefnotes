@@ -7,20 +7,23 @@
 
 import SwiftUI
 import SPAlert
-
-var mockData : [String] = ["200 g Tomater", "70 g Potatis", "12 g Persilja", "10 g Salt", "200 g Tomater", "70 g Potatis", "12 g Persilja", "10 g Salt", "200 g Tomater", "70 g Potatis", "12 g Persilja", "10 g Salt"]
-var mockDataCooking : [String] = ["Koka potatis", "Stek tomater", "Krydda med salt och persilja"]
+import Firebase
 
 struct NewPostView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    
+    @EnvironmentObject var env: GlobalEnviroment
+
     @State var showSheet = false
     @State var showHalfModal = false
     @State var halfModalTitle = ""
     @State var halfModalPlaceHolder = ""
     @State var halfModalHeight: CGFloat = 400
     
+    @State var showImagePicker = false
+    @State var sourceType: UIImagePickerController.SourceType = .camera
+    @State var image: UIImage?
+
     @State var title = ""
     @State var author = ""
     @State var category = ""
@@ -44,35 +47,38 @@ struct NewPostView: View {
                         Section(header: Text("Enter title")) {
                             TextField("Add title", text: $title)
                         }
-                        Section(header: Text("Add image")) {
+                        Section(header: Text("Add image"), footer: Text("Click the default-image to select new image.")) {
                             ZStack {
                                 Button(action: { showActionSheet() }) {
                                     ZStack {
-                                        Image("default_image")
-                                            .newRecipeImageStyle()
-                                        Image(systemName: "plus.circle.fill")
-                                            .newRecipePlusButtonImageStyle()
+                                        if image != nil {
+                                            Image(uiImage: image!)
+                                                .newRecipeImageStyle()
+                                        }
+                                        else {
+                                            Image("default_image")
+                                                .newRecipeImageStyle()
+                                        }
                                     }
                                 }
-                                .buttonStyle(PlainButtonStyle())
                                 .actionSheet(isPresented: $showSheet) {
                                     ActionSheet(title: Text("Add a picture to your post"), message: nil, buttons: [
                                         .default(Text("Camera"), action: {
-                                            //self.showImagePicker = true
-                                            //self.sourceType = .camera
+                                            self.showImagePicker = true
+                                            self.sourceType = .camera
                                         }),
                                         .default(Text("Library"), action: {
-                                            //self.showImagePicker = true
-                                            //self.sourceType = .photoLibrary
+                                            self.showImagePicker = true
+                                            self.sourceType = .photoLibrary
                                         }),
                                         .cancel()
                                     ])
                                 }
                                 
                             }
-                            .padding(.leading,43)
                             .padding(.vertical)
                         }
+                        .padding(.bottom)
                         Section(header: Text("Select category")) {
                             HStack {
                                 Picker("Category", selection: $categoryOptionTag) {
@@ -121,7 +127,7 @@ struct NewPostView: View {
                             
                             ScrollView() {
                                 if steps.count > 0 {
-                                ForEach(steps.reversed(), id: \.id) { thisStep in
+                                ForEach(steps, id: \.id) { thisStep in
                                     Text("\(thisStep.orderNumber+1) " + thisStep.description)
                                         .padding()
                                 
@@ -140,23 +146,28 @@ struct NewPostView: View {
                             Text("Add steps")
                         }
                         Section {
-                            Button (action: {
-                                category = categoryOptions[categoryOptionTag]
-                                print(title)
-                                print(category)
-                                print(serves)
-                                print(ingredients[0])
-                                print(ingredients[1])
-                                print(steps[0])
-                                print(steps[1])
-                                print(ingredients.count)
-                            }) {
+                            Button (action: { saveRecipePost()}) {
                                 Text("Save Recipe")
                             }
                             .blueButtonStyle()
                             .listRowBackground(grayBlue)
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         }
+                    }
+                }
+                .sheet(isPresented: $showImagePicker) {
+                    VStack{
+                        ScrollView(.horizontal){
+                            HStack{
+                                ForEach(0..<10) {_ in
+                                    Rectangle().frame(width: 200, height: 200)
+                                        .background(Color.red)
+                                }
+                            }.padding()
+                        }
+                        .frame(height: 240)
+                        .background(Color.blue)
+                        imagePicker(image: self.$image, sourceType: self.sourceType)
                     }
                 }
                 HalfModalView(isShown: $showHalfModal) {
@@ -273,9 +284,6 @@ struct NewPostView: View {
             else if newItemType == .Ingredient {
                 
                 if let amount = possibleStringToDouble(halfModalTextFieldOneVal) {
-                    /*
-                     let thisIngredientUnit = IngredientUnit.allCases[ingredientUnitIndex]
-                     */
                     ingredients.append(Ingredient(name: halfModalTextFieldTwoVal,
                                                   amount: amount,
                                                   amountUnit: amountUnit[ingredientUnitIndex],
@@ -288,6 +296,20 @@ struct NewPostView: View {
                 }
             }
         }
+    }
+    
+    private func clearPostView() {
+        ingredients.removeAll()
+        steps.removeAll()
+        title = ""
+        categoryOptionTag = 0
+        ingredientUnitIndex = 0
+    }
+    private func saveRecipePost() {
+        let newRecipePost = RecipePost(title: title, steps: self.steps, ingredients: self.ingredients, serves: serves, author: "\(self.env.currentUser.firstName) \(self.env.currentUser.lastName)", authorId: Auth.auth().currentUser?.uid ?? "", category: categoryOptions[categoryOptionTag], image: Image("pizza"))
+
+        fireStoreSubmitData(docRefString: "recipe/\(newRecipePost.id)", dataToSave: newRecipePost.dictionary, completion: {_ in })
+        clearPostView()
     }
 }
 

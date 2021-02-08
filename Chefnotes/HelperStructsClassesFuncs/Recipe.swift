@@ -12,23 +12,27 @@ import Combine
 
 struct RecipePost: Identifiable {
     
+    @EnvironmentObject var env: GlobalEnviroment
+    
     var id = UUID()
+    var title : String
     var steps: [Step]
     var ingredients: [Ingredient]
     var serves: Int
     var author: String
-    var description: String
+    var authorId : String
     var category: String
     var image: Image
     
     var dictionary: [String: Any] {
         return [
             "id" : id.uuidString,
+            "title" : title,
             "steps" : steps.formatForFirebase(),
             "ingredients" : ingredients.formatForFirebase(),
             "serves" : serves,
             "author" : author,
-            "description" : description,
+            "authorId" : authorId,
             "category" : category
         ]
     }
