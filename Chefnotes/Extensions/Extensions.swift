@@ -56,19 +56,8 @@ extension Image {
         self
             .resizable()
             .scaledToFit()
-            .frame(height: UIScreen.main.bounds.size.height/3)
-            .cornerRadius(4)
-    }
-    
-    func newRecipePlusButtonImageStyle() -> some View {
-        self
-            .resizable()
-            .scaledToFit()
-            .frame(width: UIScreen.main.bounds.size.width/8.5)
-            .foregroundColor(.white)
-            .shadow(radius: 2)
-            .padding(.leading, 165)
-            .padding(.bottom, 165)
+            .clipped()
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 200, alignment: .center)
     }
 }
 
