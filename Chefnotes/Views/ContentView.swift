@@ -41,6 +41,7 @@ struct ContentView: View {
                 for document in QuerySnapshot!.documents {
                  
                         self.env.currentUser = CurrentUser(
+                            id: document.data()["id"] as? String ?? "",
                             firstName: document.data()["firstName"] as? String ?? "",
                             lastName: document.data()["lastName"] as? String ?? "",
                             password: document.data()["password"] as? String ?? "",

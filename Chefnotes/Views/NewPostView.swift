@@ -16,11 +16,15 @@ struct NewPostView: View {
 
     @State var showSheet = false
     @State var showHalfModal = false
+    @State var showImagePicker = false
+    
     @State var halfModalTitle = ""
     @State var halfModalPlaceHolder = ""
     @State var halfModalHeight: CGFloat = 400
-    
-    @State var showImagePicker = false
+    @State var halfModalTextFieldOneVal = ""
+    @State var halfModalTextFieldTwoVal = ""
+    @State var newItemType: newStepOrIngredient = .Step
+    @State var ingredientUnitIndex = 0
     @State var sourceType: UIImagePickerController.SourceType = .camera
     @State var image: UIImage?
 
@@ -34,10 +38,7 @@ struct NewPostView: View {
     @State var categoryOptionTag: Int = 0
     var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
     var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
-    @State var halfModalTextFieldOneVal = ""
-    @State var halfModalTextFieldTwoVal = ""
-    @State var newItemType: newStepOrIngredient = .Step
-    @State var ingredientUnitIndex = 0
+
     
     var body: some View {
         NavigationView{
@@ -146,7 +147,9 @@ struct NewPostView: View {
                             Text("Add steps")
                         }
                         Section {
-                            Button (action: { saveRecipePost()}) {
+                            Button (action: { saveRecipePost()
+                                print(env.currentUser.id)
+                            }) {
                                 Text("Save Recipe")
                             }
                             .blueButtonStyle()
@@ -242,7 +245,7 @@ struct NewPostView: View {
     private func showActionSheet() {
         showSheet.toggle()
     }
-    func updateHalfModal(placeHolder: String, itemType: newStepOrIngredient, height: CGFloat) {
+    private func updateHalfModal(placeHolder: String, itemType: newStepOrIngredient, height: CGFloat) {
         
         halfModalTextFieldOneVal = ""
         halfModalTextFieldTwoVal = ""
@@ -250,11 +253,11 @@ struct NewPostView: View {
         newItemType = itemType
         halfModalHeight = height
     }
-    func clearHalfModal() {
+    private func clearHalfModal() {
         halfModalTextFieldOneVal = ""
         halfModalTextFieldTwoVal = ""
     }
-    func possibleStringToDouble(_ stringToValidate: String) -> Double? {
+    private func possibleStringToDouble(_ stringToValidate: String) -> Double? {
         
         let val = Double(stringToValidate) ?? nil
         
@@ -265,7 +268,7 @@ struct NewPostView: View {
             return nil
         }
     }
-    func hideModal() {
+    private func hideModal() {
         
         UIApplication.shared.endEditing()
         showHalfModal = false
@@ -306,6 +309,7 @@ struct NewPostView: View {
         ingredientUnitIndex = 0
     }
     private func saveRecipePost() {
+        //let imageUrl = Storage.storage
         let newRecipePost = RecipePost(title: title, steps: self.steps, ingredients: self.ingredients, serves: serves, author: "\(self.env.currentUser.firstName) \(self.env.currentUser.lastName)", authorId: Auth.auth().currentUser?.uid ?? "", category: categoryOptions[categoryOptionTag], image: Image("pizza"))
 
         fireStoreSubmitData(docRefString: "recipe/\(newRecipePost.id)", dataToSave: newRecipePost.dictionary, completion: {_ in })
