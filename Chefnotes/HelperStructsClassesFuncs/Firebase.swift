@@ -16,10 +16,10 @@ func fireStoreSubmitData(docRefString: String, dataToSave: [String:Any], complet
     docRef.setData(dataToSave) { error in
         if let err = error {
             print("error \(err)")
-            completion(err)
         }
         else {
             print("Data uploaded succefully")
+            completion(true)
             if showDetails {
             print("Data uploaded \(dataToSave)")
             }
@@ -27,3 +27,4 @@ func fireStoreSubmitData(docRefString: String, dataToSave: [String:Any], complet
         
     }
 }
+

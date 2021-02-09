@@ -13,41 +13,40 @@ struct NewPostView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var env: GlobalEnviroment
-
-    @State var showSheet = false
-    @State var showHalfModal = false
-    @State var showImagePicker = false
     
-    @State var halfModalTitle = ""
-    @State var halfModalPlaceHolder = ""
-    @State var halfModalHeight: CGFloat = 400
-    @State var halfModalTextFieldOneVal = ""
-    @State var halfModalTextFieldTwoVal = ""
-    @State var newItemType: newStepOrIngredient = .Step
-    @State var ingredientUnitIndex = 0
-    @State var sourceType: UIImagePickerController.SourceType = .camera
-    @State var image: UIImage?
-
-    @State var title = ""
-    @State var author = ""
-    @State var category = ""
-    @State var ingredients = [Ingredient]()
-    @State var steps = [Step]()
-    @State var serves = 1
+    @State private var showSheet = false
+    @State private var showHalfModal = false
+    @State private var showImagePicker = false
     
-    @State var categoryOptionTag: Int = 0
-    var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
-    var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
+    @State private var halfModalTitle = ""
+    @State private var halfModalPlaceHolder = ""
+    @State private var halfModalHeight: CGFloat = 400
+    @State private var halfModalTextFieldOneVal = ""
+    @State private var halfModalTextFieldTwoVal = ""
+    @State private var newItemType: newStepOrIngredient = .Step
+    @State private var ingredientUnitIndex = 0
+    @State private var sourceType: UIImagePickerController.SourceType = .camera
+    @State private var image: UIImage?
+    
+    @State private var title = ""
+    @State private var author = ""
+    @State private var category = ""
+    @State private var ingredients = [Ingredient]()
+    @State private var steps = [Step]()
+    @State private var serves = 1
+    
+    @State private var categoryOptionTag: Int = 0
+    private var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
+    private var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
+    private var actionToComplete = 2
+    private var actionsCompleted = 0
     
     var body: some View {
         NavigationView{
             ZStack {
                 VStack {
                     Form {
-                        Section(header: Text("Enter title")) {
-                            TextField("Add title", text: $title).KeyboardAwarePadding()
-                        }
-                        Section(header: Text("Add image"), footer: Text("Click the default-image to select new image.")) {
+                        Section(header: Text("Add image"), footer: Text("Click the default-image to select a new image.")) {
                             ZStack {
                                 Button(action: { showActionSheet() }) {
                                     ZStack {
@@ -74,11 +73,13 @@ struct NewPostView: View {
                                         .cancel()
                                     ])
                                 }
-                                
                             }
                             .padding(.vertical)
                         }
                         .padding(.bottom)
+                        Section(header: Text("Enter title")) {
+                            TextField("Add title", text: $title).KeyboardAwarePadding()
+                        }
                         Section(header: Text("Select category")) {
                             HStack {
                                 Picker("Category", selection: $categoryOptionTag) {
@@ -98,7 +99,7 @@ struct NewPostView: View {
                             }
                         }
                         Section(header: Text("Select number of servings")) {
-                            Stepper(value: $serves, in: 1...100) {
+                            Stepper(value: $serves, in: 1...50) {
                                 Text("Serves: \(serves)")
                             }
                         }
@@ -119,7 +120,7 @@ struct NewPostView: View {
                             }.frame(height: 200)
                         }
                         Button(action: {
-                                self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: UIScreen.main.bounds.size.height)
+                                self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: halfModalHeight)
                                 self.showHalfModal.toggle()}) {
                             Text("Add ingredients")
                         }
@@ -127,11 +128,11 @@ struct NewPostView: View {
                             
                             ScrollView() {
                                 if steps.count > 0 {
-                                ForEach(steps, id: \.id) { thisStep in
-                                    Text("\(thisStep.orderNumber+1) " + thisStep.description)
-                                        .padding()
-                                
-                                };frame(width: 340)
+                                    ForEach(steps, id: \.id) { thisStep in
+                                        Text("\(thisStep.orderNumber+1) " + thisStep.description)
+                                            .padding()
+                                        
+                                    };frame(width: 340)
                                 }
                                 else {
                                     Text("List is empty")
@@ -140,15 +141,13 @@ struct NewPostView: View {
                             }.frame(height: 200)
                         }
                         Button(action: {
-                            self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: UIScreen.main.bounds.size.height)
+                            self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
                             self.showHalfModal.toggle()
                         }) {
                             Text("Add steps")
                         }
                         Section {
-                            Button (action: { uploadImage()
-                                print(env.currentUser.id)
-                            }) {
+                            Button (action: {checkRecipeStatus()}) {
                                 Text("Save Recipe")
                             }
                             .blueButtonStyle()
@@ -304,22 +303,36 @@ struct NewPostView: View {
         title = ""
         categoryOptionTag = 0
         ingredientUnitIndex = 0
+        image = nil
+        serves = 1
     }
+    private func checkRecipeStatus() {
+        if image == nil {
+            let alertView = SPAlertView(title: "Couldn't save recipe", message: "Select an image for your recipe", preset: SPAlertIconPreset.error)
+            alertView.present(duration: 3)
+        }
+        else if ingredients.isEmpty || steps.isEmpty || title == "" {
+            let alertView = SPAlertView(title: "Couldn't save recipe", message: "Check that no fields are left blank", preset: SPAlertIconPreset.error)
+            alertView.present(duration: 3)
+        }
+        else {uploadImage()}
+    }
+    
     private func uploadImage() {
         
         let storageRef = Storage.storage().reference()
         let imageUrl = UUID().uuidString
         var data = NSData()
         data = image!.jpegData(compressionQuality: 0.8)! as NSData
-        let filePath = storageRef.child(imageUrl)
+        let filePath = storageRef.child("/images/\(imageUrl)")
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
-
+        
         _ = filePath.putData(data as Data, metadata: metaData){(metaData,error) in
             if let error = error {
                 print(error.localizedDescription)
                 return
-            }else{
+            } else {
                 filePath.downloadURL (completion: {(url, error) in
                     if url != nil {
                         print("Nu är vi här")
@@ -333,11 +346,16 @@ struct NewPostView: View {
         }
     }
     private func saveRecipePost(imageUrl: String) {
-
+        
         let newRecipePost = RecipePost(title: title, steps: self.steps, ingredients: self.ingredients, serves: serves, author: "\(self.env.currentUser.firstName) \(self.env.currentUser.lastName)", authorId: Auth.auth().currentUser?.uid ?? "", category: categoryOptions[categoryOptionTag], image: imageUrl)
+        
 
-        fireStoreSubmitData(docRefString: "recipe/\(newRecipePost.id)", dataToSave: newRecipePost.dictionary, completion: {_ in })
-        clearPostView()
+        fireStoreSubmitData(docRefString: "recipe/\(newRecipePost.id)", dataToSave: newRecipePost.dictionary, completion: {_ in
+            let alertView = SPAlertView(title: "Recipe added!", message: "The recipe has been saved to your book.", preset: SPAlertIconPreset.done)
+            alertView.present(duration: 2)
+            clearPostView()
+        })
+        
     }
 }
 
