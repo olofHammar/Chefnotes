@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseFirestoreSwift
 
 var favoritesList: [FavoriteRecipe] = [
     
@@ -20,25 +22,57 @@ var favoritesList: [FavoriteRecipe] = [
 
 struct CategoryBrowser: View {
     
+    @State var recipes = [RecipePost]()
+    var db = Firestore.firestore()
     let category: Category
-
+    
     var body: some View {
+        let thisCategory = category.title
         ZStack{
             Color.init(red: 242/255, green: 242/255, blue: 247/255)
                 .ignoresSafeArea(edges: .all)
             ScrollView{
                 VStack{
-                    ForEach(favoritesList) { recipe in
-                        RecipeBrowseView(favorite: recipe)
+                    ForEach(recipes) { recipe in
+                        if recipe.category == thisCategory {
+                        RecipeBrowseView(recipe: recipe)
                             .padding()
                         Spacer()
+                        }
                     }
                 }
-            }.background(grayBlue)
+            }
+            .background(grayBlue)
             Spacer()
                 .navigationBarHidden(false)
                 .navigationTitle(category.title)
                 .navigationBarTitleDisplayMode(.inline)
+        }.onAppear() {
+            listenForRecipes()
+        }
+    }
+    private func listenForRecipes() {
+        
+        db.collection("recipe").addSnapshotListener { (querySnapshot, error) in
+            guard let documents = querySnapshot?.documents else {
+                print("No documents")
+                return
+            }
+            
+            self.recipes = documents.map { queryDocumentSnapshot -> RecipePost in
+                let data = queryDocumentSnapshot.data()
+                let title = data["title"] as? String ?? ""
+                let steps = data["steps"] as? [Step] ?? []
+                let ingredients = data["ingredients"] as? [Ingredient] ?? []
+                let serves = data["serves"] as? Int ?? 0
+                let author = data["author"] as? String ?? ""
+                let authorId = data["authorId"] as? String ?? ""
+                let category = data["category"] as? String ?? ""
+                let image = data["image"] as? String ?? ""
+                
+                return RecipePost(title: title, steps: steps, ingredients: ingredients, serves: serves, author: author, authorId: authorId, category: category, image: image)
+                
+            }
         }
     }
 }

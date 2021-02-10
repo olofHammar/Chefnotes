@@ -174,6 +174,7 @@
 				E4A28E7325CA9D0800331B25 /* AuthTextField.swift */,
 				E4CDD36625CB2843005BDE2F /* CircleImageView.swift */,
 				E486DE5C25CD5307001EEC86 /* HalfModalView.swift */,
+				E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */,
 				E4CDD35425CB21E6005BDE2F /* RecipeBrowseView.swift */,
 				E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */,
 			);
@@ -185,7 +186,6 @@
 			children = (
 				E4B484C925C9F7B5001028EB /* ContentView.swift */,
 				E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */,
-				E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */,
 				E4CDD36125CB24FF005BDE2F /* SettingsView.swift */,
 				E4A28EB825CAD00800331B25 /* NewPostView.swift */,
 				E4A28E6D25CA244100331B25 /* HomeNavigationView.swift */,
