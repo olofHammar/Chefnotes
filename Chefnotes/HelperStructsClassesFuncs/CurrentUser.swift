@@ -18,18 +18,20 @@ class CurrentUser: Identifiable {
     var lastName: String
     var password: String
     var email: String
+    var favoriteRecipes: [String] = []
     
-    init(id: String, firstName: String, lastName: String, password: String, email: String) {
+    init(id: String, firstName: String, lastName: String, password: String, email: String, favoriteRecipes: [String]) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
         self.password = password
         self.email = email
+        self.favoriteRecipes = favoriteRecipes
     }
 }
 
 class GlobalEnviroment: ObservableObject {
     
-    @Published var currentUser: CurrentUser = CurrentUser.init(id: "", firstName: "", lastName: "", password: "", email: "")
+    @Published var currentUser: CurrentUser = CurrentUser.init(id: "", firstName: "", lastName: "", password: "", email: "", favoriteRecipes: [])
 }
 

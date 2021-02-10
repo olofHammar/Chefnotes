@@ -45,7 +45,8 @@ struct ContentView: View {
                             firstName: document.data()["firstName"] as? String ?? "",
                             lastName: document.data()["lastName"] as? String ?? "",
                             password: document.data()["password"] as? String ?? "",
-                            email: document.data()["email"] as? String ?? "")
+                            email: document.data()["email"] as? String ?? "",
+                            favoriteRecipes: document.data()["favoriteRecipes"] as? [String] ?? [])
                     
                 }
             }

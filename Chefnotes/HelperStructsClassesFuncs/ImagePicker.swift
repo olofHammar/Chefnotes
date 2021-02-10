@@ -13,6 +13,7 @@ import SwiftUI
 struct imagePicker: UIViewControllerRepresentable {
     
     @Binding var image: UIImage?
+    @Binding var isPresented: Bool
     
     typealias UIViewControllerType = UIImagePickerController
     typealias Coordinator = ImagePickerCoordinator
@@ -29,7 +30,7 @@ struct imagePicker: UIViewControllerRepresentable {
     }
     
     func makeCoordinator() -> ImagePickerCoordinator {
-        return ImagePickerCoordinator(image: $image)
+        return ImagePickerCoordinator(image: $image, isPresented: $isPresented)
     }
     
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<imagePicker>) {
@@ -41,9 +42,11 @@ struct imagePicker: UIViewControllerRepresentable {
 class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     @Binding var image: UIImage?
+    @Binding var isPresented: Bool
     
-    init(image: Binding<UIImage?>) {
+    init(image: Binding<UIImage?>, isPresented: Binding<Bool>) {
         _image = image
+        _isPresented = isPresented
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -51,6 +54,8 @@ class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImageP
             info[UIImagePickerController.InfoKey.originalImage]
             as? UIImage {
             image = uiImage
+            isPresented = false
+            
         }
     }
 }

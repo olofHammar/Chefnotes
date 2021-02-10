@@ -16,25 +16,22 @@ struct RecipeView: View {
         VStack {
             favorite.image
                 .resizable()
-                .frame(height: 125)
-                .scaledToFit()
-
+                .scaledToFill()
+                .frame(height: 150)
+                .clipped()
                 
+            Spacer()
+            Group {
             Text(favorite.title)
-                .font(.subheadline)
+                .font(.caption)
                 .fontWeight(.semibold)
-                .frame(height: 75)
-                .padding(.leading)
-                .padding(.trailing)
-            
-            Text("by: Olle Hammar")
-                .font(.caption2)
-                .foregroundColor(Color.init(red: 136/255, green: 136/255, blue: 140/255))
-                .frame(height: 50)
                 .padding(.leading)
                 .padding(.trailing)
 
-        }.frame(width: 150, height: 250, alignment: .center)
+            Text("Author: Olle Hammar")
+                .font(.caption2)
+            }.padding(.bottom)
+        }.frame(width: 150, height: 230)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(lineWidth: 0.5))
         .clipped()
         .cornerRadius(5)
