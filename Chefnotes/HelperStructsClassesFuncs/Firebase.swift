@@ -28,3 +28,22 @@ func fireStoreSubmitData(docRefString: String, dataToSave: [String:Any], complet
     }
 }
 
+func fireStoreUpdateData(docRefString: String, dataToUpdate: [String:Any], completion: @escaping (Any) -> Void, showDetails: Bool = false) {
+    
+    let docRef = Firestore.firestore().document(docRefString)
+    print("Updating data")
+    docRef.setData(dataToUpdate, merge: true) { error in
+        if let err = error {
+            print("error \(err)")
+        }
+        else {
+            print("Data uploaded succefully")
+            if showDetails {
+                print("Data uploaded \(dataToUpdate)")
+            }
+            completion(true)
+        }
+        
+    }
+}
+

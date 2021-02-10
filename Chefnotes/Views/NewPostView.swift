@@ -14,6 +14,7 @@ struct NewPostView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var env: GlobalEnviroment
     
+    @State private var isLoading = false
     @State private var showSheet = false
     @State private var showHalfModal = false
     @State private var showImagePicker = false
@@ -153,22 +154,13 @@ struct NewPostView: View {
                             .blueButtonStyle()
                             .listRowBackground(grayBlue)
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                            .padding(.bottom)
                         }
                     }
                 }
                 .sheet(isPresented: $showImagePicker) {
                     VStack{
-                        ScrollView(.horizontal){
-                            HStack{
-                                ForEach(0..<10) {_ in
-                                    Rectangle().frame(width: 200, height: 200)
-                                        .background(Color.red)
-                                }
-                            }.padding()
-                        }
-                        .frame(height: 240)
-                        .background(Color.blue)
-                        imagePicker(image: self.$image, sourceType: self.sourceType)
+                        imagePicker(image: self.$image, isPresented: $showImagePicker, sourceType: self.sourceType)
                     }
                 }
                 HalfModalView(isShown: $showHalfModal) {
@@ -224,6 +216,13 @@ struct NewPostView: View {
                         }
                     }
                 }
+                
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                        .scaleEffect(3)
+                }
+                
             }
             .navigationTitle("Write recipe")
             .navigationBarItems(trailing: Button(action: {dismissModal()}) {
@@ -315,7 +314,10 @@ struct NewPostView: View {
             let alertView = SPAlertView(title: "Couldn't save recipe", message: "Check that no fields are left blank", preset: SPAlertIconPreset.error)
             alertView.present(duration: 3)
         }
-        else {uploadImage()}
+        else {
+            isLoading = true
+            uploadImage()
+        }
     }
     
     private func uploadImage() {
@@ -349,11 +351,19 @@ struct NewPostView: View {
         
         let newRecipePost = RecipePost(title: title, steps: self.steps, ingredients: self.ingredients, serves: serves, author: "\(self.env.currentUser.firstName) \(self.env.currentUser.lastName)", authorId: Auth.auth().currentUser?.uid ?? "", category: categoryOptions[categoryOptionTag], image: imageUrl)
         
-
+        
         fireStoreSubmitData(docRefString: "recipe/\(newRecipePost.id)", dataToSave: newRecipePost.dictionary, completion: {_ in
-            let alertView = SPAlertView(title: "Recipe added!", message: "The recipe has been saved to your book.", preset: SPAlertIconPreset.done)
-            alertView.present(duration: 2)
-            clearPostView()
+            self.env.currentUser.favoriteRecipes.append(newRecipePost.id.uuidString)
+
+            fireStoreUpdateData(docRefString: "users/\(Auth.auth().currentUser?.uid ?? "")", dataToUpdate:
+                                    ["favoriteRecipes": self.env.currentUser.favoriteRecipes], completion: {_ in
+                                        isLoading = false
+                                        let alertView = SPAlertView(title: "Recipe added!", message: "The recipe has been saved to your book.", preset: SPAlertIconPreset.done)
+                                        alertView.present(duration: 2)
+                                        clearPostView()
+                                        
+                                    })
+            
         })
         
     }
