@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 var favoritesList: [FavoriteRecipe] = [
@@ -23,9 +24,9 @@ var favoritesList: [FavoriteRecipe] = [
 struct CategoryBrowser: View {
     
     @State var recipes = [RecipePost]()
+    @State var ingredients = [Ingredient]()
     var db = Firestore.firestore()
     let category: Category
-    
     var body: some View {
         let thisCategory = category.title
         ZStack{
@@ -35,9 +36,9 @@ struct CategoryBrowser: View {
                 VStack{
                     ForEach(recipes) { recipe in
                         if recipe.category == thisCategory {
-                        RecipeBrowseView(recipe: recipe)
-                            .padding()
-                        Spacer()
+                            RecipeBrowseView(recipe: recipe)
+                                .padding()
+                            Spacer()
                         }
                     }
                 }
@@ -58,31 +59,24 @@ struct CategoryBrowser: View {
                 print("No documents")
                 return
             }
-            
             self.recipes = documents.map { queryDocumentSnapshot -> RecipePost in
+                
                 let data = queryDocumentSnapshot.data()
+                let refId = data["refId"] as? String ?? ""
                 let title = data["title"] as? String ?? ""
-                let steps = data["steps"] as? [Step] ?? []
-                let ingredients = data["ingredients"] as? [Ingredient] ?? []
                 let serves = data["serves"] as? Int ?? 0
                 let author = data["author"] as? String ?? ""
                 let authorId = data["authorId"] as? String ?? ""
                 let category = data["category"] as? String ?? ""
                 let image = data["image"] as? String ?? ""
                 
-                return RecipePost(title: title, steps: steps, ingredients: ingredients, serves: serves, author: author, authorId: authorId, category: category, image: image)
+                return RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
                 
             }
         }
     }
 }
-
-struct CategoryBrowser_Previews: PreviewProvider {
-    static var pCategory = Category(id: 0, title: "Pizza", imageName: "pizza")
-    static var previews: some View {
-        Group {
-            CategoryBrowser(category: pCategory)
-            CategoryBrowser(category: pCategory)
-        }
-    }
-}
+/*
+ (data["ingredients"] as? [[String:Any]]).map { item -> Ingredient in
+ return Ingredient(name: item["name"] as? String ?? "", amount: item["amount"] as? Double ?? 0.0, amountUnit: item["amountUnit"] as? String ?? "", orderNumber: item["orederNumber"] as? Int ?? 0)
+ */

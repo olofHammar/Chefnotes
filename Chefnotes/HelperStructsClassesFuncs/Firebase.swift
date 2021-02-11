@@ -27,7 +27,42 @@ func fireStoreSubmitData(docRefString: String, dataToSave: [String:Any], complet
         
     }
 }
-
+func fireStoreSubmitIngredients(docRefString: String, dataToSave: [String:Any], completion: @escaping (Any) -> Void, showDetails: Bool = false) {
+    let db = Firestore.firestore().document(docRefString)
+    let docRef = db.collection("ingredients").document()
+    print("Setting data")
+    docRef.setData(dataToSave) { error in
+        if let err = error {
+            print("error \(err)")
+        }
+        else {
+            print("Ingredients uploaded succefully")
+            completion(true)
+            if showDetails {
+            print("Data uploaded \(dataToSave)")
+            }
+        }
+        
+    }
+}
+func fireStoreSubmitSteps(docRefString: String, dataToSave: [String:Any], completion: @escaping (Any) -> Void, showDetails: Bool = false) {
+    let db = Firestore.firestore().document(docRefString)
+    let docRef = db.collection("steps").document()
+    print("Setting data")
+    docRef.setData(dataToSave) { error in
+        if let err = error {
+            print("error \(err)")
+        }
+        else {
+            print("Steps uploaded succefully")
+            completion(true)
+            if showDetails {
+            print("Data uploaded \(dataToSave)")
+            }
+        }
+        
+    }
+}
 func fireStoreUpdateData(docRefString: String, dataToUpdate: [String:Any], completion: @escaping (Any) -> Void, showDetails: Bool = false) {
     
     let docRef = Firestore.firestore().document(docRefString)
