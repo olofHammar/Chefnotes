@@ -10,34 +10,28 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-var favoritesList: [FavoriteRecipe] = [
-    
-    FavoriteRecipe(image: Image("char"), title: "Smoked char with potatoes"),
-    FavoriteRecipe(image: Image("milk"), title: "Milk and honey"),
-    FavoriteRecipe(image: Image("steak-1"), title: "Steak and garlicbutter"),
-    FavoriteRecipe(image: Image("eggplant"), title: "Grilled eggplant and condiments"),
-    FavoriteRecipe(image: Image("greens"), title: "Lots of green stuff"),
-    FavoriteRecipe(image: Image("pasta"), title: "Fettucini pasta with mushrooms"),
-    FavoriteRecipe(image: Image("ravioli"), title: "Ricotta ravioli in tomato sauce"),
-    FavoriteRecipe(image: Image("soup"), title: "Pumpkinsoup")]
-
 struct CategoryBrowser: View {
     
-    @State var recipes = [RecipePost]()
-    @State var ingredients = [Ingredient]()
-    var db = Firestore.firestore()
+    @State  var recipes = [RecipePost]()
+    @State  var ingredients = [Ingredient]()
+    private let db = Firestore.firestore()
     let category: Category
+    
     var body: some View {
-        let thisCategory = category.title
+        
+    let thisCategory = category.title
+        
         ZStack{
-            Color.init(red: 242/255, green: 242/255, blue: 247/255)
+            grayBlue
                 .ignoresSafeArea(edges: .all)
             ScrollView{
                 VStack{
                     ForEach(recipes) { recipe in
                         if recipe.category == thisCategory {
+                            NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
                             RecipeBrowseView(recipe: recipe)
                                 .padding()
+                            }.buttonStyle(PlainButtonStyle())
                             Spacer()
                         }
                     }
@@ -45,12 +39,14 @@ struct CategoryBrowser: View {
             }
             .background(grayBlue)
             Spacer()
-                .navigationBarHidden(false)
+            
+             //   .navigationBarHidden(false)
                 .navigationTitle(category.title)
                 .navigationBarTitleDisplayMode(.inline)
         }.onAppear() {
             listenForRecipes()
         }
+    
     }
     private func listenForRecipes() {
         
@@ -71,7 +67,7 @@ struct CategoryBrowser: View {
                 let image = data["image"] as? String ?? ""
                 
                 return RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
-                
+
             }
         }
     }
