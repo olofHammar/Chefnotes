@@ -41,6 +41,7 @@
 		E4CDD36225CB24FF005BDE2F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36125CB24FF005BDE2F /* SettingsView.swift */; };
 		E4CDD36725CB2843005BDE2F /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36625CB2843005BDE2F /* CircleImageView.swift */; };
 		E4CDD36F25CB2E51005BDE2F /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */; };
+		E4E40F6125D48761003E2707 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E40F6025D48761003E2707 /* ImageLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +108,7 @@
 		E4CDD36125CB24FF005BDE2F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E4CDD36625CB2843005BDE2F /* CircleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
 		E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
+		E4E40F6025D48761003E2707 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +202,7 @@
 			children = (
 				E4A28E9125CAAC8500331B25 /* SessionStore.swift */,
 				E4CDD33D25CB1DCA005BDE2F /* CustomColors.swift */,
+				E4E40F6025D48761003E2707 /* ImageLoader.swift */,
 				E45A1B0825D1633B000667C9 /* Firebase.swift */,
 				E45A1B1025D17921000667C9 /* ImagePicker.swift */,
 				E486DE6E25CD5E02001EEC86 /* Recipe.swift */,
@@ -540,6 +543,7 @@
 				E4CDD33E25CB1DCA005BDE2F /* CustomColors.swift in Sources */,
 				E486DE5D25CD5307001EEC86 /* HalfModalView.swift in Sources */,
 				E4A28E9225CAAC8500331B25 /* SessionStore.swift in Sources */,
+				E4E40F6125D48761003E2707 /* ImageLoader.swift in Sources */,
 				E45A1B0925D1633B000667C9 /* Firebase.swift in Sources */,
 				E4CDD34325CB1E2B005BDE2F /* Category.swift in Sources */,
 				E4A28EAF25CACEC000331B25 /* AddView.swift in Sources */,

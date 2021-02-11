@@ -16,9 +16,8 @@ struct RecipePost: Identifiable {
     @EnvironmentObject var env: GlobalEnviroment
     
     var id = UUID()
+    var refId : String
     var title : String
-    var steps: [Step]
-    var ingredients: [Ingredient]
     var serves: Int
     var author: String
     var authorId : String
@@ -28,9 +27,8 @@ struct RecipePost: Identifiable {
     var dictionary: [String: Any] {
         return [
             "id" : id.uuidString,
+            "refId" : refId,
             "title" : title,
-            "steps" : steps.formatForFirebase(),
-            "ingredients" : ingredients.formatForFirebase(),
             "serves" : serves,
             "author" : author,
             "authorId" : authorId,
@@ -57,7 +55,6 @@ struct Ingredient: Identifiable {
     var name: String
     var amount: Double
     var amountUnit: String
-        //IngredientUnit
     var orderNumber: Int
     
     var dictionary: [String: Any] {

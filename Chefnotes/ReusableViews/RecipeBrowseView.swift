@@ -10,24 +10,20 @@ import Firebase
 
 struct RecipeBrowseView: View {
     
-    @State var recipeImage: UIImage?
-    var recipe: RecipePost
+    @State var recipe: RecipePost
     var postHeight: CGFloat = 320
+    var db = Firestore.firestore()
+    @State var ingredients = [Ingredient]()
     
     var body: some View {
         ZStack {
-                Image("default_image")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: UIScreen.main.bounds.width, height: postHeight)
-                    .clipped()
-                    .background(Color.init(red: 0.9, green: 0.9, blue: 0.9))
-                LinearGradient(gradient: Gradient(colors: [Color.clear, Color.clear, Color.black]), startPoint: .top, endPoint: .bottom)
+            ImageView(withURL: recipe.image)
+            
+            LinearGradient(gradient: Gradient(colors: [Color.clear, Color.clear, Color.black]), startPoint: .top, endPoint: .bottom)
             
             HStack {
                 
                 Spacer()
-                
                 Text(recipe.title)
                     .font(.title2)
                     .fontWeight(.semibold)
@@ -46,7 +42,7 @@ struct RecipeBrowseView: View {
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height/11)
             .background(Color.white).opacity(0.9)
             .padding(.bottom, 253)
-
+            
             VStack {
                 Spacer()
                 HStack{
@@ -70,26 +66,65 @@ struct RecipeBrowseView: View {
                 }
                 .font(.system(size: 15, weight: .bold))
             }
-        }.onAppear() {
-            getImage()
+        }.onAppear(){
+            listenToFirestore()
+            print("\(ingredients.count)")
+            print("\(recipe.refId)")
         }
         .frame(width: UIScreen.main.bounds.width, height: postHeight)
     }
-    
-    private func getImage() {
-        let Ref = Storage.storage().reference(forURL: recipe.image)
-        Ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
-            if error != nil {
-                print("Error: Image could not download!")
-            } else {
-                self.recipeImage = UIImage(data: data!)!
+
+    func listenToFirestore() {
+        let itemRef = db.collection("recipe").document("\(recipe.refId)")
+        itemRef.collection("ingredients").addSnapshotListener { (querySnapshot, error) in
+            guard let documents = querySnapshot?.documents else {
+                print("No documents")
+                return
+            }
+            self.ingredients = documents.map { queryDocumentSnapshot -> Ingredient in
+                
+                let data = queryDocumentSnapshot.data()
+                let name = data["name"] as? String ?? ""
+                let amount = data["amount"] as? Double ?? 0.0
+                let amountUnit = data["amountUnit"] as? String ?? ""
+                let orderNumber = data["orderNumber"] as? Int ?? 0
+                //print("\(ingredients)")
+                
+                return Ingredient(name: name, amount: amount, amountUnit: amountUnit, orderNumber: orderNumber)
+                
             }
         }
-    }
 }
-
-struct RecipeBrowseView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipeBrowseView(recipe: RecipePost(title: "", steps: [], ingredients: [], serves: 1, author: "", authorId: "", category: "", image: ""))
-    }
+//    func listenForIngredients() {
+//        let itemRef = db.collection("recipe").document("\(recipe.id)")
+//        itemRef.collection("ingredients").addSnapshotListener { (snapshot, err) in
+//            if let err = err {
+//                print("Error getting document \(err)")
+//            } else {
+//                //items.removeAll()
+//                for document in snapshot!.documents {
+//
+//                    let result = Result {
+//                        try document.data(as: Ingredient.self)
+//                    }
+//                    switch result {
+//                    case .success(let item):
+//                        if let item = item {
+//                            //print("\(item)")
+//                            ingredients.append(item)
+//                        } else {
+//                            print("Document does not exist")
+//                        }
+//                    case .failure(let error):
+//                        print("Error decoding item: \(error)")
+//                    }
+//                }
+//            }
+//        }
+//}
 }
+//struct RecipeBrowseView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        RecipeBrowseView(withURL: RecipePost(title: "", steps: [], ingredients: [], serves: 1, author: "", authorId: "", category: "", image: ""))
+//    }
+//}
