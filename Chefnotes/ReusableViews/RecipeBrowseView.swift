@@ -66,10 +66,6 @@ struct RecipeBrowseView: View {
                 }
                 .font(.system(size: 15, weight: .bold))
             }
-        }.onAppear(){
-            listenToFirestore()
-            print("\(ingredients.count)")
-            print("\(recipe.refId)")
         }
         .frame(width: UIScreen.main.bounds.width, height: postHeight)
     }
@@ -94,34 +90,7 @@ struct RecipeBrowseView: View {
                 
             }
         }
-}
-//    func listenForIngredients() {
-//        let itemRef = db.collection("recipe").document("\(recipe.id)")
-//        itemRef.collection("ingredients").addSnapshotListener { (snapshot, err) in
-//            if let err = err {
-//                print("Error getting document \(err)")
-//            } else {
-//                //items.removeAll()
-//                for document in snapshot!.documents {
-//
-//                    let result = Result {
-//                        try document.data(as: Ingredient.self)
-//                    }
-//                    switch result {
-//                    case .success(let item):
-//                        if let item = item {
-//                            //print("\(item)")
-//                            ingredients.append(item)
-//                        } else {
-//                            print("Document does not exist")
-//                        }
-//                    case .failure(let error):
-//                        print("Error decoding item: \(error)")
-//                    }
-//                }
-//            }
-//        }
-//}
+    }
 }
 //struct RecipeBrowseView_Previews: PreviewProvider {
 //    static var previews: some View {

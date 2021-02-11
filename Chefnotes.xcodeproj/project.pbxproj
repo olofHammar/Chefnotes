@@ -42,6 +42,7 @@
 		E4CDD36725CB2843005BDE2F /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36625CB2843005BDE2F /* CircleImageView.swift */; };
 		E4CDD36F25CB2E51005BDE2F /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */; };
 		E4E40F6125D48761003E2707 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E40F6025D48761003E2707 /* ImageLoader.swift */; };
+		E4E40F6625D57FDA003E2707 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E40F6525D57FDA003E2707 /* RecipeDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 		E4CDD36625CB2843005BDE2F /* CircleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
 		E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		E4E40F6025D48761003E2707 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		E4E40F6525D57FDA003E2707 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +190,7 @@
 			children = (
 				E4B484C925C9F7B5001028EB /* ContentView.swift */,
 				E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */,
+				E4E40F6525D57FDA003E2707 /* RecipeDetailView.swift */,
 				E4CDD36125CB24FF005BDE2F /* SettingsView.swift */,
 				E4A28EB825CAD00800331B25 /* NewPostView.swift */,
 				E4A28E6D25CA244100331B25 /* HomeNavigationView.swift */,
@@ -545,6 +548,7 @@
 				E4A28E9225CAAC8500331B25 /* SessionStore.swift in Sources */,
 				E4E40F6125D48761003E2707 /* ImageLoader.swift in Sources */,
 				E45A1B0925D1633B000667C9 /* Firebase.swift in Sources */,
+				E4E40F6625D57FDA003E2707 /* RecipeDetailView.swift in Sources */,
 				E4CDD34325CB1E2B005BDE2F /* Category.swift in Sources */,
 				E4A28EAF25CACEC000331B25 /* AddView.swift in Sources */,
 				E4CDD35025CB2064005BDE2F /* CategoryListView.swift in Sources */,

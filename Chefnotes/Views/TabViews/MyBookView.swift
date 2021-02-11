@@ -101,9 +101,8 @@ struct MyBookView: View {
                                             Image(systemName: "person.circle")
                                                 .personSettingsImageStyle()
                                         }
-                                        
                                     })
-            .navigationBarTitle("My Book", displayMode: .large)
+            .navigationBarTitle("My Book")
             .background(grayBlue)
         }
         
