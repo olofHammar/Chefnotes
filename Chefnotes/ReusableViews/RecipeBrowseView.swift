@@ -18,26 +18,29 @@ struct RecipeBrowseView: View {
     var body: some View {
         ZStack {
             ImageView(withURL: recipe.image)
-            
+//            Image("soup")
+//                .resizable()
+//                .scaledToFill()
+//                .frame(width: UIScreen.main.bounds.width, height: 320)
+//                .clipped()
+//                .background(Color.init(red: 0.9, green: 0.9, blue: 0.9))
             LinearGradient(gradient: Gradient(colors: [Color.clear, Color.clear, Color.black]), startPoint: .top, endPoint: .bottom)
             
             HStack {
-                
-                Spacer()
                 Text(recipe.title)
-                    .font(.title2)
-                    .fontWeight(.semibold)
+                    .subtitleFontStyle()
+//                    .font(.system(.title2 , design: .serif))
+//                    .fontWeight(.semibold)
+                    .lineLimit(1)
                     .padding(.leading)
                     .padding(.trailing)
                 
                 Spacer()
                 
-                Image(systemName: "ellipsis.circle")
-                    .resizable()
-                    .frame(width: 25, height: 25)
+                Image(systemName: "bookmark")
+                    .font(Font.title.weight(.light))
+                    .imageScale(.small)
                     .padding(.trailing)
-                    .foregroundColor(.blue)
-                
             }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height/11)
             .background(Color.white).opacity(0.9)
@@ -51,12 +54,12 @@ struct RecipeBrowseView: View {
                             Image(systemName: "book")
                             Text("Author:")
                             Text(recipe.author)
-                        }
-                        .padding(.bottom, 2)
-                        HStack {
-                            Image(systemName: "timer")
-                            Text("Cookingtime: ")
-                            Text("30 min")
+                      
+                            Spacer()
+                            
+                            Image(systemName: "person.2")
+                            Text("Serves: ")
+                            Text("\(recipe.serves)")
                         }
                     }
                     .foregroundColor(.white)
@@ -68,6 +71,7 @@ struct RecipeBrowseView: View {
             }
         }
         .frame(width: UIScreen.main.bounds.width, height: postHeight)
+        
     }
 
     func listenToFirestore() {
@@ -84,16 +88,14 @@ struct RecipeBrowseView: View {
                 let amount = data["amount"] as? Double ?? 0.0
                 let amountUnit = data["amountUnit"] as? String ?? ""
                 let orderNumber = data["orderNumber"] as? Int ?? 0
-                //print("\(ingredients)")
                 
                 return Ingredient(name: name, amount: amount, amountUnit: amountUnit, orderNumber: orderNumber)
-                
             }
         }
     }
 }
-//struct RecipeBrowseView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        RecipeBrowseView(withURL: RecipePost(title: "", steps: [], ingredients: [], serves: 1, author: "", authorId: "", category: "", image: ""))
-//    }
-//}
+struct RecipeBrowseView_Previews: PreviewProvider {
+    static var previews: some View {
+        RecipeBrowseView(recipe: RecipePost(refId: "", title: "Pumpkin soup with bread", serves: 1, author: "Olof Hammar", authorId: "", category: "", image: ""))
+    }
+}

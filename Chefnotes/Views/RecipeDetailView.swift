@@ -16,37 +16,95 @@ struct RecipeDetailView: View {
     @State private var steps = [Step]()
     
     var body: some View {
-        
-        
-        Form {
-            Section {
-                Text("Author: \(thisRecipe.author)")
-            }
-            Section(header: Text("Recipe ingredients")) {
+        ScrollView(showsIndicators: false) {
+        VStack {
+            Image("soup")
+                .resizable()
+                .scaledToFill()
+                .frame(width: UIScreen.main.bounds.width, height: 320)
+                .clipped()
+                .background(Color.init(red: 0.9, green: 0.9, blue: 0.9))
+            
+            HStack {
+                Image(systemName: "book")
+                Text("Author:")
+                Text(thisRecipe.author)
+          
+                Spacer()
                 
-                ScrollView() {
-                    ForEach(ingredients.reversed(), id: \.id) { ingredient in
+                Image(systemName: "person.2")
+                Text("Serves: ")
+                Text("\(thisRecipe.serves)")
+            }
+            .padding()
+            
+            Text("Ingredients")
+                .subtitleFontStyle()
+                .padding()
+            VStack(alignment: .leading, spacing: 5) {
+                ForEach(ingredients) { ingredient in
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
-                            .padding()
-                        
-                    }.frame(width: 340)
-                }.frame(height: 200)
+                            .font(.subheadline)
+                            .multilineTextAlignment(.leading)
+                        Divider()
+                    }
+                }
+            }.padding(.leading)
+            
+            Text("Instructions")
+                .subtitleFontStyle()
+                .padding()
+            let sortedSteps = steps.sorted(by: { $0.orderNumber > $1.orderNumber })
+            ForEach(sortedSteps.reversed()) {step in
+                VStack(alignment: .center, spacing: 5) {
+                    Image(systemName: "chevron.down.circle")
+                        .resizable()
+                        .frame(width: 42, height: 42, alignment: .center)
+                        .imageScale(.large)
+                        .foregroundColor(.secondary)
+                    
+                    Text(step.description)
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.center)
+                        .font(.subheadline)
+                        .frame(minHeight: 100)
+                }
             }
-            Section(header: Text("Recipe steps")) {
-                
-                ScrollView() {
-                    let sortedSteps = steps.sorted(by: { $0.orderNumber > $1.orderNumber })
-                    ForEach(sortedSteps.reversed(), id: \.id) { thisStep in
-                        Text("\(thisStep.orderNumber+1) " + thisStep.description)
-                            .padding()
-                        
-                    }.frame(width: 340)
-                }.frame(height: 200)
-            }
-        }.onAppear() {
+        }
+        }.background(grayBlue)
+        .navigationTitle(thisRecipe.title)
+        .onAppear() {
             listenForIngredients()
             listenForSteps()
         }
+        
+        //        Form {
+        //            Section {
+        //                Text("Author: \(thisRecipe.author)")
+        //            }
+        //            Section(header: Text("Recipe ingredients")) {
+        //
+        //                ScrollView() {
+        //                    ForEach(ingredients.reversed(), id: \.id) { ingredient in
+        //                        Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
+        //                            .padding()
+        //
+        //                    }.frame(width: 340)
+        //                }.frame(height: 200)
+        //            }
+        //            Section(header: Text("Recipe steps")) {
+        //
+        //                ScrollView() {
+        //                    let sortedSteps = steps.sorted(by: { $0.orderNumber > $1.orderNumber })
+        //                    ForEach(sortedSteps.reversed(), id: \.id) { thisStep in
+        //                        Text("\(thisStep.orderNumber+1) " + thisStep.description)
+        //                            .padding()
+        //
+        //                    }.frame(width: 340)
+        //                }.frame(height: 200)
+        //            }
+        
     }
     func listenForSteps() {
         let itemRef = db.collection("recipe").document("\(thisRecipe.refId)")
@@ -90,6 +148,6 @@ struct RecipeDetailView: View {
 
 struct RecipeDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeDetailView(thisRecipe: RecipePost(refId: "", title: "Pasta", serves: 2, author: "Olle", authorId: "", category: "", image: ""))
+        RecipeDetailView(thisRecipe: RecipePost(refId: "", title: "", serves: 4, author: "", authorId: "", category: "", image: ""))
     }
 }

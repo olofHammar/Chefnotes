@@ -15,39 +15,56 @@ struct ContentView: View {
     @EnvironmentObject var env: GlobalEnviroment
     @State private var selectedIndex = 0
     @State private var showModally = false
-    
+    @State var userIsLoaded = false
+
     var body: some View {
-            Group {
+        Group {
+            if userIsLoaded {
                 if (session.session == nil) {
                     LogInView()
                 } else {
                     HomeNavigationView()
                 }
-            }.onAppear {
-                self.session.listen()
-                self.getFirestoreUser()
             }
+            else {
+                    ZStack {
+                        grayBlue
+                        CircleImageView(image: Image("aubergine"))
+                            .frame(width: 200)
+                        
+                        Image("chefnotes_logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 300, height: 250)
+                    }
+            }
+        }.onAppear {
+            self.session.listen()
+            self.getFirestoreUser() { _ in
+                self.userIsLoaded = true
+            }
+        }
     }
     
     func getUser () {
         session.listen()
     }
     
-    func getFirestoreUser() {
+    func getFirestoreUser(completion: @escaping (Any) -> Void) {
         Firestore.firestore().collection("users").whereField("id", isEqualTo: Auth.auth().currentUser?.uid ?? "").getDocuments() { (QuerySnapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
             } else {
                 for document in QuerySnapshot!.documents {
-                 
-                        self.env.currentUser = CurrentUser(
-                            id: document.data()["id"] as? String ?? "",
-                            firstName: document.data()["firstName"] as? String ?? "",
-                            lastName: document.data()["lastName"] as? String ?? "",
-                            password: document.data()["password"] as? String ?? "",
-                            email: document.data()["email"] as? String ?? "",
-                            favoriteRecipes: document.data()["favoriteRecipes"] as? [String] ?? [])
                     
+                    self.env.currentUser = CurrentUser(
+                        id: document.data()["id"] as? String ?? "",
+                        firstName: document.data()["firstName"] as? String ?? "",
+                        lastName: document.data()["lastName"] as? String ?? "",
+                        password: document.data()["password"] as? String ?? "",
+                        email: document.data()["email"] as? String ?? "",
+                        favoriteRecipes: document.data()["favoriteRecipes"] as? [String] ?? [])
+                    completion(true)
                 }
             }
         }
