@@ -17,18 +17,6 @@ var categoryList: [Category] = [
     Category(id: 5, title: "Baking", imageName: "loaf"),
     Category(id: 6, title: "Deserts", imageName: "birthday-cake")]
 
-var favoriteList: [FavoriteRecipe] = [
-    
-    FavoriteRecipe(image: Image("char"), title: "Smoked char with potatoes"),
-    FavoriteRecipe(image: Image("milk"), title: "Milk and honey"),
-    FavoriteRecipe(image: Image("steak-1"), title: "Steak and garlicbutter"),
-    FavoriteRecipe(image: Image("eggplant"), title: "Grilled eggplant and condiments"),
-    FavoriteRecipe(image: Image("greens"), title: "Lots of green stuff"),
-    FavoriteRecipe(image: Image("pasta"), title: "Fettucini pasta with mushrooms"),
-    FavoriteRecipe(image: Image("ravioli"), title: "Ricotta ravioli in tomato sauce"),
-    FavoriteRecipe(image: Image("soup"), title: "Pumpkinsoup")
-]
-
 struct MyBookView: View {
     
     init() {
@@ -50,6 +38,8 @@ struct MyBookView: View {
                         .subtitleFontStyle()
                     Button(action: {
                         //TODO
+                        print("\(env.favoriteRecipes.count)")
+
                     }) {
                         Text("See all")
                         
@@ -58,14 +48,14 @@ struct MyBookView: View {
                 .padding(.leading)
                 .background(grayBlue)
                 
-                ScrollView(.horizontal) {
+                ScrollView([.horizontal], showsIndicators: false) {
                     HStack (spacing: 50){
-                        ForEach(favoriteList) { recipe in
+                        ForEach(env.favoriteRecipes) { recipe in
                             GeometryReader { proxy in
                                 VStack {
                                     let scale = getScale(proxy: proxy)
+                                    
                                     RecipeView(favorite: recipe)
-                                        
                                         .scaleEffect(CGSize(width: scale, height: scale))
                                 }
                             }
@@ -74,6 +64,7 @@ struct MyBookView: View {
                     }
                     .padding(.top, 50)
                 }
+                .frame(height: 300)
                 .background(Color.white)
                 .padding(.bottom, 30)
                 
@@ -108,7 +99,7 @@ struct MyBookView: View {
             .navigationBarTitle("My Book")
             .background(grayBlue)
         }.onAppear() {
-           getFavoriteRecipes()
+            env.getFavoriteRecipes()
         }
         
     }
@@ -156,9 +147,4 @@ struct MyBookView_Previews: PreviewProvider {
     static var previews: some View {
         MyBookView().environmentObject(GlobalEnviroment())
     }
-}
-struct FavoriteRecipe: Identifiable {
-    var id = UUID()
-    var image: Image
-    var title: String
 }

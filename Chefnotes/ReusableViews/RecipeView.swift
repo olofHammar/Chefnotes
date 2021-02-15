@@ -9,16 +9,19 @@ import SwiftUI
 
 struct RecipeView: View {
     
-    var favorite: FavoriteRecipe
+    var favorite: RecipePost
     
     var body: some View {
         
         VStack {
-            favorite.image
-                .resizable()
-                .scaledToFill()
+            ImageView(withURL: favorite.image)
                 .frame(height: 150)
                 .clipped()
+//            Image("pasta")
+//                .resizable()
+//                .scaledToFill()
+//                .frame(height: 150)
+//                .clipped()
                 
             Spacer()
             Group {
@@ -28,7 +31,7 @@ struct RecipeView: View {
                 .padding(.leading)
                 .padding(.trailing)
 
-            Text("Author: Olle Hammar")
+                Text("Author: \(favorite.author)")
                 .font(.caption2)
             }.padding(.bottom)
         }.frame(width: 150, height: 230)
@@ -41,6 +44,6 @@ struct RecipeView: View {
 
 struct RecipeView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeView(favorite: FavoriteRecipe(image: Image("steak-1"), title: "Steak with butter and rosemary"))
+        RecipeView(favorite: RecipePost(refId: "", title: "Pasta", serves: 4, author: "Olle Hammar", authorId: "", category: "", image: ""))
     }
 }
