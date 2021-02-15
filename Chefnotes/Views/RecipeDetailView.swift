@@ -87,7 +87,7 @@ struct RecipeDetailView: View {
             }
         }
         .background(grayBlue)
-        .navigationTitle(thisRecipe.title)
+        //.navigationTitle(thisRecipe.title)
         .navigationBarItems(trailing:
                                 Button(action: {
                                 }) {

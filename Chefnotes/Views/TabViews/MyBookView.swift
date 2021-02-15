@@ -8,7 +8,7 @@
 import SwiftUI
 import Firebase
 
-var categoryList: [Category] = [
+let categoryList: [Category] = [
     Category(id: 0, title: "Basics", imageName: "pickles"),
     Category(id: 1, title: "Vegetarian", imageName: "aubergine"),
     Category(id: 2, title: "Meat", imageName: "steak"),
@@ -16,6 +16,8 @@ var categoryList: [Category] = [
     Category(id: 4, title: "Pasta", imageName: "spaguetti"),
     Category(id: 5, title: "Baking", imageName: "loaf"),
     Category(id: 6, title: "Deserts", imageName: "birthday-cake")]
+let favoriteCat = Category(id: 7, title: "Favorites", imageName: "loaf")
+let showAllMyRecipes = Category(id: 8, title: "My recipes", imageName: "loaf")
 
 struct MyBookView: View {
     
@@ -36,15 +38,16 @@ struct MyBookView: View {
                 HStack {
                     Text("Favorites")
                         .subtitleFontStyle()
-                    Button(action: {
-                        //TODO
-                        print("\(env.favoriteRecipes.count)")
-
-                    }) {
-                        Text("See all")
-                        
-                    }.smallTextButtonStyle()
+                        Button(action: {
+                            print("\(env.favoriteRecipes.count)")
+                        }) {
+                            NavigationLink (destination: CategoryBrowser(category: favoriteCat)) {
+                            Text("See all")
+                            }
+                        }.smallTextButtonStyle()
+                    
                 }
+                .padding(.top, 50)
                 .padding(.leading)
                 .background(grayBlue)
                 
@@ -54,9 +57,12 @@ struct MyBookView: View {
                             GeometryReader { proxy in
                                 VStack {
                                     let scale = getScale(proxy: proxy)
-                                    
-                                    RecipeView(favorite: recipe)
-                                        .scaleEffect(CGSize(width: scale, height: scale))
+                                    NavigationLink(
+                                        destination: RecipeDetailView(thisRecipe: recipe)) {
+                                        RecipeView(favorite: recipe)
+                                            .scaleEffect(CGSize(width: scale, height: scale))
+                                    }.ignoresSafeArea(.all)
+                                    .buttonStyle(PlainButtonStyle())
                                 }
                             }
                             .frame(width: 125, height: 300)
@@ -74,7 +80,9 @@ struct MyBookView: View {
                     Button(action: {
                         //TODO
                     }) {
+                        NavigationLink (destination: CategoryBrowser(category: showAllMyRecipes)) {
                         Text("See all")
+                        }
                         
                     }.smallTextButtonStyle()
                 }.padding(.horizontal)
@@ -97,6 +105,7 @@ struct MyBookView: View {
                                         }
                                     })
             .navigationBarTitle("My Book")
+            .navigationBarTitleDisplayMode(.inline)
             .background(grayBlue)
         }.onAppear() {
             env.getFavoriteRecipes()
@@ -117,29 +126,6 @@ struct MyBookView: View {
         }
         
         return scale
-    }
-    
-    private func getFavoriteRecipes() {
-        db.collection("recipe").whereField("id", isEqualTo: env.currentUser.favoriteRecipes)
-            .addSnapshotListener { (querySnapshot, error) in
-            guard let documents = querySnapshot?.documents else {
-                print("No documents")
-                return
-            }
-            self.favoriteRecipeList = documents.map { queryDocumentSnapshot -> RecipePost in
-                
-                let data = queryDocumentSnapshot.data()
-                let refId = data["refId"] as? String ?? ""
-                let title = data["title"] as? String ?? ""
-                let serves = data["serves"] as? Int ?? 0
-                let author = data["author"] as? String ?? ""
-                let authorId = data["authorId"] as? String ?? ""
-                let category = data["category"] as? String ?? ""
-                let image = data["image"] as? String ?? ""
-                
-                return RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
-            }
-        }
     }
 }
 
