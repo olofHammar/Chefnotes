@@ -50,6 +50,8 @@ struct MyBookView: View {
                         .subtitleFontStyle()
                     Button(action: {
                         //TODO
+                        print("\(env.favoriteRecipes.count)")
+
                     }) {
                         Text("See all")
                         
@@ -60,7 +62,7 @@ struct MyBookView: View {
                 
                 ScrollView(.horizontal) {
                     HStack (spacing: 50){
-                        ForEach(favoriteList) { recipe in
+                        ForEach(env.favoriteRecipes) { recipe in
                             GeometryReader { proxy in
                                 VStack {
                                     let scale = getScale(proxy: proxy)
@@ -108,7 +110,7 @@ struct MyBookView: View {
             .navigationBarTitle("My Book")
             .background(grayBlue)
         }.onAppear() {
-           getFavoriteRecipes()
+            env.getFavoriteRecipes()
         }
         
     }
