@@ -72,8 +72,6 @@ struct ImageView: View {
         Image(uiImage: imageLoader.image ?? UIImage())
             .resizable()
             .scaledToFill()
-            .frame(width: UIScreen.main.bounds.width, height: 320)
-            .clipped()
-            .background(Color.init(red: 0.9, green: 0.9, blue: 0.9))
+            
     }
 }

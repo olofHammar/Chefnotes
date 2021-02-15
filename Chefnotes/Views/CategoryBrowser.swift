@@ -12,14 +12,15 @@ import FirebaseFirestoreSwift
 
 struct CategoryBrowser: View {
     
+    @EnvironmentObject var env: GlobalEnviroment
+    
     @State  var recipes = [RecipePost]()
     @State  var ingredients = [Ingredient]()
+    
     private let db = Firestore.firestore()
     let category: Category
     
     var body: some View {
-        
-    let thisCategory = category.title
         
         ZStack{
             grayBlue
@@ -27,10 +28,11 @@ struct CategoryBrowser: View {
             ScrollView{
                 VStack{
                     ForEach(recipes) { recipe in
-                        if recipe.category == thisCategory {
+                        if recipe.category == category.title {
+                            
                             NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
-                            RecipeBrowseView(recipe: recipe)
-                                .padding()
+                                RecipeBrowseView(recipe: recipe)
+                                    .padding()
                             }.buttonStyle(PlainButtonStyle())
                             Spacer()
                         }
@@ -39,18 +41,20 @@ struct CategoryBrowser: View {
             }
             .background(grayBlue)
             Spacer()
-            
-             //   .navigationBarHidden(false)
+                
                 .navigationTitle(category.title)
                 .navigationBarTitleDisplayMode(.inline)
         }.onAppear() {
             listenForRecipes()
+            print(env.currentUser.id)
+
         }
-    
+        
     }
     private func listenForRecipes() {
         
-        db.collection("recipe").addSnapshotListener { (querySnapshot, error) in
+        db.collection("recipe").whereField("authorId", isEqualTo: env.currentUser.id)
+            .addSnapshotListener { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
                 print("No documents")
                 return
@@ -67,7 +71,6 @@ struct CategoryBrowser: View {
                 let image = data["image"] as? String ?? ""
                 
                 return RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
-
             }
         }
     }
