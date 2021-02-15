@@ -18,21 +18,19 @@ class CurrentUser: Identifiable {
     var lastName: String
     var password: String
     var email: String
-    var favoriteRecipes: [String] = []
     
-    init(id: String, firstName: String, lastName: String, password: String, email: String, favoriteRecipes: [String]) {
+    init(id: String, firstName: String, lastName: String, password: String, email: String) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
         self.password = password
         self.email = email
-        self.favoriteRecipes = favoriteRecipes
     }
 }
 
 class GlobalEnviroment: ObservableObject {
     
-    @Published var currentUser: CurrentUser = CurrentUser.init(id: "", firstName: "", lastName: "", password: "", email: "", favoriteRecipes: [])
+    @Published var currentUser: CurrentUser = CurrentUser.init(id: "", firstName: "", lastName: "", password: "", email: "")
     
     @Published var favoriteRecipes = [RecipePost]()
     
@@ -55,7 +53,7 @@ class GlobalEnviroment: ObservableObject {
                 let authorId = data["authorId"] as? String ?? ""
                 let category = data["category"] as? String ?? ""
                 let image = data["image"] as? String ?? ""
-                print("document added")
+                
                 return RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
             }
         }

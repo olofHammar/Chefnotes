@@ -348,7 +348,7 @@ struct NewPostView: View {
     }
     private func saveRecipePost(imageUrl: String) {
         let refId = UUID().uuidString
-
+        
         let newRecipePost = RecipePost(refId: refId, title: title, serves: serves, author: "\(self.env.currentUser.firstName) \(self.env.currentUser.lastName)", authorId: Auth.auth().currentUser?.uid ?? "", category: categoryOptions[categoryOptionTag], image: imageUrl)
         
         for i in 0...ingredients.count-1 {
@@ -360,16 +360,11 @@ struct NewPostView: View {
             fireStoreSubmitSteps(docRefString: "recipe/\(refId)", dataToSave: step) { _ in}
         }
         fireStoreSubmitData(docRefString: "recipe/\(refId)", dataToSave: newRecipePost.dictionary, completion: {_ in
-            self.env.currentUser.favoriteRecipes.append(newRecipePost.id.uuidString)
-
-            fireStoreUpdateData(docRefString: "users/\(Auth.auth().currentUser?.uid ?? "")", dataToUpdate:
-                                    ["favoriteRecipes": self.env.currentUser.favoriteRecipes], completion: {_ in
-                                        isLoading = false
-                                        let alertView = SPAlertView(title: "Recipe added!", message: "The recipe has been saved to your book.", preset: SPAlertIconPreset.done)
-                                        alertView.present(duration: 2)
-                                        clearPostView()
-                                        return
-                                    })
+            isLoading = false
+            let alertView = SPAlertView(title: "Recipe added!", message: "The recipe has been saved to your book.", preset: SPAlertIconPreset.done)
+            alertView.present(duration: 2)
+            clearPostView()
+            return
         })
         return
     }

@@ -27,6 +27,25 @@ struct CategoryBrowser: View {
                 .ignoresSafeArea(edges: .all)
             ScrollView{
                 VStack{
+                    if category.title == "Favorites" {
+                        ForEach(env.favoriteRecipes) { recipe in
+                            NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
+                                RecipeBrowseView(recipe: recipe)
+                                    .padding()
+                            }.buttonStyle(PlainButtonStyle())
+                            Spacer()
+                        }
+                    }
+                    else if category.title == "My recipes" {
+                        ForEach(recipes) { recipe in
+                                NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
+                                    RecipeBrowseView(recipe: recipe)
+                                        .padding()
+                                }.buttonStyle(PlainButtonStyle())
+                                Spacer()
+                        }
+                    }
+                    else {
                     ForEach(recipes) { recipe in
                         if recipe.category == category.title {
                             
@@ -36,6 +55,7 @@ struct CategoryBrowser: View {
                             }.buttonStyle(PlainButtonStyle())
                             Spacer()
                         }
+                    }
                     }
                 }
             }

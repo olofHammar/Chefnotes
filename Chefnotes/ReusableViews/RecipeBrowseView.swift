@@ -70,7 +70,7 @@ struct RecipeBrowseView: View {
         }
         .frame(width: UIScreen.main.bounds.width-40, height: postHeight)
         .cornerRadius(12)
-        .shadow(radius: 12)
+        .shadow(radius: 15)
         
     }
 }
