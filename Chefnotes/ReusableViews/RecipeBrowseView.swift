@@ -11,52 +11,50 @@ import Firebase
 struct RecipeBrowseView: View {
     
     @State var recipe: RecipePost
-    var postHeight: CGFloat = 320
-    var db = Firestore.firestore()
-    @State var ingredients = [Ingredient]()
+    var postHeight: CGFloat = 400
     
     var body: some View {
         ZStack {
             ImageView(withURL: recipe.image)
-//            Image("soup")
-//                .resizable()
-//                .scaledToFill()
-//                .frame(width: UIScreen.main.bounds.width, height: 320)
-//                .clipped()
-//                .background(Color.init(red: 0.9, green: 0.9, blue: 0.9))
-            LinearGradient(gradient: Gradient(colors: [Color.clear, Color.clear, Color.black]), startPoint: .top, endPoint: .bottom)
+                .frame(width: UIScreen.main.bounds.width, height: 400)
+                .clipped()
+            //            Image("soup")
+            //                .resizable()
+            //                .scaledToFill()
+            //                .frame(width: UIScreen.main.bounds.width, height: 400)
+            //                .clipped()
             
-            HStack {
-                Text(recipe.title)
-                    .subtitleFontStyle()
-//                    .font(.system(.title2 , design: .serif))
-//                    .fontWeight(.semibold)
-                    .lineLimit(1)
+            LinearGradient(gradient: Gradient(colors: [Color.clear, Color.clear, Color.black.opacity(0.5)]), startPoint: .bottom, endPoint: .top)
+                .frame(width: UIScreen.main.bounds.width-40, height: postHeight)
+            
+            LinearGradient(gradient: Gradient(colors: [Color.clear, Color.clear, Color.black.opacity(0.5)]), startPoint: .top, endPoint: .bottom)
+                .frame(width: UIScreen.main.bounds.width-40, height: postHeight)
+            VStack {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("A recipe by: \(recipe.author)"
+                        )
+                        .font(.system(size: 18, weight: .bold, design: .default))
+                        .foregroundColor(.init(white: 0.8)).opacity(0.6)
+                        .lineLimit(2)
+                        Text("\(recipe.title)")
+                            .font(.system(size: 36, weight: .bold, design: .default))
+                    }
                     .padding(.leading)
-                    .padding(.trailing)
-                
+                    .foregroundColor(.white)
+                    Spacer()
+                }
+                .padding(.top)
+                .padding(.leading)
                 Spacer()
-                
-                Image(systemName: "bookmark")
-                    .font(Font.title.weight(.light))
-                    .imageScale(.small)
-                    .padding(.trailing)
             }
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height/11)
-            .background(Color.white).opacity(0.9)
-            .padding(.bottom, 253)
             
             VStack {
                 Spacer()
+                
                 HStack{
                     VStack(alignment: .leading){
                         HStack {
-                            Image(systemName: "book")
-                            Text("Author:")
-                            Text(recipe.author)
-                      
-                            Spacer()
-                            
                             Image(systemName: "person.2")
                             Text("Serves: ")
                             Text("\(recipe.serves)")
@@ -68,30 +66,12 @@ struct RecipeBrowseView: View {
                     Spacer()
                 }
                 .font(.system(size: 15, weight: .bold))
-            }
+            }.padding(.horizontal)
         }
-        .frame(width: UIScreen.main.bounds.width, height: postHeight)
+        .frame(width: UIScreen.main.bounds.width-40, height: postHeight)
+        .cornerRadius(12)
+        .shadow(radius: 12)
         
-    }
-
-    func listenToFirestore() {
-        let itemRef = db.collection("recipe").document("\(recipe.refId)")
-        itemRef.collection("ingredients").addSnapshotListener { (querySnapshot, error) in
-            guard let documents = querySnapshot?.documents else {
-                print("No documents")
-                return
-            }
-            self.ingredients = documents.map { queryDocumentSnapshot -> Ingredient in
-                
-                let data = queryDocumentSnapshot.data()
-                let name = data["name"] as? String ?? ""
-                let amount = data["amount"] as? Double ?? 0.0
-                let amountUnit = data["amountUnit"] as? String ?? ""
-                let orderNumber = data["orderNumber"] as? Int ?? 0
-                
-                return Ingredient(name: name, amount: amount, amountUnit: amountUnit, orderNumber: orderNumber)
-            }
-        }
     }
 }
 struct RecipeBrowseView_Previews: PreviewProvider {

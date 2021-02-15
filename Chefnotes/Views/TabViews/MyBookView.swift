@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import Firebase
 
 var categoryList: [Category] = [
-    Category(id: 0, title: "Pasta", imageName: "spaguetti"),
+    Category(id: 0, title: "Basics", imageName: "pickles"),
     Category(id: 1, title: "Vegetarian", imageName: "aubergine"),
     Category(id: 2, title: "Meat", imageName: "steak"),
-    Category(id: 3, title: "Fish", imageName: "fish"),
-    Category(id: 4, title: "Pizza", imageName: "pizza"),
+    Category(id: 3, title: "Fish & seafood", imageName: "fish"),
+    Category(id: 4, title: "Pasta", imageName: "spaguetti"),
     Category(id: 5, title: "Baking", imageName: "loaf"),
     Category(id: 6, title: "Deserts", imageName: "birthday-cake")]
 
@@ -35,6 +36,8 @@ struct MyBookView: View {
     }
     
     @EnvironmentObject var env: GlobalEnviroment
+    @State var favoriteRecipeList = [RecipePost]()
+    private let db = Firestore.firestore()
     
     var body: some View {
         NavigationView {
@@ -104,6 +107,8 @@ struct MyBookView: View {
                                     })
             .navigationBarTitle("My Book")
             .background(grayBlue)
+        }.onAppear() {
+           getFavoriteRecipes()
         }
         
     }
@@ -121,6 +126,29 @@ struct MyBookView: View {
         }
         
         return scale
+    }
+    
+    private func getFavoriteRecipes() {
+        db.collection("recipe").whereField("id", isEqualTo: env.currentUser.favoriteRecipes)
+            .addSnapshotListener { (querySnapshot, error) in
+            guard let documents = querySnapshot?.documents else {
+                print("No documents")
+                return
+            }
+            self.favoriteRecipeList = documents.map { queryDocumentSnapshot -> RecipePost in
+                
+                let data = queryDocumentSnapshot.data()
+                let refId = data["refId"] as? String ?? ""
+                let title = data["title"] as? String ?? ""
+                let serves = data["serves"] as? Int ?? 0
+                let author = data["author"] as? String ?? ""
+                let authorId = data["authorId"] as? String ?? ""
+                let category = data["category"] as? String ?? ""
+                let image = data["image"] as? String ?? ""
+                
+                return RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
+            }
+        }
     }
 }
 

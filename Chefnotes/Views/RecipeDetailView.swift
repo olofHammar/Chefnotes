@@ -18,12 +18,9 @@ struct RecipeDetailView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
         VStack {
-            Image("soup")
-                .resizable()
-                .scaledToFill()
-                .frame(width: UIScreen.main.bounds.width, height: 320)
+            ImageView(withURL: thisRecipe.image)
+                .frame(width: UIScreen.main.bounds.width, height: 400)
                 .clipped()
-                .background(Color.init(red: 0.9, green: 0.9, blue: 0.9))
             
             HStack {
                 Image(systemName: "book")
@@ -47,7 +44,7 @@ struct RecipeDetailView: View {
                         Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
                             .font(.subheadline)
                             .multilineTextAlignment(.leading)
-                        Divider()
+                            Divider()
                     }
                 }
             }.padding(.leading)
@@ -77,34 +74,7 @@ struct RecipeDetailView: View {
         .onAppear() {
             listenForIngredients()
             listenForSteps()
-        }
-        
-        //        Form {
-        //            Section {
-        //                Text("Author: \(thisRecipe.author)")
-        //            }
-        //            Section(header: Text("Recipe ingredients")) {
-        //
-        //                ScrollView() {
-        //                    ForEach(ingredients.reversed(), id: \.id) { ingredient in
-        //                        Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
-        //                            .padding()
-        //
-        //                    }.frame(width: 340)
-        //                }.frame(height: 200)
-        //            }
-        //            Section(header: Text("Recipe steps")) {
-        //
-        //                ScrollView() {
-        //                    let sortedSteps = steps.sorted(by: { $0.orderNumber > $1.orderNumber })
-        //                    ForEach(sortedSteps.reversed(), id: \.id) { thisStep in
-        //                        Text("\(thisStep.orderNumber+1) " + thisStep.description)
-        //                            .padding()
-        //
-        //                    }.frame(width: 340)
-        //                }.frame(height: 200)
-        //            }
-        
+        } 
     }
     func listenForSteps() {
         let itemRef = db.collection("recipe").document("\(thisRecipe.refId)")
