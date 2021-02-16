@@ -13,16 +13,21 @@ struct SearchView: View {
     
     @EnvironmentObject var env: GlobalEnviroment
     
-    @State  var recipes = [RecipePost]()
-    
+    @State var recipes = [RecipePost]()
+    @State var searchText = ""
+    @State var isSearching = false
     private let db = Firestore.firestore()
     
     var body: some View {
         NavigationView {
             ZStack {
                 ScrollView{
+                    
                     VStack{
-                        ForEach(recipes) { recipe in
+                        SearchBar(searchText: $searchText, isSearching: $isSearching)
+                        Spacer()
+                            .frame(height: 20)
+                        ForEach(recipes.filter { $0.title.contains(searchText) || $0.category.contains(searchText) || $0.author.contains(searchText) || searchText.isEmpty }) { recipe in
                             NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
                                 RecipeBrowseView(recipe: recipe)
                                     .padding()
@@ -66,6 +71,6 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView()
+        SearchView().environmentObject(GlobalEnviroment())
     }
 }

@@ -127,7 +127,7 @@ struct RecipeDetailView: View {
             checkIsFavorite()
             listenForIngredients()
             listenForSteps()
-            URLImageService.shared.cleanup()
+            //URLImageService.shared.cleanup()
         }
     }
     
