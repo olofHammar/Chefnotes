@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import URLImage
 
 struct RecipeBrowseView: View {
     
@@ -14,15 +15,36 @@ struct RecipeBrowseView: View {
     var postHeight: CGFloat = 400
     
     var body: some View {
+        
+        let url = URL(string: recipe.image)!
+        
         ZStack {
-            ImageView(withURL: recipe.image)
-                .frame(width: UIScreen.main.bounds.width, height: 400)
-                .clipped()
-            //            Image("soup")
-            //                .resizable()
-            //                .scaledToFill()
-            //                .frame(width: UIScreen.main.bounds.width, height: 400)
-            //                .clipped()
+            GeometryReader { geo in
+            URLImage(url: url,
+                     empty: {
+                        Image("default_image")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: UIScreen.main.bounds.width, height: 400)
+                            .clipped()
+                     },
+                     inProgress: { progress in
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                            .scaleEffect(3)
+                            .frame(width: UIScreen.main.bounds.width, height: 400)
+                     },
+                     failure: { error, retry in
+                        Text("Failed loading image")
+                            .frame(width: UIScreen.main.bounds.width, height: 400)
+                     },
+                     content: { image, info in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: geo.size.width)
+                     })
+            }
             
             LinearGradient(gradient: Gradient(colors: [Color.clear, Color.clear, Color.black.opacity(0.5)]), startPoint: .bottom, endPoint: .top)
                 .frame(width: UIScreen.main.bounds.width-40, height: postHeight)
@@ -45,11 +67,9 @@ struct RecipeBrowseView: View {
                     Spacer()
                 }
                 .padding(.top)
-                .padding(.leading)
                 
                 Spacer()
             }
-            
             VStack {
                 
                 Spacer()
@@ -71,13 +91,12 @@ struct RecipeBrowseView: View {
                     Spacer()
                 }
                 .font(.system(size: 15, weight: .bold))
-            }.padding(.horizontal)
+            }
         }
         .frame(width: UIScreen.main.bounds.width-40, height: postHeight)
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 0.5))
         .cornerRadius(12)
-        .shadow(radius: 5)
-        
+        .shadow(radius: 8)
     }
 }
 struct RecipeBrowseView_Previews: PreviewProvider {
@@ -85,3 +104,4 @@ struct RecipeBrowseView_Previews: PreviewProvider {
         RecipeBrowseView(recipe: RecipePost(refId: "", title: "Pumpkin soup with bread", serves: 1, author: "Olof Hammar", authorId: "", category: "", image: ""))
     }
 }
+
