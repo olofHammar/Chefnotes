@@ -23,6 +23,7 @@ struct AddView: View {
                             .fontWeight(.bold)
                         Spacer()
                     }.padding(.leading)
+
                     Button(action: {
                         self.isPresented.toggle()
                     }) {
@@ -78,11 +79,13 @@ struct AddView: View {
                         
                         .background(grayBlue)
                 }
+                .padding(.top, 35)
                 .frame(width: UIScreen.main.bounds.size.width)
                 .background(grayBlue)
                 .navigationTitle("Add new recipe")
+                .navigationBarTitleDisplayMode(.inline)
             }.background(grayBlue)
-        }.padding(.bottom, 40).background(grayBlue)
+        }//.padding(.bottom, 40).background(grayBlue)
     }
 }
 

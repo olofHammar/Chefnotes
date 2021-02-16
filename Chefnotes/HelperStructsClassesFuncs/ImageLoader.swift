@@ -70,6 +70,7 @@ struct ImageView: View {
     var body: some View {
         
         Image(uiImage: imageLoader.image ?? UIImage())
+            .renderingMode(.original)
             .resizable()
             .scaledToFill()
             

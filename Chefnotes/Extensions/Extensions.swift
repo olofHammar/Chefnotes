@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import URLImage
 
 //MARK ---------------------------> Buttons
 extension Button {
@@ -38,6 +39,23 @@ extension Text {
             .fontWeight(.bold)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
+    func cardViewTopSub() -> some View {
+        self
+            .font(Font.system(.body).smallCaps())
+            .fontWeight(.bold)
+            .foregroundColor(.init(white: 0.8)).opacity(0.8)
+    }
+    func cardViewTitle() -> some View {
+        self
+            .font(.system(size: 36, weight: .bold, design: .default))
+            .lineLimit(2)
+    }
+    func cardViewBottomSub() -> some View {
+        self
+            .font(.system(size: 18, weight: .bold, design: .default))
+            .foregroundColor(.init(white: 0.8)).opacity(0.8)
+            .lineLimit(2)
+    }
 }
 
 //MARK ---------------------------> Image
@@ -60,6 +78,7 @@ extension Image {
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 200, alignment: .center)
     }
 }
+
 
 //MARK ---------------------------> List
 

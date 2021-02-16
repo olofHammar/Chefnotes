@@ -32,29 +32,34 @@ struct RecipeBrowseView: View {
             VStack {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("A recipe by: \(recipe.author)"
-                        )
-                        .font(.system(size: 18, weight: .bold, design: .default))
-                        .foregroundColor(.init(white: 0.8)).opacity(0.6)
-                        .lineLimit(2)
+                        Text("\(recipe.category) recipe")
+                            .cardViewTopSub()
                         Text("\(recipe.title)")
-                            .font(.system(size: 36, weight: .bold, design: .default))
+                            .cardViewTitle()
+                        Text("by: \(recipe.author)")
+                            .cardViewBottomSub()
                     }
                     .padding(.leading)
                     .foregroundColor(.white)
+                    
                     Spacer()
                 }
                 .padding(.top)
                 .padding(.leading)
+                
                 Spacer()
             }
             
             VStack {
+                
                 Spacer()
                 
                 HStack{
+                    
                     VStack(alignment: .leading){
+                        
                         HStack {
+                            
                             Image(systemName: "person.2")
                             Text("Serves: ")
                             Text("\(recipe.serves)")
@@ -69,8 +74,9 @@ struct RecipeBrowseView: View {
             }.padding(.horizontal)
         }
         .frame(width: UIScreen.main.bounds.width-40, height: postHeight)
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 0.5))
         .cornerRadius(12)
-        .shadow(radius: 15)
+        .shadow(radius: 5)
         
     }
 }
