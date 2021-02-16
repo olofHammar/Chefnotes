@@ -15,7 +15,6 @@ struct CategoryBrowser: View {
     @EnvironmentObject var env: GlobalEnviroment
     
     @State  var recipes = [RecipePost]()
-    @State  var ingredients = [Ingredient]()
     
     private let db = Firestore.firestore()
     let category: Category
@@ -23,8 +22,8 @@ struct CategoryBrowser: View {
     var body: some View {
         
         ZStack{
-            grayBlue
-                .ignoresSafeArea(edges: .all)
+            //grayBlue
+            //    .ignoresSafeArea(edges: .all)
             ScrollView{
                 VStack{
                     if category.title == "Favorites" {
@@ -59,15 +58,13 @@ struct CategoryBrowser: View {
                     }
                 }
             }
-            .background(grayBlue)
+            //.background(grayBlue)
             Spacer()
                 
                 .navigationTitle(category.title)
                 .navigationBarTitleDisplayMode(.inline)
         }.onAppear() {
             listenForRecipes()
-            print(env.currentUser.id)
-
         }
         
     }

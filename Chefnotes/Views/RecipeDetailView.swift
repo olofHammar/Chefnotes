@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import URLImage
 
 struct RecipeDetailView: View {
     
@@ -18,24 +19,49 @@ struct RecipeDetailView: View {
     @State private var steps = [Step]()
     
     var body: some View {
+        
+        let url = URL(string: thisRecipe.image)!
+        
         ScrollView(showsIndicators: false) {
             VStack {
-                
-                ImageView(withURL: thisRecipe.image)
-                    .frame(width: UIScreen.main.bounds.width, height: 400)
-                    .clipped()
-                //                Image("pasta")
-                //                    .resizable()
-                //                    .scaledToFill()
-                //                    .frame(width: UIScreen.main.bounds.width, height: 400)
-                //                    .clipped()
+                URLImage(url: url,
+                         empty: {
+                            Image("default_image")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: UIScreen.main.bounds.width, height: 400)
+                                .clipped()
+                         },
+                         inProgress: { progress in
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                                .scaleEffect(3)
+                                .frame(width: UIScreen.main.bounds.width, height: 400)
+                         },
+                         failure: { error, retry in
+                            Text("Failed loading image")
+                                .frame(width: UIScreen.main.bounds.width, height: 400)
+                         },
+                         content: { image, info in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: UIScreen.main.bounds.width, height: 400)
+                                .clipped()
+                         })
+                //                                recipeImage
+                //                                    .resizable()
+                //                                    .scaledToFill()
+                //                                    .frame(width: UIScreen.main.bounds.width, height: 400)
+                //                                    .clipped()
                 HStack {
                     Text(thisRecipe.title)
                         .subtitleFontStyle()
-                    FavoriteButton(isSet: $isFavorite, recipe: thisRecipe)
                     Spacer()
+                    FavoriteButton(isSet: $isFavorite, recipe: thisRecipe)
+                    
                 }
-                .padding(.leading)
+                .padding(.horizontal)
                 HStack {
                     Image(systemName: "book")
                     Text("Author:")
@@ -87,29 +113,34 @@ struct RecipeDetailView: View {
             }
         }
         .background(grayBlue)
-        //.navigationTitle(thisRecipe.title)
         .navigationBarItems(trailing:
+                                
                                 Button(action: {
                                 }) {
-                                    NavigationLink(destination: SettingsView()) {
-                                        Text("Edit")
+                                    if thisRecipe.authorId == env.currentUser.id {
+                                        NavigationLink(destination: SettingsView()) {
+                                            Text("Edit")
+                                        }
                                     }
                                 })
         .onAppear() {
             checkIsFavorite()
             listenForIngredients()
             listenForSteps()
+            URLImageService.shared.cleanup()
         }
     }
     
     func checkIsFavorite() {
-        for i in 0...env.favoriteRecipes.count-1 {
-            if env.favoriteRecipes[i].refId == thisRecipe.refId {
-                isFavorite = true
-                return
-            }
-            else {
-                isFavorite = false
+        if env.favoriteRecipes.count > 0 {
+            for i in 0...env.favoriteRecipes.count-1 {
+                if env.favoriteRecipes[i].refId == thisRecipe.refId {
+                    isFavorite = true
+                    return
+                }
+                else {
+                    isFavorite = false
+                }
             }
         }
     }
@@ -147,7 +178,6 @@ struct RecipeDetailView: View {
                 //print("\(ingredients)")
                 
                 return Ingredient(name: name, amount: amount, amountUnit: amountUnit, orderNumber: orderNumber)
-                
             }
         }
     }

@@ -6,35 +6,66 @@
 //
 
 import SwiftUI
+import Firebase
+import URLImage
 
 struct SearchView: View {
     
-    @EnvironmentObject var session: SessionStore
+    @EnvironmentObject var env: GlobalEnviroment
+    
+    @State  var recipes = [RecipePost]()
+    
+    private let db = Firestore.firestore()
     
     var body: some View {
         NavigationView {
             ZStack {
-                VStack {
-                    Text("This is SearchView")
-                    Button(action: {
-                       
-                        session.signOut()
-                        session.unbind()
-                        print(self.session.session ?? "nil")
-                    
-                    }){
-                        Text("Sign Out")
+                ScrollView{
+                    VStack{
+                        ForEach(recipes) { recipe in
+                            NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
+                                RecipeBrowseView(recipe: recipe)
+                                    .padding()
+                            }.buttonStyle(PlainButtonStyle())
+                            Spacer()
+                        }
                     }
                 }
             }
             .navigationBarTitle("Search View")
-
+            .navigationBarTitleDisplayMode(.inline)
+            
+        }.onAppear() {
+            listenForRecipes()
+        }
+    }
+    private func listenForRecipes() {
+        
+        db.collection("recipe")
+            .addSnapshotListener { (querySnapshot, error) in
+            guard let documents = querySnapshot?.documents else {
+                print("No documents")
+                return
+            }
+            self.recipes = documents.map { queryDocumentSnapshot -> RecipePost in
+                
+                let data = queryDocumentSnapshot.data()
+                let refId = data["refId"] as? String ?? ""
+                let title = data["title"] as? String ?? ""
+                let serves = data["serves"] as? Int ?? 0
+                let author = data["author"] as? String ?? ""
+                let authorId = data["authorId"] as? String ?? ""
+                let category = data["category"] as? String ?? ""
+                let image = data["image"] as? String ?? ""
+                
+                return RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
+            }
         }
     }
 }
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView().environmentObject(SessionStore())
+        SearchView()
     }
 }

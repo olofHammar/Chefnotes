@@ -23,9 +23,10 @@ struct FavoriteButton: View {
             if isSet == true {
                 print("Added to favorites")
                 addFavorite(completion: { _ in
+                    
                     let alertView = SPAlertView(title: "Recipe added!", message: "The recipe has been saved to your favorite recipes.", preset: SPAlertIconPreset.done)
                     alertView.present(duration: 2)
-                    
+ 
                 })
             }
             else if isSet == false {
