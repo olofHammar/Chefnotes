@@ -10,6 +10,7 @@ import SwiftUI
 struct AddView: View {
     
     @State private var isPresented = false
+    @State var scanSelected = false
     
     var body: some View {
         NavigationView {
@@ -37,8 +38,9 @@ struct AddView: View {
                         .shadow(radius: 5)
                         
                     }.fullScreenCover(isPresented: $isPresented) {
-                        NewPostView()}
-                    
+                            NewPostView()
+                    }
+                        
                     Text("Use our simple templates to create your own recipes")
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
@@ -56,18 +58,26 @@ struct AddView: View {
                         Spacer()
                     }.padding(.leading)
                     Button(action: {
-                        self.isPresented.toggle()
+                       // self.isPresented.toggle()
                     }) {
-                        HStack {
-                            CircleImageView(image: Image("vintage_camera"))
-                                .frame(width: UIScreen.main.bounds.size.width/3)
-                                .padding()
-                        }.frame(width: UIScreen.main.bounds.size.width/1.1)
-                        .background(Color(.white))
-                        .cornerRadius(12)
-                        .shadow(radius: 5)
-                    }.fullScreenCover(isPresented: $isPresented) {
-                        NewPostView()}
+                        NavigationLink(
+                            destination: ScanView(),
+                            label: {
+                                HStack {
+                                    CircleImageView(image: Image("vintage_camera"))
+                                        .frame(width: UIScreen.main.bounds.size.width/3)
+                                        .padding()
+                                }.frame(width: UIScreen.main.bounds.size.width/1.1)
+                                .background(Color(.white))
+                                .cornerRadius(12)
+                                .shadow(radius: 5)
+                            })
+                        
+                    }
+//                    .fullScreenCover(isPresented: $isPresented) {
+//                            ScanView()
+//
+//                    }
                     
                     Text("Take a picture of a recipe and scan it in to your book")
                         .font(.subheadline)
