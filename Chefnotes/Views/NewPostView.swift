@@ -103,42 +103,42 @@ struct NewPostView: View {
                                 Text("Serves: \(serves)")
                             }
                         }
-                        Section(header: Text("Add ingredients")) {
-                            
-                            ScrollView() {
+                        Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
+                                    .overlay(Text("Added ingredients"), alignment: .leading)) {
+                            List {
                                 if ingredients.count > 0 {
-                                    ForEach(ingredients.reversed(), id: \.id) { ingredient in
+                                    ForEach(ingredients, id: \.id) { ingredient in
                                         Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
-                                            .padding()
-                                        
-                                    };frame(width: 340)
+
+                                    }.onDelete(perform: {indexSet in
+                                        ingredients.remove(atOffsets: indexSet)
+                                     })
+                                    .onMove(perform: moveIngredient)
                                 }
                                 else {
                                     Text("List is empty")
-                                        .padding()
                                 }
-                            }.frame(height: 200)
+                            }
                         }
                         Button(action: {
                                 self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: halfModalHeight)
                                 self.showHalfModal.toggle()}) {
                             Text("Add ingredients")
                         }
-                        Section(header: Text("Add steps")) {
+                        Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
+                                    .overlay(Text("Added instructions"), alignment: .leading)) {
                             
-                            ScrollView() {
                                 if steps.count > 0 {
                                     ForEach(steps, id: \.id) { thisStep in
                                         Text("\(thisStep.orderNumber+1) " + thisStep.description)
-                                            .padding()
-                                        
-                                    };frame(width: 340)
+                                    }.onDelete(perform: {indexSet in
+                                        steps.remove(atOffsets: indexSet)
+                                     })
+                                    .onMove(perform: moveInstruction)
                                 }
                                 else {
                                     Text("List is empty")
-                                        .padding()
                                 }
-                            }.frame(height: 200)
                         }
                         Button(action: {
                             self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
@@ -232,7 +232,22 @@ struct NewPostView: View {
         }
     }
     
-    
+    private func moveIngredient(from source: IndexSet, to destination: Int) {
+        ingredients.move(fromOffsets: source, toOffset: destination)
+        var count = 0
+        for i in 0..<ingredients.count {
+            ingredients[i].orderNumber = count
+            count += 1
+        }
+    }
+    private func moveInstruction(from source: IndexSet, to destination: Int) {
+        steps.move(fromOffsets: source, toOffset: destination)
+        var count = 0
+        for i in 0..<steps.count {
+            steps[i].orderNumber = count
+            count += 1
+        }
+    }
     private func dismissModal() {
         presentationMode.wrappedValue.dismiss()
     }
