@@ -11,7 +11,7 @@ import SPAlert
 import AVKit
 
 struct ReadItem: Identifiable {
-    var id = UUID()
+    var id = UUID().uuidString
     var title: String = ""
 }
 
@@ -20,38 +20,44 @@ struct ScanView: View {
     @State private var image: UIImage?
     @State var wordlists = [ReadItem]()
     @State var showSheet = false
+    @State var showSelectionSheet = false
     @State private var showImagePicker = false
     @State private var sourceType: UIImagePickerController.SourceType = .camera
+    @State var stringToEdit = ""
+    @State var stringId = 0
+    @State var ingredients = [String]()
+    @State var instrnctions = [String]()
+
     
     var body: some View {
         
         VStack {
-                Button(action: { showActionSheet() }) {
-                    ZStack {
-                        if image != nil {
-                            Image(uiImage: image!)
-                                .newRecipeImageStyle()
-                        }
-                        else {
-                            Image("default_image")
-                                .newRecipeImageStyle()
-                        }
+            Button(action: { showActionSheet() }) {
+                ZStack {
+                    if image != nil {
+                        Image(uiImage: image!)
+                            .newRecipeImageStyle()
+                    }
+                    else {
+                        Image("default_image")
+                            .newRecipeImageStyle()
                     }
                 }
-                .padding()
-                .actionSheet(isPresented: $showSheet) {
-                    ActionSheet(title: Text("Select image to scan"), message: nil, buttons: [
-                        .default(Text("Camera"), action: {
-                            self.showImagePicker = true
-                            self.sourceType = .camera
-                        }),
-                        .default(Text("Library"), action: {
-                            self.showImagePicker = true
-                            self.sourceType = .photoLibrary
-                        }),
-                        .cancel()
-                    ])
-                }
+            }
+            .padding()
+            .actionSheet(isPresented: $showSheet) {
+                ActionSheet(title: Text("Select image to scan"), message: nil, buttons: [
+                    .default(Text("Camera"), action: {
+                        self.showImagePicker = true
+                        self.sourceType = .camera
+                    }),
+                    .default(Text("Library"), action: {
+                        self.showImagePicker = true
+                        self.sourceType = .photoLibrary
+                    }),
+                    .cancel()
+                ])
+            }
             
             Button(action: {
                 if image != nil {
@@ -66,23 +72,48 @@ struct ScanView: View {
             }
             .blueButtonStyle()
             
+            TextField("Selected text", text: $stringToEdit)
+                //TextEditor(text: $stringToEdit)
+                Button(action: {
+                    print("\(ingredients.count)")
+                    showSelectionSheet.toggle()
+                }) {
+                    Text("Save item as")
+                }.actionSheet(isPresented: $showSelectionSheet) {
+                    ActionSheet(title: Text("Select item type"), message: nil, buttons: [
+                        .default(Text("Ingredient"), action: {
+                            ingredients.append(stringToEdit)
+                            stringToEdit = ""
+                            print("\(ingredients.count) ingredients added")
+                        }),
+                        .default(Text("Instruction"), action: {
+                            instrnctions.append(stringToEdit)
+                            stringToEdit = ""
+                            print("\(instrnctions.count) instructions added")
+                        }),
+                        .cancel()
+                    ])
+                }
+            
             List {
                 Section(header: Text("Text found")) {
-                ForEach(wordlists) { item in
-                    Button(action: {
-                        print("Clicked: \(item.title)")
-                    }) {
-                        Text(item.title)
+                    ForEach(wordlists) { item in
+                        Button(action: {
+                            stringToEdit = item.title
+                            print("Clicked: \(item.title)")
+                        }) {
+                            Text(item.title)
+                        }
+                        
                     }
                 }
+            }
+            .sheet(isPresented: $showImagePicker) {
+                VStack{
+                    imagePicker(image: self.$image, isPresented: $showImagePicker, sourceType: self.sourceType)
                 }
             }
-        .sheet(isPresented: $showImagePicker) {
-            VStack{
-                imagePicker(image: self.$image, isPresented: $showImagePicker, sourceType: self.sourceType)
-            }
         }
-    }
     }
     
     private func showActionSheet() {
@@ -98,7 +129,7 @@ struct ScanView: View {
         let textRecognizer = vision.cloudTextRecognizer(options: options)
         
         let visionImage = VisionImage(image: image!)
-
+        
         let cameraPosition = AVCaptureDevice.Position.back  // Set to the capture device you used.
         let metadata = VisionImageMetadata()
         metadata.orientation = imageOrientation(
@@ -107,10 +138,10 @@ struct ScanView: View {
         )
         
         textRecognizer.process(visionImage) { result, error in
-          guard error == nil, let result = result else {
-            print("Error")
-            return
-          }
+            guard error == nil, let result = result else {
+                print("Error")
+                return
+            }
             let resultText = result.text
             print("result: \(result.text)")
             for block in result.blocks {
@@ -148,7 +179,7 @@ struct ScanView: View {
     func imageOrientation(
         deviceOrientation: UIDeviceOrientation,
         cameraPosition: AVCaptureDevice.Position
-        ) -> VisionDetectorImageOrientation {
+    ) -> VisionDetectorImageOrientation {
         switch deviceOrientation {
         case .portrait:
             return cameraPosition == .front ? .leftTop : .rightTop
