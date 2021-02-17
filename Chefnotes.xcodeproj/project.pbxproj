@@ -10,6 +10,7 @@
 		27546687C01B0501AC0CF10A /* Pods_Chefnotes_ChefnotesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94695E79D0ED9B7B40F307F8 /* Pods_Chefnotes_ChefnotesUITests.framework */; };
 		7FD228E81568D2AC1E7BAC69 /* Pods_ChefnotesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62EE407D64FC36E1A99FB8A0 /* Pods_ChefnotesTests.framework */; };
 		874E593D2CD98546A34D0FA0 /* Pods_Chefnotes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47C18132194440E5D943F035 /* Pods_Chefnotes.framework */; };
+		E40A833E25DD2A6400FF9B4D /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40A833D25DD2A6400FF9B4D /* ScanView.swift */; };
 		E425B1E425CC1D9100528882 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E425B1E325CC1D9100528882 /* Extensions.swift */; };
 		E45A1B0925D1633B000667C9 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A1B0825D1633B000667C9 /* Firebase.swift */; };
 		E45A1B1125D17922000667C9 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A1B1025D17921000667C9 /* ImagePicker.swift */; };
@@ -74,6 +75,7 @@
 		94695E79D0ED9B7B40F307F8 /* Pods_Chefnotes_ChefnotesUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chefnotes_ChefnotesUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F62C73C4C03E381D58FB671 /* Pods-ChefnotesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChefnotesTests.debug.xcconfig"; path = "Target Support Files/Pods-ChefnotesTests/Pods-ChefnotesTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C32F766D69E71D14B2D7DE50 /* Pods-Chefnotes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chefnotes.debug.xcconfig"; path = "Target Support Files/Pods-Chefnotes/Pods-Chefnotes.debug.xcconfig"; sourceTree = "<group>"; };
+		E40A833D25DD2A6400FF9B4D /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		E425B1E325CC1D9100528882 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E45A1B0825D1633B000667C9 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		E45A1B1025D17921000667C9 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			children = (
 				E4B484C925C9F7B5001028EB /* ContentView.swift */,
 				E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */,
+				E40A833D25DD2A6400FF9B4D /* ScanView.swift */,
 				E4E40F6525D57FDA003E2707 /* RecipeDetailView.swift */,
 				E4CDD36125CB24FF005BDE2F /* SettingsView.swift */,
 				E4A28EB825CAD00800331B25 /* NewPostView.swift */,
@@ -317,14 +320,13 @@
 				E4B484C125C9F7B5001028EB /* Frameworks */,
 				E4B484C225C9F7B5001028EB /* Resources */,
 				D6D08D7F156691E1EA0C4A57 /* [CP] Embed Pods Frameworks */,
+				BE6833D72885655E56C8D1C5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Chefnotes;
-			packageProductDependencies = (
-			);
 			productName = Chefnotes;
 			productReference = E4B484C425C9F7B5001028EB /* Chefnotes.app */;
 			productType = "com.apple.product-type.application";
@@ -357,6 +359,7 @@
 				E4B484DD25C9F7B7001028EB /* Frameworks */,
 				E4B484DE25C9F7B7001028EB /* Resources */,
 				D408A7CE985C1380A588B7EA /* [CP] Embed Pods Frameworks */,
+				551726CCB0C4C73CCF8A8E52 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -399,8 +402,6 @@
 				Base,
 			);
 			mainGroup = E4B484BB25C9F7B5001028EB;
-			packageReferences = (
-			);
 			productRefGroup = E4B484C525C9F7B5001028EB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -484,6 +485,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		551726CCB0C4C73CCF8A8E52 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Chefnotes-ChefnotesUITests/Pods-Chefnotes-ChefnotesUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Chefnotes-ChefnotesUITests/Pods-Chefnotes-ChefnotesUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chefnotes-ChefnotesUITests/Pods-Chefnotes-ChefnotesUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B51A74345C09AA18D56A0A79 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -504,6 +522,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BE6833D72885655E56C8D1C5 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Chefnotes/Pods-Chefnotes-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Chefnotes/Pods-Chefnotes-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chefnotes/Pods-Chefnotes-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D408A7CE985C1380A588B7EA /* [CP] Embed Pods Frameworks */ = {
@@ -553,6 +588,7 @@
 				E486DE5D25CD5307001EEC86 /* HalfModalView.swift in Sources */,
 				E4A28E9225CAAC8500331B25 /* SessionStore.swift in Sources */,
 				E4E40F6125D48761003E2707 /* ImageLoader.swift in Sources */,
+				E40A833E25DD2A6400FF9B4D /* ScanView.swift in Sources */,
 				E45A1B0925D1633B000667C9 /* Firebase.swift in Sources */,
 				E4E40F6625D57FDA003E2707 /* RecipeDetailView.swift in Sources */,
 				E4CDD34325CB1E2B005BDE2F /* Category.swift in Sources */,
