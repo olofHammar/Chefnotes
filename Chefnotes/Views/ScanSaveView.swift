@@ -21,6 +21,8 @@ struct ScanSaveView: View {
     @Binding var title: String
     @Binding var ingredients: [Ingredient]
     @Binding var instructions: [Step]
+    @Binding var wordList: [ReadItem]
+    @Binding var passedImage: UIImage?
     @State var serves = 1
     @State var categoryOptionTag: Int = 0
     var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
@@ -171,13 +173,15 @@ struct ScanSaveView: View {
     private func showActionSheet() {
         showSheet.toggle()
     }
-    private func clearPostView() {
+    private func clearPostViews() {
         ingredients.removeAll()
         instructions.removeAll()
         title = ""
         categoryOptionTag = 0
         image = nil
         serves = 1
+        passedImage = nil
+        wordList.removeAll()
     }
     private func checkRecipeStatus() {
         if image == nil {
@@ -237,8 +241,8 @@ struct ScanSaveView: View {
         fireStoreSubmitData(docRefString: "recipe/\(refId)", dataToSave: newRecipePost.dictionary, completion: {_ in
             isLoading = false
             savedRecipeAlert(completion: {_ in
-                clearPostView()
-                dismissModal()
+                
+                clearPostViews()
             })
         })
         return
