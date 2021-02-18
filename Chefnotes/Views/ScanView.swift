@@ -31,10 +31,11 @@ struct ScanView: View {
     @State var instructions = [Step]()
     @State var wordList = [ReadItem]()
     @State private var count = 0
+    var isTrue = false
     
     
     var body: some View {
-        
+
         ZStack {
             VStack {
                 Form {
@@ -114,11 +115,11 @@ struct ScanView: View {
                         //TextEditor(text: $stringToEdit)
                         Button(action: {
                             print("\(ingredients.count)")
-                            if !wordList.isEmpty {
+                            if !wordList.isEmpty && stringToEdit != "" {
                                 showSelectionSheet.toggle()
                             }
                             else {
-                                let alertView = SPAlertView(title: "Could't add item", message: "List of scanned items is empty", preset: SPAlertIconPreset.error)
+                                let alertView = SPAlertView(title: "Could't add item", message: "List of scanned items or selected text is empty", preset: SPAlertIconPreset.error)
                                 alertView.present(duration: 3)
                             }
                         }) {
@@ -134,19 +135,15 @@ struct ScanView: View {
                             Text("Next")
                         }
                         .blueButtonStyle()
-                        .listRowBackground(grayBlue)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
-                        .padding(.bottom)
                         .fullScreenCover(isPresented: $isPresented) {
-                            ScanSaveView(title: $title, ingredients: $ingredients, instructions: $instructions)
+                            ScanSaveView(title: $title, ingredients: $ingredients, instructions: $instructions, wordList: $wordList, passedImage: $image)
                         }
-                    }
-                    Section {
-                        Button(action: { clearScanView() }) {
-                            Text("Clear page")
-                        }
+                        .listRowBackground(grayBlue)
+
                     }
                 }
+                
                 .sheet(isPresented: $showImagePicker) {
                     VStack{
                         imagePicker(image: self.$image, isPresented: $showImagePicker, sourceType: self.sourceType)
@@ -166,20 +163,19 @@ struct ScanView: View {
                 }
             }
             .navigationTitle("Scan recipe")
-            .navigationBarTitleDisplayMode(.inline)            .navigationBarTitleDisplayMode(.inline)
-
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     
     func showSaveView() {
         self.isPresented.toggle()
     }
-    private func clearScanView() {
-        image = nil
-        wordList.removeAll()
-        ingredients.removeAll()
-        instructions.removeAll()
-    }
+//    private func clearScanView() {
+//        image = nil
+//        wordList.removeAll()
+//        ingredients.removeAll()
+//        instructions.removeAll()
+//    }
     private func saveTitle(completion: @escaping (Any) -> Void) {
         title = stringToEdit
         completion(true)
