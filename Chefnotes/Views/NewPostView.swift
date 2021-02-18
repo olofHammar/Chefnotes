@@ -42,14 +42,13 @@ struct NewPostView: View {
     private var actionToComplete = 2
     private var actionsCompleted = 0
     var body: some View {
-        NavigationView{
+        
             ZStack {
                 VStack {
                     Form {
                         Section(header: Text("Add image"), footer: Text("Click the default-image to select a new image.")) {
                             ZStack {
                                 Button(action: { showActionSheet() }) {
-                                    ZStack {
                                         if image != nil {
                                             Image(uiImage: image!)
                                                 .newRecipeImageStyle()
@@ -58,7 +57,6 @@ struct NewPostView: View {
                                             Image("default_image")
                                                 .newRecipeImageStyle()
                                         }
-                                    }
                                 }
                                 .actionSheet(isPresented: $showSheet) {
                                     ActionSheet(title: Text("Add a picture to your post"), message: nil, buttons: [
@@ -75,8 +73,9 @@ struct NewPostView: View {
                                 }
                             }
                             .padding(.vertical)
+                            .padding(.bottom)
                         }
-                        .padding(.bottom)
+                        .padding(.top)
                         Section(header: Text("Enter title")) {
                             TextField("Add title", text: $title).KeyboardAwarePadding()
                         }
@@ -156,6 +155,7 @@ struct NewPostView: View {
                             .padding(.bottom)
                         }
                     }
+                    
                 }
                 .sheet(isPresented: $showImagePicker) {
                     VStack{
@@ -224,12 +224,6 @@ struct NewPostView: View {
                 
             }
             .navigationTitle("Write recipe")
-            .navigationBarItems(trailing: Button(action: {dismissModal()}) {
-                Image(systemName: "x.circle")
-                    .personSettingsImageStyle()
-                    .padding(.bottom, 2)
-            })
-        }
     }
     
     private func moveIngredient(from source: IndexSet, to destination: Int) {

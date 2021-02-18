@@ -12,7 +12,7 @@ let categoryList: [Category] = [
     Category(id: 0, title: "Basics", imageName: "pickles"),
     Category(id: 1, title: "Vegetarian", imageName: "aubergine"),
     Category(id: 2, title: "Meat", imageName: "steak"),
-    Category(id: 3, title: "Fish & seafood", imageName: "fish"),
+    Category(id: 3, title: "Fish & Seafood", imageName: "fish"),
     Category(id: 4, title: "Pasta", imageName: "spaguetti"),
     Category(id: 5, title: "Baking", imageName: "loaf"),
     Category(id: 6, title: "Deserts", imageName: "birthday-cake")]

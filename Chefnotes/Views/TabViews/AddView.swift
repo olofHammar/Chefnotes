@@ -26,8 +26,11 @@ struct AddView: View {
                     }.padding(.leading)
 
                     Button(action: {
-                        self.isPresented.toggle()
+                        //self.isPresented.toggle()
                     }) {
+                        NavigationLink(
+                            destination: NewPostView(),
+                            label: {
                         HStack {
                             CircleImageView(image: Image("phone_color"))
                                 .frame(width: UIScreen.main.bounds.size.width/3)
@@ -37,8 +40,7 @@ struct AddView: View {
                         .cornerRadius(12)
                         .shadow(radius: 5)
                         
-                    }.fullScreenCover(isPresented: $isPresented) {
-                            NewPostView()
+                    })
                     }
                         
                     Text("Use our simple templates to create your own recipes")
