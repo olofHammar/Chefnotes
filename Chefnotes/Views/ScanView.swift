@@ -17,8 +17,7 @@ struct ReadItem: Identifiable {
 
 struct ScanView: View {
     
-    @State private var image: UIImage?
-    @State var wordList = [ReadItem]()
+    @State var isPresented = false
     @State var showSheet = false
     @State var showSelectionSheet = false
     @State private var showImagePicker = false
@@ -27,8 +26,10 @@ struct ScanView: View {
     @State var stringToEdit = ""
     @State var stringId = 0
     @State var title = ""
+    @State private var image: UIImage?
     @State var ingredients = [Ingredient]()
     @State var instructions = [Step]()
+    @State var wordList = [ReadItem]()
     @State private var count = 0
     
     
@@ -127,6 +128,7 @@ struct ScanView: View {
                     }
                     Section {
                         Button (action: {
+                            showSaveView()
                             print("\(ingredients.count) ingredients & \(instructions.count) instructions added.")
                         }) {
                             Text("Next")
@@ -135,6 +137,14 @@ struct ScanView: View {
                         .listRowBackground(grayBlue)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         .padding(.bottom)
+                        .fullScreenCover(isPresented: $isPresented) {
+                            ScanSaveView(title: $title, ingredients: $ingredients, instructions: $instructions)
+                        }
+                    }
+                    Section {
+                        Button(action: { clearScanView() }) {
+                            Text("Clear page")
+                        }
                     }
                 }
                 .sheet(isPresented: $showImagePicker) {
@@ -156,7 +166,19 @@ struct ScanView: View {
                 }
             }
             .navigationTitle("Scan recipe")
+            .navigationBarTitleDisplayMode(.inline)            .navigationBarTitleDisplayMode(.inline)
+
         }
+    }
+    
+    func showSaveView() {
+        self.isPresented.toggle()
+    }
+    private func clearScanView() {
+        image = nil
+        wordList.removeAll()
+        ingredients.removeAll()
+        instructions.removeAll()
     }
     private func saveTitle(completion: @escaping (Any) -> Void) {
         title = stringToEdit
@@ -243,14 +265,8 @@ struct ScanView: View {
             }
             completion(true)
         }
-        
-        
-        
-        
-        
-        
-        
     }
+    
     func imageOrientation(
         deviceOrientation: UIDeviceOrientation,
         cameraPosition: AVCaptureDevice.Position
