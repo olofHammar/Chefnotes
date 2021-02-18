@@ -17,111 +17,207 @@ struct ReadItem: Identifiable {
 
 struct ScanView: View {
     
-    @State private var image: UIImage?
-    @State var wordlists = [ReadItem]()
+    @State var isPresented = false
     @State var showSheet = false
     @State var showSelectionSheet = false
     @State private var showImagePicker = false
+    @State private var inProcess = false
     @State private var sourceType: UIImagePickerController.SourceType = .camera
     @State var stringToEdit = ""
     @State var stringId = 0
-    @State var ingredients = [String]()
-    @State var instrnctions = [String]()
-
+    @State var title = ""
+    @State private var image: UIImage?
+    @State var ingredients = [Ingredient]()
+    @State var instructions = [Step]()
+    @State var wordList = [ReadItem]()
+    @State private var count = 0
+    
     
     var body: some View {
         
-        VStack {
-            Button(action: { showActionSheet() }) {
-                ZStack {
-                    if image != nil {
-                        Image(uiImage: image!)
-                            .newRecipeImageStyle()
+        ZStack {
+            VStack {
+                Form {
+                    Section(header: Text("Select image to scan"), footer: Text("Click the default-image to select a new image.")) {
+                        Button(action: { showActionSheet() }) {
+                            ZStack {
+                                if image != nil {
+                                    Image(uiImage: image!)
+                                        .newRecipeImageStyle()
+                                }
+                                else {
+                                    Image("default_image")
+                                        .newRecipeImageStyle()
+                                }
+                                if inProcess {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                                        .scaleEffect(2)
+                                }
+                            }
+                            .padding(.vertical)
+                            .padding(.bottom)
+                        }
                     }
-                    else {
-                        Image("default_image")
-                            .newRecipeImageStyle()
+                    .padding(.top)
+                    .actionSheet(isPresented: $showSheet) {
+                        ActionSheet(title: Text("Select image to scan"), message: nil, buttons: [
+                            .default(Text("Camera"), action: {
+                                self.showImagePicker = true
+                                self.sourceType = .camera
+                            }),
+                            .default(Text("Library"), action: {
+                                self.showImagePicker = true
+                                self.sourceType = .photoLibrary
+                            }),
+                            .cancel()
+                        ])
                     }
-                }
-            }
-            .padding()
-            .actionSheet(isPresented: $showSheet) {
-                ActionSheet(title: Text("Select image to scan"), message: nil, buttons: [
-                    .default(Text("Camera"), action: {
-                        self.showImagePicker = true
-                        self.sourceType = .camera
-                    }),
-                    .default(Text("Library"), action: {
-                        self.showImagePicker = true
-                        self.sourceType = .photoLibrary
-                    }),
-                    .cancel()
-                ])
-            }
-            
-            Button(action: {
-                if image != nil {
-                    textRecognition(image: image)
-                }
-                else {
-                    let alertView = SPAlertView(title: "Could't scan image", message: "Please select image to scan", preset: SPAlertIconPreset.error)
-                    alertView.present(duration: 3)
-                }
-            }){
-                Text("Scan")
-            }
-            .blueButtonStyle()
-            
-            TextField("Selected text", text: $stringToEdit)
-                //TextEditor(text: $stringToEdit)
-                Button(action: {
-                    print("\(ingredients.count)")
-                    showSelectionSheet.toggle()
-                }) {
-                    Text("Save item as")
-                }.actionSheet(isPresented: $showSelectionSheet) {
-                    ActionSheet(title: Text("Select item type"), message: nil, buttons: [
-                        .default(Text("Ingredient"), action: {
-                            ingredients.append(stringToEdit)
-                            stringToEdit = ""
-                            print("\(ingredients.count) ingredients added")
-                        }),
-                        .default(Text("Instruction"), action: {
-                            instrnctions.append(stringToEdit)
-                            stringToEdit = ""
-                            print("\(instrnctions.count) instructions added")
-                        }),
-                        .cancel()
-                    ])
-                }
-            
-            List {
-                Section(header: Text("Text found")) {
-                    ForEach(wordlists) { item in
+                    Section {
                         Button(action: {
-                            stringToEdit = item.title
-                            print("Clicked: \(item.title)")
+                            if image != nil {
+                                textRecognition(image: image, completion: {_ in
+                                    inProcess = false
+                                })
+                            }
+                            else {
+                                let alertView = SPAlertView(title: "Could't scan image", message: "Please select image to scan", preset: SPAlertIconPreset.error)
+                                alertView.present(duration: 3)
+                            }
+                        }){
+                            Text("Scan image")
+                        }
+                    }
+                    Section(header: Text("Text found in image"), footer: Text("Click item to edit or save to recipe")) {
+                        List {
+                            if wordList.count > 0 {
+                                ForEach(wordList) { item in
+                                    Button(action: {
+                                        stringToEdit = item.title
+                                        print("Clicked: \(item.title)")
+                                    }) {
+                                        Text(item.title)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }.onDelete(perform: {indexSet in
+                                    wordList.remove(atOffsets: indexSet)
+                                })
+                            }
+                            else {
+                                Text("List is empty")
+                            }
+                            
+                        }
+                    }
+                    Section {
+                        TextField("Selected text", text: $stringToEdit)
+                        //TextEditor(text: $stringToEdit)
+                        Button(action: {
+                            print("\(ingredients.count)")
+                            if !wordList.isEmpty {
+                                showSelectionSheet.toggle()
+                            }
+                            else {
+                                let alertView = SPAlertView(title: "Could't add item", message: "List of scanned items is empty", preset: SPAlertIconPreset.error)
+                                alertView.present(duration: 3)
+                            }
                         }) {
-                            Text(item.title)
+                            Text("Save item as...")
                         }
                         
                     }
+                    Section {
+                        Button (action: {
+                            showSaveView()
+                            print("\(ingredients.count) ingredients & \(instructions.count) instructions added.")
+                        }) {
+                            Text("Next")
+                        }
+                        .blueButtonStyle()
+                        .listRowBackground(grayBlue)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                        .padding(.bottom)
+                        .fullScreenCover(isPresented: $isPresented) {
+                            ScanSaveView(title: $title, ingredients: $ingredients, instructions: $instructions)
+                        }
+                    }
+                    Section {
+                        Button(action: { clearScanView() }) {
+                            Text("Clear page")
+                        }
+                    }
+                }
+                .sheet(isPresented: $showImagePicker) {
+                    VStack{
+                        imagePicker(image: self.$image, isPresented: $showImagePicker, sourceType: self.sourceType)
+                    }
+                }
+                .actionSheet(isPresented: $showSelectionSheet) {
+                    ActionSheet(title: Text("Select item type"), message: nil, buttons: [
+                        .default(Text("Title"), action: {
+                            saveTitle(completion: {_ in
+                            removeFromWordList()})}),
+                        .default(Text("Ingredient"), action: { saveIngredient(completion: {_ in
+                            removeFromWordList()})}),
+                        .default(Text("Instruction"), action: {saveInstruction(completion: {_ in
+                            removeFromWordList()})}),
+                        .cancel()
+                    ])
                 }
             }
-            .sheet(isPresented: $showImagePicker) {
-                VStack{
-                    imagePicker(image: self.$image, isPresented: $showImagePicker, sourceType: self.sourceType)
-                }
+            .navigationTitle("Scan recipe")
+            .navigationBarTitleDisplayMode(.inline)            .navigationBarTitleDisplayMode(.inline)
+
+        }
+    }
+    
+    func showSaveView() {
+        self.isPresented.toggle()
+    }
+    private func clearScanView() {
+        image = nil
+        wordList.removeAll()
+        ingredients.removeAll()
+        instructions.removeAll()
+    }
+    private func saveTitle(completion: @escaping (Any) -> Void) {
+        title = stringToEdit
+        completion(true)
+    }
+    private func saveIngredient(completion: @escaping (Any) -> Void) {
+        let ingredient = Ingredient(name: stringToEdit, amount: 0, amountUnit: "-", orderNumber: ingredients.count)
+        ingredients.append(ingredient)
+        
+        completion(true)
+        print("\(ingredients.count) ingredients added")
+    }
+    private func saveInstruction(completion: @escaping (Any) -> Void) {
+        let instruction = Step(description: stringToEdit, orderNumber: instructions.count)
+        instructions.append(instruction)
+        
+        completion(true)
+        print("\(instructions.count) instruction added")
+    }
+    private func removeFromWordList() {
+        for i in 0..<wordList.count {
+            if wordList[i].title == stringToEdit {
+                stringId = count
+            }
+            else {
+                count += 1
             }
         }
+        wordList.remove(at: stringId)
+        count = 0
+        stringToEdit = ""
     }
     
     private func showActionSheet() {
         showSheet.toggle()
     }
     
-    func textRecognition(image: UIImage?) {
-        
+    func textRecognition(image: UIImage?, completion: @escaping (Any) -> Void) {
+        self.inProcess = true
         print("start scan")
         let vision = Vision.vision()
         let options = VisionCloudTextRecognizerOptions()
@@ -157,7 +253,7 @@ struct ScanView: View {
                     let lineCornerPoints = line.cornerPoints
                     let lineFrame = line.frame
                     
-                    self.wordlists.append(ReadItem.init(title: lineText))
+                    self.wordList.append(ReadItem.init(title: lineText))
                     for element in line.elements {
                         let elementText = element.text
                         let elementConfidence = element.confidence
@@ -167,15 +263,10 @@ struct ScanView: View {
                     }
                 }
             }
+            completion(true)
         }
-        
-        
-        
-        
-        
-        
-        
     }
+    
     func imageOrientation(
         deviceOrientation: UIDeviceOrientation,
         cameraPosition: AVCaptureDevice.Position

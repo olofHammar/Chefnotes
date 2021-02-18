@@ -81,9 +81,14 @@ struct RecipeDetailView: View {
                 VStack(alignment: .leading, spacing: 5) {
                     ForEach(ingredients) { ingredient in
                         VStack(alignment: .leading, spacing: 5) {
+                            if ingredient.amountUnit == "-" {
+                                Text("\(ingredient.name)")
+                            }
+                            else {
                             Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
                                 .font(.subheadline)
                                 .multilineTextAlignment(.leading)
+                            }
                             Divider()
                         }
                     }
