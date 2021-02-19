@@ -12,6 +12,7 @@ import URLImage
 struct RecipeDetailView: View {
     
     @EnvironmentObject var env: GlobalEnviroment
+    @State var isPresented = false
     let thisRecipe: RecipePost
     var db = Firestore.firestore()
     @State var isFavorite = false
@@ -121,13 +122,15 @@ struct RecipeDetailView: View {
         .navigationBarItems(trailing:
                                 
                                 Button(action: {
+                                    showEditView()
                                 }) {
                                     if thisRecipe.authorId == env.currentUser.id {
-                                        NavigationLink(destination: SettingsView()) {
                                             Text("Edit")
-                                        }
                                     }
-                                })
+                                }.fullScreenCover(isPresented: $isPresented) {
+                                    EditRecipeView()
+                                }
+        )
         .onAppear() {
             checkIsFavorite()
             listenForIngredients()
@@ -136,6 +139,9 @@ struct RecipeDetailView: View {
         }
     }
     
+    func showEditView() {
+        isPresented.toggle()
+    }
     func checkIsFavorite() {
         if env.favoriteRecipes.count > 0 {
             for i in 0...env.favoriteRecipes.count-1 {
