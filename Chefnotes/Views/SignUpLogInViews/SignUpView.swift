@@ -40,7 +40,8 @@ struct SignUpView: View {
                     Button(action: {saveUserInAuth(email: email, password: password)})
                         {Text("Sign up")}
                         .blueButtonStyle()
-                        .padding(.bottom, 40)
+                        .frame(width: 300, height: 50)
+                        .padding(.bottom, 100)
                 }
             }
             .navigationBarTitle("Create Account")

@@ -43,6 +43,9 @@ struct LogInView: View {
                             TextField("Enter E-mail", text: $email)
                             SecureField("Enter password", text: $password)
                         }
+                        Section {
+                            
+                        }
                     }
                     VStack {
                         
@@ -50,6 +53,7 @@ struct LogInView: View {
                             signIn(email: email, password: password)
                         }){Text("Log in")}
                         .blueButtonStyle()
+                        .frame(width: 300, height: 50)
                         .padding(2)
                         
                         Button(action: {
@@ -62,7 +66,7 @@ struct LogInView: View {
                                     SignUpView()
                                 })
                     }
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 100)
                 }
             }
             .navigationBarTitle("Log in")
@@ -70,7 +74,7 @@ struct LogInView: View {
     }
     
     func signIn(email: String, password: String) {
-        session.listen()
+        session.listen(completion: {_ in })
         Auth.auth().signIn(withEmail: email, password: password) { user, error in
             
             if let err = error {

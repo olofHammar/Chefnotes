@@ -15,9 +15,9 @@ extension Button {
     
     func blueButtonStyle() -> some View {
         self
+            .frame(minWidth: UIScreen.main.bounds.size.width/1.5, maxWidth: .infinity, minHeight: UIScreen.main.bounds.size.height/16, maxHeight: .infinity)
             .font(.headline)
             .foregroundColor(.white)
-            .frame(width: UIScreen.main.bounds.size.width/1.5, height: UIScreen.main.bounds.size.height/16)
             .background(Color.blue)
             .cornerRadius(8)
     }
