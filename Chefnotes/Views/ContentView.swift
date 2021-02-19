@@ -18,6 +18,7 @@ struct ContentView: View {
     @State var userIsLoaded = false
 
     var body: some View {
+
         Group {
             if userIsLoaded {
                 if (session.session == nil) {
@@ -31,7 +32,7 @@ struct ContentView: View {
                         grayBlue
                         CircleImageView(image: Image("aubergine"))
                             .frame(width: 200)
-                        
+
                         Image("chefnotes_logo")
                             .resizable()
                             .scaledToFit()
@@ -39,16 +40,22 @@ struct ContentView: View {
                     }
             }
         }.onAppear {
-            self.session.listen()
-            self.getFirestoreUser() { _ in
-                self.userIsLoaded = true
-            }
+            self.session.listen(completion: { _ in
+                if session.session == nil {
+                    self.userIsLoaded = true
+                }
+                else {
+                    self.getFirestoreUser() { _ in
+                        self.userIsLoaded = true
+                    }
+                }
+            })
         }
     }
     
-    func getUser () {
-        session.listen()
-    }
+//    func getUser () {
+//        session.listen()
+//    }
     
     func getFirestoreUser(completion: @escaping (Any) -> Void) {
         Firestore.firestore().collection("users").whereField("id", isEqualTo: Auth.auth().currentUser?.uid ?? "").getDocuments() { (QuerySnapshot, err) in

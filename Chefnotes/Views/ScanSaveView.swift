@@ -94,7 +94,6 @@ struct ScanSaveView: View {
                                 if ingredients.count > 0 {
                                     ForEach(ingredients, id: \.id) { ingredient in
                                         Text("\(ingredient.name)")
-
                                     }.onDelete(perform: {indexSet in
                                         ingredients.remove(atOffsets: indexSet)
                                      })

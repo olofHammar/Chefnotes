@@ -24,6 +24,7 @@ struct ScanView: View {
     @State private var inProcess = false
     @State private var sourceType: UIImagePickerController.SourceType = .camera
     @State var stringToEdit = ""
+    @State var selectedItem: String?
     @State var stringId = 0
     @State var title = ""
     @State private var image: UIImage?
@@ -95,12 +96,14 @@ struct ScanView: View {
                                 ForEach(wordList) { item in
                                     Button(action: {
                                         stringToEdit = item.title
-                                        print("Clicked: \(item.title)")
+                                        self.selectedItem = item.title
                                     }) {
                                         Text(item.title)
                                     }
                                     .buttonStyle(PlainButtonStyle())
-                                }.onDelete(perform: {indexSet in
+                                    .listRowBackground(self.selectedItem == item.title ? Color(UIColor.systemGray4).opacity(0.6) : Color(UIColor.white))
+                                }
+                                .onDelete(perform: {indexSet in
                                     wordList.remove(atOffsets: indexSet)
                                 })
                             }
@@ -217,7 +220,7 @@ struct ScanView: View {
         print("start scan")
         let vision = Vision.vision()
         let options = VisionCloudTextRecognizerOptions()
-        options.languageHints = ["en", "hi"]
+        options.languageHints = ["en", "sv"]
         let textRecognizer = vision.cloudTextRecognizer(options: options)
         
         let visionImage = VisionImage(image: image!)
