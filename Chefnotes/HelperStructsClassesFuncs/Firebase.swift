@@ -21,7 +21,7 @@ func fireStoreSubmitData(docRefString: String, dataToSave: [String:Any], complet
             print("Data uploaded succefully")
             completion(true)
             if showDetails {
-            print("Data uploaded \(dataToSave)")
+                print("Data uploaded \(dataToSave)")
             }
         }
         
@@ -39,7 +39,7 @@ func fireStoreSubmitIngredients(docRefString: String, dataToSave: [String:Any], 
             print("Ingredients uploaded succefully")
             completion(true)
             if showDetails {
-            print("Data uploaded \(dataToSave)")
+                print("Data uploaded \(dataToSave)")
             }
         }
         
@@ -57,7 +57,7 @@ func fireStoreSubmitSteps(docRefString: String, dataToSave: [String:Any], comple
             print("Steps uploaded succefully")
             completion(true)
             if showDetails {
-            print("Data uploaded \(dataToSave)")
+                print("Data uploaded \(dataToSave)")
             }
         }
         
@@ -79,11 +79,27 @@ func deleteSteps(refId: String, completion: @escaping (Any) -> Void) {
     })
     completion(true)
 }
+func deleteIngredients(refId: String, completion: @escaping (Any) -> Void) {
+    let db = Firestore.firestore().collection("recipe")
+    let docRef = db.document(refId).collection("ingredients")
+    docRef.getDocuments(completion: { querySnapshot, error in
+        if let err = error {
+            print("error: \(err.localizedDescription)")
+            return
+        }
+        guard let docs = querySnapshot?.documents else {
+            return }
+        for doc in docs {
+            docRef.document(doc.documentID).delete()
+        }
+    })
+    completion(true)
+}
 func fireStoreUpdateData(docRefString: String, dataToUpdate: [String:Any], completion: @escaping (Any) -> Void, showDetails: Bool = false) {
     
     let docRef = Firestore.firestore().document(docRefString)
     print("Updating data")
-    docRef.setData(dataToUpdate, merge: true) { error in
+    docRef.setData(dataToUpdate, merge: false) { error in
         if let err = error {
             print("error \(err)")
         }
@@ -95,6 +111,36 @@ func fireStoreUpdateData(docRefString: String, dataToUpdate: [String:Any], compl
             completion(true)
         }
         
+    }
+}
+func updateOtherUsersFavorites(userIds: [String], refString: String, dataToUpdate: [String:Any], completion: @escaping (Any) -> Void) {
+    
+    let db = Firestore.firestore()
+    if userIds.count >  0 {
+        for i in 0..<userIds.count {
+            print("\(userIds.count)")
+            let ref = db.collection("users").document(userIds[i])
+            let docRef = ref.collection("favoriteRecipes").document(refString)
+            docRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    docRef.setData(dataToUpdate, merge: false) { error in
+                        if let err = error {
+                            print("error \(err)")
+                        }
+                        else {
+                            print("Data updated succefully and such")
+                        }
+                    }
+                }
+                else {
+                    print("Document does not exist")
+                }
+            }
+            completion(true)
+        }
+    }
+    else {
+        print("no users")
     }
 }
 

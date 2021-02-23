@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct RecipeView: View {
     
@@ -13,10 +14,41 @@ struct RecipeView: View {
     
     var body: some View {
         
+        let url = URL(string: favorite.image)!
+
         VStack {
-            ImageView(withURL: favorite.image)
-                .frame(height: 150)
-                .clipped()
+            URLImage(url: url,
+                     empty: {
+                        Image("default_image")
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 150)
+                            .clipped()
+                     },
+                     inProgress: { progress in
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                            .scaleEffect(3)
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 150, alignment: .center)
+                        
+                     },
+                     failure: { error, retry in
+                        Text("Failed loading image")
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 150, alignment: .center)
+                        
+                     },
+                     content: { image, info in
+                        image
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 150)
+                            .clipped()
+                     })
+//            ImageView(withURL: favorite.image)
+//                .frame(height: 150)
+//                .clipped()
 //            Image("pasta")
 //                .resizable()
 //                .scaledToFill()

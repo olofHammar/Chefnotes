@@ -13,7 +13,7 @@ struct RecipeDetailView: View {
     
     @EnvironmentObject var env: GlobalEnviroment
     @State var isPresented = false
-    @State var thisRecipe: RecipePost
+    var thisRecipe: RecipePost
     var db = Firestore.firestore()
     @State var isFavorite = false
     @State private var ingredients = [Ingredient]()
