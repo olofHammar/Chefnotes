@@ -15,11 +15,12 @@ extension Button {
     
     func blueButtonStyle() -> some View {
         self
-            .frame(minWidth: UIScreen.main.bounds.size.width/1.5, maxWidth: .infinity, minHeight: UIScreen.main.bounds.size.height/16, maxHeight: .infinity)
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+            .padding()
             .font(.headline)
             .foregroundColor(.white)
             .background(Color.blue)
-            .cornerRadius(8)
+            .cornerRadius(12)
     }
     
     func smallTextButtonStyle() -> some View {
