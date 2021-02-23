@@ -363,14 +363,14 @@ struct EditRecipeView: View {
             }
         }
     }
-    private func saveNewSteps(refId: String) {
-        if steps.count > 0 {
-            for i in 0...steps.count-1 {
-                let step = steps[i].dictionary
-                fireStoreSubmitSteps(docRefString: "recipe/\(refId)", dataToSave: step) { _ in}
-            }
-        }
-    }
+//    private func saveNewSteps(refId: String) {
+//        if steps.count > 0 {
+//            for i in 0...steps.count-1 {
+//                let step = steps[i].dictionary
+//                fireStoreSubmitSteps(docRefString: "recipe/\(refId)", dataToSave: step) { _ in}
+//            }
+//        }
+//    }
     private func checkRecipeStatus() {
         if image == nil {
             updateRecipePost(imageUrl: "") {_ in
