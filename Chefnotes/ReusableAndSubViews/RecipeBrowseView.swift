@@ -11,7 +11,7 @@ import URLImage
 
 struct RecipeBrowseView: View {
     
-    @State var recipe: RecipePost
+    var recipe: RecipePost
     var postHeight: CGFloat = 400
     
     var body: some View {

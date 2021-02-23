@@ -12,13 +12,13 @@ import SPAlert
 
 struct EditRecipeView: View {
     
-    @Environment(\.presentationMode) var presentationMode
-    
+    @EnvironmentObject var env: GlobalEnviroment
+
     @State var thisRecipe: RecipePost
     @State var ingredients: [Ingredient]
     @State var steps: [Step]
     
-    @State private var showImagePicker = false
+    @State var showImagePicker = false
     @State var showSheet = false
     @State var isLoading = false
     @State var showHalfModal = false
@@ -30,12 +30,13 @@ struct EditRecipeView: View {
     @State var halfModalTextFieldTwoVal = ""
     @State var newItemType: newStepOrIngredient = .Step
     @State var ingredientUnitIndex = 0
-
     @State var sourceType: UIImagePickerController.SourceType = .camera
     @State var image: UIImage?
     @State var categoryOptionTag: Int = 0
     var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
     var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
+    @State var oldImageUrl = ""
+    @State var users = [String]()
 
     
     var body: some View {
@@ -78,7 +79,7 @@ struct EditRecipeView: View {
                                 
                             }
                             .actionSheet(isPresented: $showSheet) {
-                                ActionSheet(title: Text("Add a picture to your post"), message: nil, buttons: [
+                                ActionSheet(title: Text("Change picture of your post"), message: nil, buttons: [
                                     .default(Text("Camera"), action: {
                                         self.showImagePicker = true
                                         self.sourceType = .camera
@@ -148,7 +149,7 @@ struct EditRecipeView: View {
                         Text("Add ingredients")
                     }
                     Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
-                                .overlay(Text("Added instructions"), alignment: .leading)) {
+                                .overlay(Text("Edit steps"), alignment: .leading)) {
                         
                             if steps.count > 0 {
                                 ForEach(steps, id: \.id) { thisStep in
@@ -162,11 +163,15 @@ struct EditRecipeView: View {
                                 Text("List is empty")
                             }
                     }
+                    Button(action: {
+                        self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
+                        self.showHalfModal.toggle()
+                    }) {
+                        Text("Add steps")
+                    }
                     Section {
-                        Button (action: {
-                                    //checkRecipeStatus()
-                        }) {
-                            Text("Save Recipe")
+                        Button (action: { checkRecipeStatus() }) {
+                            Text("Update Recipe")
                         }
                         .blueButtonStyle()
                         .listRowBackground(grayBlue)
@@ -244,6 +249,7 @@ struct EditRecipeView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear() {
             getCategory(recipe: thisRecipe)
+            oldImageUrl = thisRecipe.image
         }
     }
     private func moveIngredient(from source: IndexSet, to destination: Int) {
@@ -265,7 +271,7 @@ struct EditRecipeView: View {
     private func showActionSheet() {
         showSheet.toggle()
     }
-    func getCategory(recipe: RecipePost) {
+    private func getCategory(recipe: RecipePost) {
         if thisRecipe.category == "Basics" {
             categoryOptionTag = 0
         }
@@ -294,12 +300,12 @@ struct EditRecipeView: View {
             categoryOptionTag = 8
         }
     }
-    func hideModal() {
+    private func hideModal() {
         
         UIApplication.shared.endEditing()
         showHalfModal = false
     }
-    func updateHalfModal(placeHolder: String, itemType: newStepOrIngredient, height: CGFloat) {
+    private func updateHalfModal(placeHolder: String, itemType: newStepOrIngredient, height: CGFloat) {
         
         halfModalTextFieldOneVal = ""
         halfModalTextFieldTwoVal = ""
@@ -307,7 +313,7 @@ struct EditRecipeView: View {
         newItemType = itemType
         halfModalHeight = height
     }
-    func clearHalfModal() {
+    private func clearHalfModal() {
         halfModalTextFieldOneVal = ""
         halfModalTextFieldTwoVal = ""
     }
@@ -322,7 +328,7 @@ struct EditRecipeView: View {
             return nil
         }
     }
-    func addNewItem() {
+    private func addNewItem() {
         if halfModalTextFieldTwoVal == "" {
             let alertView = SPAlertView(title: newItemType == .Step ? "Please add a step" : "Please add a ingredient", message: "Check that no fields are left blank" , preset: SPAlertIconPreset.error)
             
@@ -349,17 +355,123 @@ struct EditRecipeView: View {
             }
         }
     }
-    
-    func dismissModal() {
-        presentationMode.wrappedValue.dismiss()
-    }
-    func saveNewSteps(refId: String) {
+    private func saveNewSteps(refId: String) {
         if steps.count > 0 {
             for i in 0...steps.count-1 {
                 let step = steps[i].dictionary
                 fireStoreSubmitSteps(docRefString: "recipe/\(refId)", dataToSave: step) { _ in}
             }
         }
+    }
+    private func checkRecipeStatus() {
+        if image == nil {
+            updateRecipePost(imageUrl: "") {_ in
+                self.isLoading = false
+                showUpdateAlert()
+            }
+        }
+        else if ingredients.isEmpty || steps.isEmpty || thisRecipe.title == "" {
+            let alertView = SPAlertView(title: "Couldn't save recipe", message: "Check that no fields are left blank", preset: SPAlertIconPreset.error)
+            alertView.present(duration: 3)
+        }
+        else {
+            isLoading = true
+            uploadImage()
+        }
+    }
+    private func uploadImage() {
+        
+        let storageRef = Storage.storage().reference()
+        let imageUrl = UUID().uuidString
+        var data = NSData()
+        data = image!.jpegData(compressionQuality: 0.8)! as NSData
+        let filePath = storageRef.child("/images/\(imageUrl)")
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpg"
+        
+        _ = filePath.putData(data as Data, metadata: metaData){(metaData,error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            } else {
+                filePath.downloadURL (completion: {(url, error) in
+                    if url != nil {
+                        print("Nu är vi här")
+                        self.updateRecipePost(imageUrl: (url?.absoluteString)!) {_ in
+                            self.isLoading = false
+                            showUpdateAlert()
+                        }
+                    }
+                    else {
+                        print("Error")
+                    }
+                })
+            }
+        }
+    }
+    private func deleteOldImage() {
+        
+        let storage = Storage.storage()
+        let url = oldImageUrl
+        let storageRef = storage.reference(forURL: url)
+
+        storageRef.delete { error in
+            if let error = error {
+                print("\(error)")
+            } else {
+                print("deleted old image")
+            }
+        }
+    }
+    private func updateRecipePost(imageUrl: String, completion: @escaping (Any) -> Void) {
+        isLoading = true
+        
+        var updatedRecipePost = RecipePost(id: thisRecipe.id, refId: thisRecipe.refId, title: thisRecipe.title, serves: thisRecipe.serves, author: "\(self.env.currentUser.firstName) \(self.env.currentUser.lastName)", authorId: Auth.auth().currentUser?.uid ?? "", category: categoryOptions[categoryOptionTag], image: thisRecipe.image)
+        
+        if image != nil {
+            updatedRecipePost.image = imageUrl
+        }
+        
+        fireStoreUpdateData(docRefString: "recipe/\(thisRecipe.refId)", dataToUpdate: updatedRecipePost.dictionary, completion: { _ in
+            deleteOldImage()
+            deleteIngredients(refId: thisRecipe.refId, completion: { _ in
+                for i in 0...ingredients.count-1 {
+                    let ingredient = ingredients[i].dictionary
+                    fireStoreSubmitIngredients(docRefString: "recipe/\(thisRecipe.refId)", dataToSave: ingredient) { _ in
+                    }
+                }
+            })
+            deleteSteps(refId: thisRecipe.refId, completion: { _ in
+                for i in 0...steps.count-1 {
+                    let step = steps[i].dictionary
+                    fireStoreSubmitSteps(docRefString: "recipe/\(thisRecipe.refId)", dataToSave: step){ _ in }
+                }
+            })
+            getUsers(completion: {_ in
+                print("\(self.users.count)")
+                updateOtherUsersFavorites(userIds: self.users, refString: thisRecipe.refId, dataToUpdate: updatedRecipePost.dictionary, completion: { _ in })
+            })
+        })
+        completion(true)
+    }
+    func getUsers(completion: @escaping (Any) -> Void) {
+        
+        let db = Firestore.firestore()
+        db.collection("users").getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+                return
+            } else {
+                for document in querySnapshot!.documents {
+                    self.users.append(document.documentID)
+                }
+                completion(true)
+            }
+        }
+    }
+    func showUpdateAlert() {
+        let alertView = SPAlertView(title: "Recipe updated!", message: "The recipe has been updated in your book.", preset: SPAlertIconPreset.done)
+        alertView.present(duration: 2)
     }
 }
 

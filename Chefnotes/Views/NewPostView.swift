@@ -345,7 +345,6 @@ struct NewPostView: View {
             } else {
                 filePath.downloadURL (completion: {(url, error) in
                     if url != nil {
-                        print("Nu är vi här")
                         self.saveRecipePost(imageUrl: (url?.absoluteString)!)
                     }
                     else {

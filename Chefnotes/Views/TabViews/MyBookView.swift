@@ -26,7 +26,8 @@ struct MyBookView: View {
     }
     
     @EnvironmentObject var env: GlobalEnviroment
-    @State var favoriteRecipeList = [RecipePost]()
+    //@State var favoriteRecipeList = [RecipePost]()
+    //@State var refIds = [String]()
     private let db = Firestore.firestore()
     
     var body: some View {
@@ -127,6 +128,52 @@ struct MyBookView: View {
         
         return scale
     }
+//    func getFavoriteRefs(completion: @escaping (Any) -> Void) {
+//
+//        let db = Firestore.firestore()
+//        let ref = db.collection("users").document(env.currentUser.id)
+//        ref.collection("favoriteRecipes").addSnapshotListener() { (querySnapshot, err) in
+//            if let err = err {
+//                print("Error getting documents: \(err)")
+//            } else {
+//                for document in querySnapshot!.documents {
+//                    let data = document.data()
+//                    let refId = data["refId"] as? String ?? ""
+//                    self.refIds.append(refId)
+//                }
+//            }
+//            completion(true)
+//            print("completed")
+//        }
+//    }
+//    func loadFavoriteRecipes() {
+//        let db = Firestore.firestore()
+//        print("started")
+//        for i in 0..<self.refIds.count {
+//            print("\(i)")
+//            let ref = db.collection("recipe").whereField("refId", isEqualTo: refIds[i])
+//            ref.addSnapshotListener { (querySnapshot, err) in
+//                if let err = err {
+//                    print("Error getting documents: \(err)")
+//                } else {
+//                    for document in querySnapshot!.documents {
+//                        let data = document.data()
+//                        let refId = data["refId"] as? String ?? ""
+//                        let title = data["title"] as? String ?? ""
+//                        let serves = data["serves"] as? Int ?? 0
+//                        let author = data["author"] as? String ?? ""
+//                        let authorId = data["authorId"] as? String ?? ""
+//                        let category = data["category"] as? String ?? ""
+//                        let image = data["image"] as? String ?? ""
+//                        print("\(document.documentID) => \(document.data())")
+//                        let recipe = RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
+//                        self.favoriteRecipeList.append(recipe)
+//                        print("\(self.favoriteRecipeList.count)")
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 struct MyBookView_Previews: PreviewProvider {
