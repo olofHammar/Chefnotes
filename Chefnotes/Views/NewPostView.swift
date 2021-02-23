@@ -39,8 +39,8 @@ struct NewPostView: View {
     @State private var categoryOptionTag: Int = 0
     private var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
     private var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
-    private var actionToComplete = 2
-    private var actionsCompleted = 0
+    //private var actionToComplete = 2
+    //private var actionsCompleted = 0
     var body: some View {
         
             ZStack {

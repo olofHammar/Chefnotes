@@ -13,7 +13,7 @@ struct RecipeDetailView: View {
     
     @EnvironmentObject var env: GlobalEnviroment
     @State var isPresented = false
-    let thisRecipe: RecipePost
+    @State var thisRecipe: RecipePost
     var db = Firestore.firestore()
     @State var isFavorite = false
     @State private var ingredients = [Ingredient]()
@@ -86,9 +86,9 @@ struct RecipeDetailView: View {
                                 Text("\(ingredient.name)")
                             }
                             else {
-                            Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
-                                .font(.subheadline)
-                                .multilineTextAlignment(.leading)
+                                Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
+                                    .font(.subheadline)
+                                    .multilineTextAlignment(.leading)
                             }
                             Divider()
                         }
@@ -120,15 +120,10 @@ struct RecipeDetailView: View {
         }
         .background(grayBlue)
         .navigationBarItems(trailing:
-                                
-                                Button(action: {
-                                    showEditView()
-                                }) {
+                                NavigationLink(destination: EditRecipeView(thisRecipe: thisRecipe, ingredients: ingredients, steps: steps.sorted(by: {$0.orderNumber < $1.orderNumber}))) {
                                     if thisRecipe.authorId == env.currentUser.id {
-                                            Text("Edit")
+                                        Text("Edit")
                                     }
-                                }.fullScreenCover(isPresented: $isPresented) {
-                                    EditRecipeView()
                                 }
         )
         .onAppear() {
