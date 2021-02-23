@@ -136,7 +136,6 @@ struct ScanView: View {
                             Text("Next")
                         }
                         .blueButtonStyle()
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         .fullScreenCover(isPresented: $isPresented) {
                             ScanSaveView(title: $title, ingredients: $ingredients, steps: $steps, wordList: $wordList, passedImage: $image)
                         }

@@ -13,31 +13,34 @@ import SPAlert
 struct EditRecipeView: View {
     
     @EnvironmentObject var env: GlobalEnviroment
-
+    
     @State var thisRecipe: RecipePost
     @State var ingredients: [Ingredient]
     @State var steps: [Step]
+    @State var oldImageUrl = ""
+    @State var users = [String]()
     
     @State var showImagePicker = false
     @State var showSheet = false
     @State var isLoading = false
     @State var showHalfModal = false
-
+    
     @State var halfModalTitle = ""
     @State var halfModalPlaceHolder = ""
     @State var halfModalHeight: CGFloat = 400
     @State var halfModalTextFieldOneVal = ""
     @State var halfModalTextFieldTwoVal = ""
+    
     @State var newItemType: newStepOrIngredient = .Step
     @State var ingredientUnitIndex = 0
     @State var sourceType: UIImagePickerController.SourceType = .camera
     @State var image: UIImage?
+    @State var newImageAdded = false
     @State var categoryOptionTag: Int = 0
     var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
     var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
-    @State var oldImageUrl = ""
-    @State var users = [String]()
-
+    
+    
     
     var body: some View {
         
@@ -71,8 +74,8 @@ struct EditRecipeView: View {
                                                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 200, alignment: .center)
                                                 
                                              },
-                                             content: { image, info in
-                                                image
+                                             content: { oldImage, info in
+                                                oldImage
                                                     .newRecipeImageStyle()
                                              })
                                 }
@@ -96,9 +99,11 @@ struct EditRecipeView: View {
                         .padding(.bottom)
                     }
                     .padding(.top)
+                    
                     Section(header: Text("Edit title")) {
                         TextField("Add title", text: $thisRecipe.title).KeyboardAwarePadding()
                     }
+                    
                     Section(header: Text("Edit category")) {
                         HStack {
                             Picker("Category", selection: $categoryOptionTag) {
@@ -117,11 +122,13 @@ struct EditRecipeView: View {
                             Text(categoryOptions[categoryOptionTag])
                         }
                     }
+                    
                     Section(header: Text("Edit number of servings")) {
                         Stepper(value: $thisRecipe.serves, in: 1...50) {
                             Text("Serves: \(thisRecipe.serves)")
                         }
                     }
+                    
                     Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
                                 .overlay(Text("Edit ingredients"), alignment: .leading)) {
                         List {
@@ -131,11 +138,11 @@ struct EditRecipeView: View {
                                         Text("\(ingredient.name)")
                                     }
                                     else {
-                                    Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
+                                        Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
                                     }
                                 }.onDelete(perform: {indexSet in
                                     ingredients.remove(atOffsets: indexSet)
-                                 })
+                                })
                                 .onMove(perform: moveIngredient)
                             }
                             else {
@@ -148,20 +155,21 @@ struct EditRecipeView: View {
                             self.showHalfModal.toggle()}) {
                         Text("Add ingredients")
                     }
+                    
                     Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
                                 .overlay(Text("Edit steps"), alignment: .leading)) {
                         
-                            if steps.count > 0 {
-                                ForEach(steps, id: \.id) { thisStep in
-                                    Text("\(thisStep.orderNumber+1) " + thisStep.description)
-                                }.onDelete(perform: {indexSet in
-                                    steps.remove(atOffsets: indexSet)
-                                 })
-                                .onMove(perform: moveInstruction)
-                            }
-                            else {
-                                Text("List is empty")
-                            }
+                        if steps.count > 0 {
+                            ForEach(steps, id: \.id) { thisStep in
+                                Text("\(thisStep.orderNumber+1) " + thisStep.description)
+                            }.onDelete(perform: {indexSet in
+                                steps.remove(atOffsets: indexSet)
+                            })
+                            .onMove(perform: moveInstruction)
+                        }
+                        else {
+                            Text("List is empty")
+                        }
                     }
                     Button(action: {
                         self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
@@ -169,13 +177,13 @@ struct EditRecipeView: View {
                     }) {
                         Text("Add steps")
                     }
+                    
                     Section {
                         Button (action: { checkRecipeStatus() }) {
                             Text("Update Recipe")
                         }
                         .blueButtonStyle()
                         .listRowBackground(grayBlue)
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         .padding(.bottom)
                     }
                     
@@ -355,14 +363,14 @@ struct EditRecipeView: View {
             }
         }
     }
-    private func saveNewSteps(refId: String) {
-        if steps.count > 0 {
-            for i in 0...steps.count-1 {
-                let step = steps[i].dictionary
-                fireStoreSubmitSteps(docRefString: "recipe/\(refId)", dataToSave: step) { _ in}
-            }
-        }
-    }
+//    private func saveNewSteps(refId: String) {
+//        if steps.count > 0 {
+//            for i in 0...steps.count-1 {
+//                let step = steps[i].dictionary
+//                fireStoreSubmitSteps(docRefString: "recipe/\(refId)", dataToSave: step) { _ in}
+//            }
+//        }
+//    }
     private func checkRecipeStatus() {
         if image == nil {
             updateRecipePost(imageUrl: "") {_ in
@@ -396,7 +404,7 @@ struct EditRecipeView: View {
             } else {
                 filePath.downloadURL (completion: {(url, error) in
                     if url != nil {
-                        print("Nu är vi här")
+                        self.newImageAdded = true
                         self.updateRecipePost(imageUrl: (url?.absoluteString)!) {_ in
                             self.isLoading = false
                             showUpdateAlert()
@@ -410,17 +418,23 @@ struct EditRecipeView: View {
         }
     }
     private func deleteOldImage() {
-        
-        let storage = Storage.storage()
-        let url = oldImageUrl
-        let storageRef = storage.reference(forURL: url)
-
-        storageRef.delete { error in
-            if let error = error {
-                print("\(error)")
-            } else {
-                print("deleted old image")
+        if newImageAdded {
+            
+            let storage = Storage.storage()
+            let url = oldImageUrl
+            let storageRef = storage.reference(forURL: url)
+            
+            storageRef.delete { error in
+                if let error = error {
+                    print("\(error)")
+                } else {
+                    print("deleted old image")
+                }
             }
+        }
+        else {
+            print("no new image added")
+            return
         }
     }
     private func updateRecipePost(imageUrl: String, completion: @escaping (Any) -> Void) {

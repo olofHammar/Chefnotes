@@ -53,7 +53,6 @@ struct LogInView: View {
                             signIn(email: email, password: password)
                         }){Text("Log in")}
                         .blueButtonStyle()
-                        .frame(width: 300, height: 50)
                         .padding(2)
                         
                         Button(action: {
