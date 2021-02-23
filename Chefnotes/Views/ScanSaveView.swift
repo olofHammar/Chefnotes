@@ -20,7 +20,7 @@ struct ScanSaveView: View {
     @State var image: UIImage?
     @Binding var title: String
     @Binding var ingredients: [Ingredient]
-    @Binding var instructions: [Step]
+    @Binding var steps: [Step]
     @Binding var wordList: [ReadItem]
     @Binding var passedImage: UIImage?
     @State var serves = 1
@@ -107,11 +107,11 @@ struct ScanSaveView: View {
                         Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
                                     .overlay(Text("Added instructions"), alignment: .leading)) {
                             
-                                if instructions.count > 0 {
-                                    ForEach(instructions, id: \.id) { thisStep in
+                                if steps.count > 0 {
+                                    ForEach(steps, id: \.id) { thisStep in
                                         Text("\(thisStep.orderNumber+1) " + thisStep.description)
                                     }.onDelete(perform: {indexSet in
-                                        instructions.remove(atOffsets: indexSet)
+                                        steps.remove(atOffsets: indexSet)
                                      })
                                     .onMove(perform: moveInstruction)
                                 }
@@ -159,10 +159,10 @@ struct ScanSaveView: View {
         }
     }
     private func moveInstruction(from source: IndexSet, to destination: Int) {
-        instructions.move(fromOffsets: source, toOffset: destination)
+        steps.move(fromOffsets: source, toOffset: destination)
         var count = 0
-        for i in 0..<instructions.count {
-            instructions[i].orderNumber = count
+        for i in 0..<steps.count {
+            steps[i].orderNumber = count
             count += 1
         }
     }
@@ -174,7 +174,7 @@ struct ScanSaveView: View {
     }
     private func clearPostViews() {
         ingredients.removeAll()
-        instructions.removeAll()
+        steps.removeAll()
         title = ""
         categoryOptionTag = 0
         image = nil
@@ -187,7 +187,7 @@ struct ScanSaveView: View {
             let alertView = SPAlertView(title: "Couldn't save recipe", message: "Select an image for your recipe", preset: SPAlertIconPreset.error)
             alertView.present(duration: 3)
         }
-        else if ingredients.isEmpty || instructions.isEmpty || title == "" {
+        else if ingredients.isEmpty || steps.isEmpty || title == "" {
             let alertView = SPAlertView(title: "Couldn't save recipe", message: "Check that no fields are left blank", preset: SPAlertIconPreset.error)
             alertView.present(duration: 3)
         }
@@ -233,8 +233,8 @@ struct ScanSaveView: View {
             let ingredient = ingredients[i].dictionary
             fireStoreSubmitIngredients(docRefString: "recipe/\(refId)", dataToSave: ingredient) { _ in}
         }
-        for i in 0...instructions.count-1 {
-            let step = instructions[i].dictionary
+        for i in 0...steps.count-1 {
+            let step = steps[i].dictionary
             fireStoreSubmitSteps(docRefString: "recipe/\(refId)", dataToSave: step) { _ in}
         }
         fireStoreSubmitData(docRefString: "recipe/\(refId)", dataToSave: newRecipePost.dictionary, completion: {_ in

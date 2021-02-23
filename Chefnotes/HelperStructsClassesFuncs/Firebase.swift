@@ -63,6 +63,22 @@ func fireStoreSubmitSteps(docRefString: String, dataToSave: [String:Any], comple
         
     }
 }
+func deleteSteps(refId: String, completion: @escaping (Any) -> Void) {
+    let db = Firestore.firestore().collection("recipe")
+    let docRef = db.document(refId).collection("steps")
+    docRef.getDocuments(completion: { querySnapshot, error in
+        if let err = error {
+            print("error: \(err.localizedDescription)")
+            return
+        }
+        guard let docs = querySnapshot?.documents else {
+            return }
+        for doc in docs {
+            docRef.document(doc.documentID).delete()
+        }
+    })
+    completion(true)
+}
 func fireStoreUpdateData(docRefString: String, dataToUpdate: [String:Any], completion: @escaping (Any) -> Void, showDetails: Bool = false) {
     
     let docRef = Firestore.firestore().document(docRefString)

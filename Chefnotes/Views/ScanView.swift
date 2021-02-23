@@ -29,7 +29,7 @@ struct ScanView: View {
     @State var title = ""
     @State private var image: UIImage?
     @State var ingredients = [Ingredient]()
-    @State var instructions = [Step]()
+    @State var steps = [Step]()
     @State var wordList = [ReadItem]()
     @State private var count = 0
     var isTrue = false
@@ -94,13 +94,11 @@ struct ScanView: View {
                         List {
                             if wordList.count > 0 {
                                 ForEach(wordList) { item in
-                                    Button(action: {
-                                        stringToEdit = item.title
-                                        self.selectedItem = item.title
-                                    }) {
+                                    Button(action: {setSelectedItemData(word: item)}) {
                                         Text(item.title)
+                                            .foregroundColor(.black)
                                     }
-                                    .buttonStyle(PlainButtonStyle())
+                                   // .buttonStyle(PlainButtonStyle())
                                     .listRowBackground(self.selectedItem == item.title ? Color(UIColor.systemGray4).opacity(0.6) : Color(UIColor.white))
                                 }
                                 .onDelete(perform: {indexSet in
@@ -133,14 +131,14 @@ struct ScanView: View {
                     Section {
                         Button (action: {
                             showSaveView()
-                            print("\(ingredients.count) ingredients & \(instructions.count) instructions added.")
+                            print("\(ingredients.count) ingredients & \(steps.count) instructions added.")
                         }) {
                             Text("Next")
                         }
                         .blueButtonStyle()
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         .fullScreenCover(isPresented: $isPresented) {
-                            ScanSaveView(title: $title, ingredients: $ingredients, instructions: $instructions, wordList: $wordList, passedImage: $image)
+                            ScanSaveView(title: $title, ingredients: $ingredients, steps: $steps, wordList: $wordList, passedImage: $image)
                         }
                         .listRowBackground(grayBlue)
 
@@ -179,6 +177,19 @@ struct ScanView: View {
 //        ingredients.removeAll()
 //        instructions.removeAll()
 //    }
+    private func setSelectedItemData(word: ReadItem) {
+        count = 0
+        stringToEdit = word.title
+        self.selectedItem = word.title
+        for i in 0..<wordList.count {
+            if wordList[i].title == word.title {
+                stringId = count
+            }
+            else {
+                count += 1
+            }
+        }
+    }
     private func saveTitle(completion: @escaping (Any) -> Void) {
         title = stringToEdit
         completion(true)
@@ -191,21 +202,13 @@ struct ScanView: View {
         print("\(ingredients.count) ingredients added")
     }
     private func saveInstruction(completion: @escaping (Any) -> Void) {
-        let instruction = Step(description: stringToEdit, orderNumber: instructions.count)
-        instructions.append(instruction)
+        let instruction = Step(description: stringToEdit, orderNumber: steps.count)
+        steps.append(instruction)
         
         completion(true)
-        print("\(instructions.count) instruction added")
+        print("\(steps.count) instruction added")
     }
     private func removeFromWordList() {
-        for i in 0..<wordList.count {
-            if wordList[i].title == stringToEdit {
-                stringId = count
-            }
-            else {
-                count += 1
-            }
-        }
         wordList.remove(at: stringId)
         count = 0
         stringToEdit = ""
