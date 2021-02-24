@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Firebase
+import SPAlert
 
 struct SettingsView: View {
     
@@ -88,9 +90,11 @@ struct SettingsView: View {
                         }
                         if changePassword {
                             TextField("Current password", text: $currentPassword)
+                                .autocapitalization(.none)
                             TextField("New password", text: $newPassword)
+                                .autocapitalization(.none)
                             Button(action: {
-                                print("\(newPassword)")
+                                updatePassword()
                             }){
                                 Text("Update password")
                             }
@@ -118,6 +122,53 @@ struct SettingsView: View {
             .background(Color("ColorBackgroundButton"))
         }
         .modifier(DarkModeViewModifier())
+    }
+    private func updatePassword() {
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(env.currentUser.id)
+        let user = Auth.auth().currentUser
+
+        if currentPassword == env.currentUser.password {
+            
+            let credential = EmailAuthProvider.credential(withEmail: env.currentUser.email, password: env.currentUser.password)
+    
+            user?.reauthenticate(with: credential, completion: { (result, error) in
+               if let err = error {
+                  print("error: \(err)")
+               } else {
+                  //.. go on
+                user?.updatePassword(to: newPassword, completion: { (error) in
+                    if let err = error {
+                        print("couldnt change password \(err)")
+                    }
+                    else {
+                        docRef.updateData([
+                            "password": newPassword
+                        ]) { err in
+                            if let err = err {
+                                print("Error updating document: \(err)")
+                            } else {
+                                print("Document successfully updated")
+                                let alertView = SPAlertView(title: "Password updated!", message: "Your password has been changed", preset: SPAlertIconPreset.done)
+                                alertView.present(duration: 2)
+                                currentPassword = ""
+                                newPassword = ""
+                            }
+                        }
+                    }
+                })
+               }
+            })
+        }
+        else {
+            let alertView = SPAlertView(title: "Passwords doesn't match", message: "Check that you filled in your current password correctly" , preset: SPAlertIconPreset.error)
+            
+            alertView.present(duration: 3)
+        }
+        
+    }
+    private func updateEmail() {
+        
     }
 }
     
