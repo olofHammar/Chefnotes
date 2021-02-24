@@ -112,11 +112,6 @@ struct SettingsView: View {
                     }
                 }
                 .padding(.top, 20)
-//                Text("Created by: Olof Hammar ✌️")
-//                    .font(.footnote)
-//                    .padding(.top, 6)
-//                    .padding(.bottom, 8)
-//                    .foregroundColor(.secondary)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
