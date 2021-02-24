@@ -118,12 +118,13 @@ struct NewPostView: View {
                                     Text("List is empty")
                                 }
                             }
+                            Button(action: {
+                                    self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: halfModalHeight)
+                                    self.showHalfModal.toggle()}) {
+                                Text("Add ingredients")
+                            }
                         }
-                        Button(action: {
-                                self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: halfModalHeight)
-                                self.showHalfModal.toggle()}) {
-                            Text("Add ingredients")
-                        }
+
                         Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
                                     .overlay(Text("Added instructions"), alignment: .leading)) {
                             
@@ -138,23 +139,24 @@ struct NewPostView: View {
                                 else {
                                     Text("List is empty")
                                 }
+                            Button(action: {
+                                self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
+                                self.showHalfModal.toggle()
+                            }) {
+                                Text("Add steps")
+                            }
                         }
-                        Button(action: {
-                            self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
-                            self.showHalfModal.toggle()
-                        }) {
-                            Text("Add steps")
-                        }
+
                         Section {
                             Button (action: {checkRecipeStatus()}) {
                                 Text("Save Recipe")
                             }
                             .blueButtonStyle()
-                            .listRowBackground(grayBlue)
-                            .padding(.bottom)
+                            //.padding(.bottom)
                         }
+                        .listRowBackground(Color("ColorBackgroundButton"))
+                        .background(Color("ColorBackgroundButton"))
                     }
-                    
                 }
                 .sheet(isPresented: $showImagePicker) {
                     VStack{
@@ -208,7 +210,7 @@ struct NewPostView: View {
                                     Text("Done")
                                 }
                                 .blueButtonStyle()
-                                .listRowBackground(grayBlue)
+                                .listRowBackground(Color("ColorBackground"))
                                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                             }
                         }

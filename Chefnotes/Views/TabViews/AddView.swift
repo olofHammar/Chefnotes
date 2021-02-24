@@ -15,7 +15,7 @@ struct AddView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                grayBlue
+                Color("ColorBackground")
                 
                 VStack {
                     HStack {
@@ -47,7 +47,7 @@ struct AddView: View {
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
                         .frame(width: UIScreen.main.bounds.size.width/1.1)
-                        .foregroundColor(costumDarkGray)
+                        .foregroundColor(.secondary)
                         .padding(.top, 5)
                         .padding(.bottom, 5)
                     
@@ -76,27 +76,23 @@ struct AddView: View {
                             })
                         
                     }
-//                    .fullScreenCover(isPresented: $isPresented) {
-//                            ScanView()
-//
-//                    }
                     
                     Text("Take a picture of a recipe and scan it in to your book")
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
                         .frame(width: UIScreen.main.bounds.size.width/1.1)
-                        .foregroundColor(costumDarkGray)
+                        .foregroundColor(.secondary)
                         .padding(.top, 5)
                         .padding(.bottom, 5)
                         
-                        .background(grayBlue)
+                        .background(Color("ColorBackground"))
                 }
                 .padding(.top, 35)
                 .frame(width: UIScreen.main.bounds.size.width)
-                .background(grayBlue)
+                .background(Color("ColorBackground"))
                 .navigationTitle("Add new recipe")
                 .navigationBarTitleDisplayMode(.inline)
-            }.background(grayBlue)
+            }.background(Color("ColorBackground"))
         }//.padding(.bottom, 40).background(grayBlue)
     }
 }

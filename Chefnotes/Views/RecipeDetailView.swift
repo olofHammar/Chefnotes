@@ -118,7 +118,7 @@ struct RecipeDetailView: View {
                 }
             }
         }
-        .background(grayBlue)
+        .background(Color("ColorBackground"))
         .navigationBarItems(trailing:
                                 NavigationLink(destination: EditRecipeView(thisRecipe: thisRecipe, ingredients: ingredients, steps: steps.sorted(by: {$0.orderNumber < $1.orderNumber}))) {
                                     if thisRecipe.authorId == env.currentUser.id {

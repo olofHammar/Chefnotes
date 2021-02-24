@@ -139,9 +139,9 @@ struct ScanView: View {
                         .fullScreenCover(isPresented: $isPresented) {
                             ScanSaveView(title: $title, ingredients: $ingredients, steps: $steps, wordList: $wordList, passedImage: $image)
                         }
-                        .listRowBackground(grayBlue)
-
                     }
+                    .listRowBackground(Color("ColorBackgroundButton"))
+                    .background(Color("ColorBackgroundButton"))
                 }
                 
                 .sheet(isPresented: $showImagePicker) {

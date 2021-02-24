@@ -27,7 +27,7 @@ struct LogInView: View {
         
         NavigationView {
             ZStack {
-                grayBlue
+                Color("ColorBackground")
                 VStack {
                     ZStack {
                         CircleImageView(image: Image("aubergine"))
@@ -46,24 +46,33 @@ struct LogInView: View {
                         Section {
                             
                         }
-                    }
-                    VStack {
+                    
+                    Section {
                         
                         Button(action: {
                             signIn(email: email, password: password)
                         }){Text("Log in")}
                         .blueButtonStyle()
-                        .padding(2)
+                        .listRowBackground(Color("ColorBackground"))
                         
                         Button(action: {
                             self.signUpVisible.toggle()
-                        }) {Text("Or click here to sign up").font(.footnote)}
+                        }) {
+                            HStack {
+                                Spacer()
+                            Text("Or click here to sign up").font(.footnote)
+                                Spacer()
+                            }
+                        }
                         .background(Color.clear)
                         .foregroundColor(.blue)
                         .sheet(isPresented: $signUpVisible, content:
                                 {
                                     SignUpView()
                                 })
+                    }
+                    .listRowBackground(Color("ColorBackground"))
+
                     }
                     .padding(.bottom, 100)
                 }

@@ -149,13 +149,12 @@ struct EditRecipeView: View {
                                 Text("List is empty")
                             }
                         }
+                        Button(action: {
+                                self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: halfModalHeight)
+                                self.showHalfModal.toggle()}) {
+                            Text("Add ingredients")
+                        }
                     }
-                    Button(action: {
-                            self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: halfModalHeight)
-                            self.showHalfModal.toggle()}) {
-                        Text("Add ingredients")
-                    }
-                    
                     Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
                                 .overlay(Text("Edit steps"), alignment: .leading)) {
                         
@@ -170,22 +169,23 @@ struct EditRecipeView: View {
                         else {
                             Text("List is empty")
                         }
+                        Button(action: {
+                            self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
+                            self.showHalfModal.toggle()
+                        }) {
+                            Text("Add steps")
+                        }
                     }
-                    Button(action: {
-                        self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
-                        self.showHalfModal.toggle()
-                    }) {
-                        Text("Add steps")
-                    }
-                    
                     Section {
                         Button (action: { checkRecipeStatus() }) {
                             Text("Update Recipe")
                         }
                         .blueButtonStyle()
-                        .listRowBackground(grayBlue)
                         .padding(.bottom)
                     }
+                    .listRowBackground(Color("ColorBackgroundButton"))
+                    .background(Color("ColorBackgroundButton"))
+
                     
                 }
             }

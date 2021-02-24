@@ -124,9 +124,11 @@ struct ScanSaveView: View {
                                 Text("Save Recipe")
                             }
                             .blueButtonStyle()
-                            .listRowBackground(grayBlue)
                             .padding(.bottom)
                         }
+                        .listRowBackground(Color("ColorBackgroundButton"))
+                        .background(Color("ColorBackgroundButton"))
+
                     }
                     .navigationTitle("Save recipe")
                     .navigationBarTitleDisplayMode(.inline)

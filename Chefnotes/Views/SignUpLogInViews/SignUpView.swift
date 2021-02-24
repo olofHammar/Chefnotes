@@ -23,7 +23,7 @@ struct SignUpView: View {
         
         NavigationView {
             ZStack {
-                grayBlue
+                Color("ColorBackground")
                 VStack{
                     Form {
                         Section {
@@ -36,12 +36,16 @@ struct SignUpView: View {
                         Section(footer: Text("Your password must be at least six figures long")) {
                             SecureField("Create password", text: $password)
                         }
-                    }
+                    
+                    Section {
                     Button(action: {saveUserInAuth(email: email, password: password)})
                         {Text("Sign up")}
                         .blueButtonStyle()
-                        .padding(.bottom, 100)
+                        .listRowBackground(Color("ColorBackground"))
+                    }
+                    }
                 }
+                
             }
             .navigationBarTitle("Create Account")
         }
