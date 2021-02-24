@@ -55,7 +55,7 @@ struct HalfModalView<Content:View>: View {
             VStack{
                 Spacer()
                 ZStack{
-                    Color.white.opacity(1.0)
+                    Color("ColorWhiteLightBlack").opacity(1.0)
                         .frame(width: UIScreen.main.bounds.size.width, height: modalHeight)
                         .cornerRadius(10)
                         .shadow(radius: 5)

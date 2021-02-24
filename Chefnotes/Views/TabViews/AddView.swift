@@ -36,7 +36,7 @@ struct AddView: View {
                                 .frame(width: UIScreen.main.bounds.size.width/3)
                                 .padding()
                         }.frame(width: UIScreen.main.bounds.size.width/1.1)
-                        .background(Color(.white))
+                        .background(Color("ColorWhiteLightBlack"))
                         .cornerRadius(12)
                         .shadow(radius: 5)
                         
@@ -70,7 +70,7 @@ struct AddView: View {
                                         .frame(width: UIScreen.main.bounds.size.width/3)
                                         .padding()
                                 }.frame(width: UIScreen.main.bounds.size.width/1.1)
-                                .background(Color(.white))
+                                .background(Color("ColorWhiteLightBlack"))
                                 .cornerRadius(12)
                                 .shadow(radius: 5)
                             })
