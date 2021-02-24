@@ -48,6 +48,9 @@
 		E4D7902425DBF68C00FE9223 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D7902325DBF68C00FE9223 /* SearchBar.swift */; };
 		E4E40F6125D48761003E2707 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E40F6025D48761003E2707 /* ImageLoader.swift */; };
 		E4E40F6625D57FDA003E2707 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E40F6525D57FDA003E2707 /* RecipeDetailView.swift */; };
+		E4E7340425E67AF800098BD9 /* FormRowStaticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7340325E67AF800098BD9 /* FormRowStaticView.swift */; };
+		E4E7340925E67DA700098BD9 /* FormRowUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7340825E67DA700098BD9 /* FormRowUserView.swift */; };
+		E4E7340E25E69B4700098BD9 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7340D25E69B4700098BD9 /* ColorScheme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +124,9 @@
 		E4D7902325DBF68C00FE9223 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		E4E40F6025D48761003E2707 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		E4E40F6525D57FDA003E2707 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
+		E4E7340325E67AF800098BD9 /* FormRowStaticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormRowStaticView.swift; sourceTree = "<group>"; };
+		E4E7340825E67DA700098BD9 /* FormRowUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormRowUserView.swift; sourceTree = "<group>"; };
+		E4E7340D25E69B4700098BD9 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +194,8 @@
 				E4A28E7325CA9D0800331B25 /* AuthTextField.swift */,
 				E4CDD36625CB2843005BDE2F /* CircleImageView.swift */,
 				E4D7902325DBF68C00FE9223 /* SearchBar.swift */,
+				E4E7340325E67AF800098BD9 /* FormRowStaticView.swift */,
+				E4E7340825E67DA700098BD9 /* FormRowUserView.swift */,
 				E486DE5C25CD5307001EEC86 /* HalfModalView.swift */,
 				E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */,
 				E45B4DBA25DA98E100007244 /* FavoriteButton.swift */,
@@ -222,6 +230,7 @@
 				E4CDD33D25CB1DCA005BDE2F /* CustomColors.swift */,
 				E4E40F6025D48761003E2707 /* ImageLoader.swift */,
 				E45A1B0825D1633B000667C9 /* Firebase.swift */,
+				E4E7340D25E69B4700098BD9 /* ColorScheme.swift */,
 				E45A1B1025D17921000667C9 /* ImagePicker.swift */,
 				E486DE6E25CD5E02001EEC86 /* Recipe.swift */,
 				E486DE6125CD5336001EEC86 /* HalfModalStruct.swift */,
@@ -593,6 +602,7 @@
 				E4CDD33E25CB1DCA005BDE2F /* CustomColors.swift in Sources */,
 				E486DE5D25CD5307001EEC86 /* HalfModalView.swift in Sources */,
 				E4A28E9225CAAC8500331B25 /* SessionStore.swift in Sources */,
+				E4E7340425E67AF800098BD9 /* FormRowStaticView.swift in Sources */,
 				E4E40F6125D48761003E2707 /* ImageLoader.swift in Sources */,
 				E40A833E25DD2A6400FF9B4D /* ScanView.swift in Sources */,
 				E45A1B0925D1633B000667C9 /* Firebase.swift in Sources */,
@@ -608,12 +618,14 @@
 				E45A1B1125D17922000667C9 /* ImagePicker.swift in Sources */,
 				E45B4DBB25DA98E100007244 /* FavoriteButton.swift in Sources */,
 				E4D7902425DBF68C00FE9223 /* SearchBar.swift in Sources */,
+				E4E7340925E67DA700098BD9 /* FormRowUserView.swift in Sources */,
 				E486DE6225CD5336001EEC86 /* HalfModalStruct.swift in Sources */,
 				E4B4853425CA0E18001028EB /* SignUpView.swift in Sources */,
 				E4B4852F25CA0D2E001028EB /* LogInView.swift in Sources */,
 				E486DE6F25CD5E02001EEC86 /* Recipe.swift in Sources */,
 				E4A28E9A25CAAD1300331B25 /* CurrentUser.swift in Sources */,
 				E4A28E7425CA9D0800331B25 /* AuthTextField.swift in Sources */,
+				E4E7340E25E69B4700098BD9 /* ColorScheme.swift in Sources */,
 				E4CDD36F25CB2E51005BDE2F /* RecipeView.swift in Sources */,
 				E4B484CA25C9F7B5001028EB /* ContentView.swift in Sources */,
 				E4B484C825C9F7B5001028EB /* ChefnotesApp.swift in Sources */,

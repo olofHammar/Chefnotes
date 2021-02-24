@@ -11,11 +11,11 @@ import Firebase
 
 @main
 struct ChefnotesApp: App {
-    
+
     init() {
         FirebaseApp.configure()
     }
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(SessionStore()).environmentObject(GlobalEnviroment())
