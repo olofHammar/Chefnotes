@@ -23,7 +23,7 @@ struct SignUpView: View {
         
         NavigationView {
             ZStack {
-                grayBlue
+                Color("ColorBackground")
                 VStack{
                     Form {
                         Section {
@@ -41,7 +41,7 @@ struct SignUpView: View {
                     Button(action: {saveUserInAuth(email: email, password: password)})
                         {Text("Sign up")}
                         .blueButtonStyle()
-                        .listRowBackground(grayBlue)
+                        .listRowBackground(Color("ColorBackground"))
                     }
                     }
                 }

@@ -22,7 +22,7 @@ let showAllMyRecipes = Category(id: 8, title: "My recipes", imageName: "loaf")
 struct MyBookView: View {
     
     init() {
-        UINavigationBar.appearance().backgroundColor = UIColor(grayBlue)
+        UINavigationBar.appearance().backgroundColor = UIColor(Color("ColorBackground"))
     }
     
     @EnvironmentObject var env: GlobalEnviroment
@@ -50,7 +50,7 @@ struct MyBookView: View {
                 }
                 .padding(.top, 50)
                 .padding(.leading)
-                .background(grayBlue)
+                .background(Color("ColorBackground"))
                 
                 ScrollView([.horizontal], showsIndicators: false) {
                     HStack (spacing: 50){
@@ -107,7 +107,7 @@ struct MyBookView: View {
                                     })
             .navigationBarTitle("My Book")
             .navigationBarTitleDisplayMode(.inline)
-            .background(grayBlue)
+            .background(Color("ColorBackground"))
         }.onAppear() {
             env.getFavoriteRecipes()
         }

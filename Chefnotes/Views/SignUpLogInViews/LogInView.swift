@@ -27,7 +27,7 @@ struct LogInView: View {
         
         NavigationView {
             ZStack {
-                grayBlue
+                Color("ColorBackground")
                 VStack {
                     ZStack {
                         CircleImageView(image: Image("aubergine"))
@@ -53,7 +53,7 @@ struct LogInView: View {
                             signIn(email: email, password: password)
                         }){Text("Log in")}
                         .blueButtonStyle()
-                        .listRowBackground(grayBlue)
+                        .listRowBackground(Color("ColorBackground"))
                         
                         Button(action: {
                             self.signUpVisible.toggle()
@@ -71,7 +71,7 @@ struct LogInView: View {
                                     SignUpView()
                                 })
                     }
-                    .listRowBackground(grayBlue)
+                    .listRowBackground(Color("ColorBackground"))
 
                     }
                     .padding(.bottom, 100)

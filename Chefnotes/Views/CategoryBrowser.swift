@@ -22,8 +22,6 @@ struct CategoryBrowser: View {
     var body: some View {
         
         ZStack{
-            //grayBlue
-            //    .ignoresSafeArea(edges: .all)
             ScrollView{
                 VStack{
                     if category.title == "Favorites" {
@@ -58,7 +56,6 @@ struct CategoryBrowser: View {
                     }
                 }
             }
-            //.background(grayBlue)
             Spacer()
                 
                 .navigationTitle(category.title)
