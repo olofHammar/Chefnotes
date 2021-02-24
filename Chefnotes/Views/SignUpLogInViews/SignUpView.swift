@@ -11,6 +11,10 @@ import SPAlert
 
 struct SignUpView: View {
     
+    init() {
+        UINavigationBar.appearance().backgroundColor = UIColor(Color("ColorBackground"))
+    }
+    
     @EnvironmentObject var session: SessionStore
     @State private var firstName: String = ""
     @State private var lastName: String = ""
@@ -45,11 +49,9 @@ struct SignUpView: View {
                     }
                     }
                 }
-                
             }
             .navigationBarTitle("Create Account")
-        }
-        
+        }.modifier(DarkModeViewModifier())
     }
     func saveUserInAuth(email: String, password: String) {
         

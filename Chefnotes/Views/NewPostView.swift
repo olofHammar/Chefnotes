@@ -210,7 +210,7 @@ struct NewPostView: View {
                                     Text("Done")
                                 }
                                 .blueButtonStyle()
-                                .listRowBackground(Color("ColorBackground"))
+                                .listRowBackground(Color("ColorBackgroundButton"))
                                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                             }
                         }

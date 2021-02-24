@@ -19,6 +19,7 @@ struct SettingsView: View {
     var body: some View {
 
         ZStack {
+            Color("ColorBackgroundButton")
             VStack(alignment: .center, spacing: 0) {
                 Picker("Mode", selection: $isDarkMode) {
                     Text("Light")
@@ -29,10 +30,9 @@ struct SettingsView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
                 .padding(.top, 40)
+                .background(Color("ColorBackgroundButton"))
+
                 Form {
-//                    Section(header: Text("Display mode")) {
-//
-//                    }
                     Section(header: Text("About User")) {
                         FormRowUserView(icon: "person", color: Color.pink, firstText: "User", secondText: "\(env.currentUser.firstName) \(env.currentUser.lastName)")
                         FormRowUserView(icon: "envelope", color: Color.blue, firstText: "E-mail", secondText: "\(env.currentUser.email)")
@@ -63,7 +63,7 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
-            .background(Color("ColorBackground"))
+            .background(Color("ColorBackgroundButton"))
         }
         .modifier(DarkModeViewModifier())
     }

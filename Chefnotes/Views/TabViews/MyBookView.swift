@@ -72,7 +72,7 @@ struct MyBookView: View {
                     .padding(.top, 50)
                 }
                 .frame(height: 300)
-                .background(Color.white)
+                .background(Color("ColorWhiteBlack"))
                 .padding(.bottom, 30)
                 
                 HStack {

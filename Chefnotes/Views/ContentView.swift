@@ -50,12 +50,8 @@ struct ContentView: View {
                     }
                 }
             })
-        }
+        }.modifier(DarkModeViewModifier())
     }
-    
-//    func getUser () {
-//        session.listen()
-//    }
     
     func getFirestoreUser(completion: @escaping (Any) -> Void) {
         Firestore.firestore().collection("users").whereField("id", isEqualTo: Auth.auth().currentUser?.uid ?? "").getDocuments() { (QuerySnapshot, err) in

@@ -12,7 +12,7 @@ import SPAlert
 struct LogInView: View {
     
     init() {
-        UINavigationBar.appearance().backgroundColor = UIColor(grayBlue)
+        UINavigationBar.appearance().backgroundColor = UIColor(Color("ColorBackgroundButton"))
     }
     
     @EnvironmentObject var env: GlobalEnviroment
@@ -27,7 +27,7 @@ struct LogInView: View {
         
         NavigationView {
             ZStack {
-                Color("ColorBackground")
+                Color("ColorBackgroundButton")
                 VStack {
                     ZStack {
                         CircleImageView(image: Image("aubergine"))
@@ -43,17 +43,13 @@ struct LogInView: View {
                             TextField("Enter E-mail", text: $email)
                             SecureField("Enter password", text: $password)
                         }
-                        Section {
-                            
-                        }
-                    
                     Section {
                         
                         Button(action: {
                             signIn(email: email, password: password)
                         }){Text("Log in")}
                         .blueButtonStyle()
-                        .listRowBackground(Color("ColorBackground"))
+                        .listRowBackground(Color("ColorBackgroundButton"))
                         
                         Button(action: {
                             self.signUpVisible.toggle()
@@ -71,7 +67,7 @@ struct LogInView: View {
                                     SignUpView()
                                 })
                     }
-                    .listRowBackground(Color("ColorBackground"))
+                    .listRowBackground(Color("ColorBackgroundButton"))
 
                     }
                     .padding(.bottom, 100)

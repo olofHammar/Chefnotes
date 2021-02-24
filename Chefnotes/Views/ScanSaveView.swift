@@ -148,7 +148,7 @@ struct ScanSaveView: View {
                         .progressViewStyle(CircularProgressViewStyle(tint: .primary))
                         .scaleEffect(3)
                 }
-            }
+            }.modifier(DarkModeViewModifier())
         }
     }
     private func moveIngredient(from source: IndexSet, to destination: Int) {
