@@ -11,55 +11,107 @@ struct SettingsView: View {
     
     @AppStorage("isDarkMode") private var isDarkMode = false
     @EnvironmentObject var env : GlobalEnviroment
-    @State var preferredColorScheme: ColorScheme? = nil
-    
-    @State var colorSc: ColorScheme = .light
     @EnvironmentObject var session: SessionStore
+    @State var changePassword = false
+    @State var changeEmail = false
+    @State var colorSc: ColorScheme = .light
+    @State var currentPassword = ""
+    @State var newPassword = ""
+    @State var currentEmail = ""
+    @State var newEmail = ""
     
     var body: some View {
 
         ZStack {
             Color("ColorBackgroundButton")
             VStack(alignment: .center, spacing: 0) {
-                Picker("Mode", selection: $isDarkMode) {
-                    Text("Light")
-                        .tag(false)
-                    Text("Dark")
-                        .tag(true)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
-                .padding(.top, 40)
-                .background(Color("ColorBackgroundButton"))
 
                 Form {
+                    Section {
+                    Picker("Mode", selection: $isDarkMode) {
+                        Text("Light")
+                            .tag(false)
+                        Text("Dark")
+                            .tag(true)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .listRowBackground(Color("ColorBackgroundButton"))
+                    }
                     Section(header: Text("About User")) {
                         FormRowUserView(icon: "person", color: Color.pink, firstText: "User", secondText: "\(env.currentUser.firstName) \(env.currentUser.lastName)")
-                        FormRowUserView(icon: "envelope", color: Color.blue, firstText: "E-mail", secondText: "\(env.currentUser.email)")
-                        FormRowUserView(icon: "key", color: Color.green, firstText: "Password", secondText: "******")
                         Button(action: {
-                            session.signOut()
-                            session.unbind()
+                            changeEmail = true
                         }) {
-                            FormRowUserView(icon: "figure.walk", color: Color.orange, firstText: "Sign Out", secondText: "")}
+                            HStack {
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                        .fill(Color.blue)
+                                    Image(systemName: "envelope")
+                                        .imageScale(.large)
+                                        .foregroundColor(Color.white)
+                                }
+                                .frame(width: 36, height: 36, alignment: .center)
+                                
+                                Text("Change e-mail")
+                                    .foregroundColor(Color.gray)
+                                Spacer()
+                                Toggle(isOn: $changeEmail) {}
+                            }
+                        }
+                        if changeEmail {
+                            TextField("Current e-mail", text:$currentEmail )
+                            TextField("New e-mail", text: $newEmail)
+                            Button(action: {
+                                print("\(newEmail)")
+                            }){
+                                Text("Update e-mail")
+                            }
+                        }
+                        Button(action: {
+                            changePassword = true
+                        }) {
+                            HStack {
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                        .fill(Color.green)
+                                    Image(systemName: "key")
+                                        .imageScale(.large)
+                                        .foregroundColor(Color.white)
+                                }
+                                .frame(width: 36, height: 36, alignment: .center)
+                                
+                                Text("Change password")
+                                    .foregroundColor(Color.gray)
+                                Spacer()
+                                Toggle(isOn: $changePassword) {}
+                            }
+                        }
+                        if changePassword {
+                            TextField("Current password", text: $currentPassword)
+                            TextField("New password", text: $newPassword)
+                            Button(action: {
+                                print("\(newPassword)")
+                            }){
+                                Text("Update password")
+                            }
+                        }
                     }
-//                    Section(header: Text("Light/Dark mode")) {
-//                        //Toggle("Darkmode", isOn: $DarkModeIsOn)
-//
-//                    }
-                    Section(header: Text("About the apllication")) {
+                    Section(header: Text("About the application")) {
                         FormRowStaticView(icon: "checkmark.seal", firstText: "Compatibility", secondText: "iPhone")
                         FormRowStaticView(icon: "keyboard", firstText: "Developer", secondText: "Olof Hammar")
                         FormRowStaticView(icon: "flag", firstText: "Version", secondText: "1.0.0")
                     }
                     .padding(.vertical, 3)
+                    Section {
+                        Button(action: {
+                            session.signOut()
+                            session.unbind()
+                        }) {
+                            FormRowUserView(icon: "figure.walk", color: Color.orange, firstText: "Sign Out", secondText: "")
+                        }
+                    }
                 }
                 .padding(.top, 20)
-                Text("Created by: Olof Hammar ✌️")
-                    .font(.footnote)
-                    .padding(.top, 6)
-                    .padding(.bottom, 8)
-                    .foregroundColor(.secondary)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
