@@ -51,6 +51,7 @@
 		E4E7340425E67AF800098BD9 /* FormRowStaticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7340325E67AF800098BD9 /* FormRowStaticView.swift */; };
 		E4E7340925E67DA700098BD9 /* FormRowUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7340825E67DA700098BD9 /* FormRowUserView.swift */; };
 		E4E7340E25E69B4700098BD9 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7340D25E69B4700098BD9 /* ColorScheme.swift */; };
+		E4E7341B25E7F53900098BD9 /* ShopCartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7341A25E7F53900098BD9 /* ShopCartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,7 @@
 		E4E7340325E67AF800098BD9 /* FormRowStaticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormRowStaticView.swift; sourceTree = "<group>"; };
 		E4E7340825E67DA700098BD9 /* FormRowUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormRowUserView.swift; sourceTree = "<group>"; };
 		E4E7340D25E69B4700098BD9 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
+		E4E7341A25E7F53900098BD9 /* ShopCartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,6 +247,7 @@
 			children = (
 				E4A28EA625CACE9400331B25 /* MyBookView.swift */,
 				E4A28EB325CACEDC00331B25 /* SearchView.swift */,
+				E4E7341A25E7F53900098BD9 /* ShopCartView.swift */,
 				E4A28EAE25CACEC000331B25 /* AddView.swift */,
 			);
 			path = TabViews;
@@ -615,6 +618,7 @@
 				E4A28EB925CAD00800331B25 /* NewPostView.swift in Sources */,
 				E4CDD35525CB21E6005BDE2F /* RecipeBrowseView.swift in Sources */,
 				E460392725DFE9440041A6D2 /* EditRecipeView.swift in Sources */,
+				E4E7341B25E7F53900098BD9 /* ShopCartView.swift in Sources */,
 				E45A1B1125D17922000667C9 /* ImagePicker.swift in Sources */,
 				E45B4DBB25DA98E100007244 /* FavoriteButton.swift in Sources */,
 				E4D7902425DBF68C00FE9223 /* SearchBar.swift in Sources */,

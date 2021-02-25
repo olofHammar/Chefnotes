@@ -35,6 +35,12 @@ struct HomeNavigationView: View {
                         
                     }
                     .tag(2)
+                ShopCartView()
+                    .tabItem {
+                        Image(systemName: "cart")
+                        Text("Shopping list")
+                    }
+                    .tag(3)
             }
         }
     }

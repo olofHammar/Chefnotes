@@ -11,12 +11,11 @@ import URLImage
 struct RecipeView: View {
     
     var favorite: RecipePost
-    @State var isLoading = false
     
     var body: some View {
         
         let url = URL(string: favorite.image)!
-
+        
         VStack {
             URLImage(url: url,
                      empty: {
@@ -47,25 +46,17 @@ struct RecipeView: View {
                             .frame(height: 150)
                             .clipped()
                      })
-//            ImageView(withURL: favorite.image)
-//                .frame(height: 150)
-//                .clipped()
-//            Image("pasta")
-//                .resizable()
-//                .scaledToFill()
-//                .frame(height: 150)
-//                .clipped()
-                
+            
             Spacer()
             Group {
-            Text(favorite.title)
-                .font(.caption)
-                .fontWeight(.semibold)
-                .padding(.leading)
-                .padding(.trailing)
-
+                Text(favorite.title)
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .padding(.leading)
+                    .padding(.trailing)
+                
                 Text("Author: \(favorite.author)")
-                .font(.caption2)
+                    .font(.caption2)
             }.padding(.bottom)
         }
         .frame(width: 150, height: 230)
