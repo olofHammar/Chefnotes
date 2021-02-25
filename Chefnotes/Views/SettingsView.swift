@@ -64,7 +64,7 @@ struct SettingsView: View {
                             TextField("Current e-mail", text:$currentEmail )
                             TextField("New e-mail", text: $newEmail)
                             Button(action: {
-                                print("\(newEmail)")
+                                updateEmail()
                             }){
                                 Text("Update e-mail")
                             }
@@ -150,9 +150,10 @@ struct SettingsView: View {
                             } else {
                                 print("Document successfully updated")
                                 let alertView = SPAlertView(title: "Password updated!", message: "Your password has been changed", preset: SPAlertIconPreset.done)
-                                alertView.present(duration: 2)
+                                alertView.present(duration: 3)
                                 currentPassword = ""
                                 newPassword = ""
+                                changePassword.toggle()
                             }
                         }
                     }
@@ -168,7 +169,48 @@ struct SettingsView: View {
         
     }
     private func updateEmail() {
-        
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(env.currentUser.id)
+        let user = Auth.auth().currentUser
+
+        if currentEmail == env.currentUser.email {
+            
+            let credential = EmailAuthProvider.credential(withEmail: env.currentUser.email, password: env.currentUser.password)
+    
+            user?.reauthenticate(with: credential, completion: { (result, error) in
+               if let err = error {
+                  print("error: \(err)")
+               } else {
+                  //.. go on
+                user?.updateEmail(to: newEmail, completion: { (error) in
+                    if let err = error {
+                        print("couldnt change password \(err)")
+                    }
+                    else {
+                        docRef.updateData([
+                            "email": newEmail
+                        ]) { err in
+                            if let err = err {
+                                print("Error updating document: \(err)")
+                            } else {
+                                print("Email successfully updated")
+                                let alertView = SPAlertView(title: "E-mail updated!", message: "Your e-mail has been changed", preset: SPAlertIconPreset.done)
+                                alertView.present(duration: 3)
+                                currentEmail = ""
+                                newEmail = ""
+                                changeEmail.toggle()
+                            }
+                        }
+                    }
+                })
+               }
+            })
+        }
+        else {
+            let alertView = SPAlertView(title: "E-mail doesn't match", message: "Check that you filled in your current e-mail correctly" , preset: SPAlertIconPreset.error)
+            
+            alertView.present(duration: 3)
+        }
     }
 }
     

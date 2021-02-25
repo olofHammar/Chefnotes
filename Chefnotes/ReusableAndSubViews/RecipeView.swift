@@ -11,6 +11,7 @@ import URLImage
 struct RecipeView: View {
     
     var favorite: RecipePost
+    @State var isLoading = false
     
     var body: some View {
         
@@ -28,8 +29,8 @@ struct RecipeView: View {
                      },
                      inProgress: { progress in
                         ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .primary))
-                            .scaleEffect(3)
+                            .progressViewStyle(CircularProgressViewStyle(tint: .secondary))
+                            .scaleEffect(1)
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 150, alignment: .center)
                         
                      },
@@ -66,7 +67,8 @@ struct RecipeView: View {
                 Text("Author: \(favorite.author)")
                 .font(.caption2)
             }.padding(.bottom)
-        }.frame(width: 150, height: 230)
+        }
+        .frame(width: 150, height: 230)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(lineWidth: 0.5))
         .clipped()
         .cornerRadius(5)
