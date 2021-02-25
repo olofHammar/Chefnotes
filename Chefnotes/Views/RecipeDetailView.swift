@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 import URLImage
+import SPAlert
 
 struct RecipeDetailView: View {
     
@@ -19,7 +20,7 @@ struct RecipeDetailView: View {
     @State private var steps = [Step]()
     
     var thisRecipe: RecipePost
-    var db = Firestore.firestore()
+    let db = Firestore.firestore()
     
     var body: some View {
         
@@ -77,10 +78,23 @@ struct RecipeDetailView: View {
                     Text("\(thisRecipe.serves)")
                 }
                 .padding()
-                
-                Text("Ingredients")
-                    .subtitleFontStyle()
-                    .padding()
+                HStack {
+                    Text("Ingredients")
+                        .subtitleFontStyle()
+                        .padding()
+                    Spacer()
+                        Button(action: {
+                            uploadList(completion: {_ in
+                                showAlertItemAdded()
+                            })
+                        }){
+                            Image(systemName: "cart")
+                            Text("Add to shoppinglist")
+                                .font(.subheadline)
+                        }.padding(.trailing)
+                        
+                    
+                }
                 VStack(alignment: .leading, spacing: 5) {
                     ForEach(ingredients) { ingredient in
                         VStack(alignment: .leading, spacing: 5) {
@@ -188,6 +202,34 @@ struct RecipeDetailView: View {
                 return Ingredient(name: name, amount: amount, amountUnit: amountUnit, orderNumber: orderNumber)
             }
         }
+    }
+    private func addToShoppingList(refId: String, dataToSave: [String:Any]) {
+
+        let ref = db.collection("users").document(env.currentUser.id)
+        let docRef = ref.collection("shoppingList").document(refId)
+        print("Setting data")
+        docRef.setData(dataToSave) { error in
+            if let err = error {
+                print("error \(err)")
+            }
+            else {
+                print("Item uploaded succefully")
+            }
+        }
+    }
+    private func uploadList(completion: @escaping (Any) -> Void) {
+        
+        for i in 0...ingredients.count-1 {
+            let refId = UUID().uuidString
+            let item = Item(refId: refId, title: "\(ingredients[i].amount.stringWithoutZeroFractions) \(ingredients[i].amountUnit) \(ingredients[i].name)", isChecked: false)
+            
+            addToShoppingList(refId: "\(item.refId)", dataToSave: item.dictionary)
+        }
+        completion(true)
+    }
+    private func showAlertItemAdded() {
+        let alertView = SPAlertView(title: "Items added!", message: "The ingredients have been saved in your shoppinglist.", preset: SPAlertIconPreset.done)
+        alertView.present(duration: 2)
     }
 }
 
