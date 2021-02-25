@@ -44,6 +44,7 @@ struct CategoryBrowser: View {
                     }
                     else {
                     ForEach(recipes) { recipe in
+
                         if recipe.category == category.title {
                             
                             NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
