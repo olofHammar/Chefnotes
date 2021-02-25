@@ -29,7 +29,7 @@ struct ContentView: View {
             }
             else {
                     ZStack {
-                        grayBlue
+                        Color("ColorBackground")
                         CircleImageView(image: Image("aubergine"))
                             .frame(width: 200)
 
