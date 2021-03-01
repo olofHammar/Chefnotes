@@ -241,7 +241,7 @@ struct EditRecipeView: View {
                                 Text("Done")
                             }
                             .blueButtonStyle()
-                            .listRowBackground(grayBlue)
+                            .listRowBackground(Color("ColorBackgroundButton"))
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         }
                     }
