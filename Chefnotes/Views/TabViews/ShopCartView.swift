@@ -29,22 +29,26 @@ struct ShopCartView: View {
                     Section(header: Text("My shoppinglist")) {
                         List {
                             if items.count > 0 {
-                                ForEach(items) { item in
+                                ForEach(items.sorted(by:{ !$0.isChecked && $1.isChecked})) { item in
                                     HStack {
                                         let filteredText = item.title.replacingOccurrences(of: "0 -", with: "")
+                                        Button(action: {
+                                                checkItemStatus(item: item)},
+                                                label: {
+                                                Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
+                                                    .font(.system(size: 21, weight: .medium))
+                                                    .foregroundColor(.blue)
+                                                })
                                         Text(filteredText)
                                         Spacer()
-                                        Button(action: { checkItemStatus(item: item)},
-                                                label: {
-                                                Image(systemName: item.isChecked ? "checkmark.square" : "square")
-                                               })
                                     }
                                 }
                             }
                             else {
                                 Text("List is empty")
                             }
-                        }.foregroundColor(.black)
+                        }
+                        .foregroundColor(Color("BlackAndWhite"))
                     }
                     Section {
                         Button(action: {
@@ -54,7 +58,7 @@ struct ShopCartView: View {
                             Text("Add item")
                         }
                         .blueButtonStyle()
-                        .listRowBackground(Color("ColorBackground"))
+                        .listRowBackground(Color("ColorBackgroundButton"))
                     }
                 }
                 .padding()
@@ -77,16 +81,13 @@ struct ShopCartView: View {
                     Form {
                         TextField("Add new item", text: $halfModalTextFieldOneVal)
                         
-                        Button(action: {
-                            self.addNewItem()
-                            print("\(items.count)")
-                        }) {
+                        Button(action: {self.addNewItem()})
+                        {
                             Text("Add item")
                         }
                         Section {
-                            Button (action: {
-                                self.hideModal()
-                            }) {
+                            Button (action: {self.hideModal()})
+                            {
                                 Text("Done")
                             }
                             .blueButtonStyle()
@@ -137,10 +138,10 @@ struct ShopCartView: View {
     }
     private func checkItemStatus(item: Item) {
         if item.isChecked == false {
-            boolToUpdate = true
+                boolToUpdate = true
         }
         else {
-            boolToUpdate = false
+                boolToUpdate = false
         }
         let ref = db.collection("users").document(env.currentUser.id)
         ref.collection("shoppingList").document(item.refId)
