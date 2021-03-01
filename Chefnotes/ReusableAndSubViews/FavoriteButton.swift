@@ -21,7 +21,6 @@ struct FavoriteButton: View {
         Button(action: {
             isSet.toggle()
             if isSet == true {
-                print("Added to favorites")
                 addFavorite(completion: { _ in
                     
                     let alertView = SPAlertView(title: "Recipe added!", message: "The recipe has been saved to your favorite recipes.", preset: SPAlertIconPreset.done)
@@ -30,7 +29,6 @@ struct FavoriteButton: View {
                 })
             }
             else if isSet == false {
-                print("Removed from favorites")
                 deleteFavorite(completion: { _ in
                     let alertView = SPAlertView(title: "Recipe removed!", message: "The recipe has been removed from your favorite recipes.", preset: SPAlertIconPreset.done)
                     alertView.present(duration: 2)
@@ -45,13 +43,11 @@ struct FavoriteButton: View {
     func addFavorite(completion: @escaping (Any) -> Void, showDetails: Bool = false) {
         let db = Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")")
         let docRef = db.collection("favoriteRecipes").document(recipe.refId)
-        print("Setting data")
         docRef.setData(recipe.dictionary) { error in
             if let err = error {
                 print("error \(err)")
             }
             else {
-                print("Steps uploaded succefully")
                 completion(true)
                 if showDetails {
                     print("Data uploaded \(recipe.dictionary)")
@@ -68,7 +64,6 @@ struct FavoriteButton: View {
                 print("error \(err)")
             }
             else {
-                print("Steps uploaded succefully")
                 completion(true)
                 if showDetails {
                     print("Data uploaded \(recipe.dictionary)")

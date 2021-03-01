@@ -17,47 +17,29 @@ struct ShopCartView: View {
     @State private var halfModalHeight: CGFloat = 300
     @State private var halfModalTextFieldOneVal = ""
     @State private var items = [Item]()
-    @State private var isChecked = false
+    //@State private var isChecked = false
+    @State var boolToUpdate = false
     let db = Firestore.firestore()
-    @State var dataToUpdate = false
     
     var body: some View {
         
         ZStack {
             NavigationView {
                 Form {
-                    Section {
+                    Section(header: Text("My shoppinglist")) {
                         List {
                             if items.count > 0 {
                                 ForEach(items) { item in
                                     HStack {
-                                        Text(item.title)
+                                        let filteredText = item.title.replacingOccurrences(of: "0 -", with: "")
+                                        Text(filteredText)
                                         Spacer()
-                                        Button(action: {
-                                            if item.isChecked == false {
-                                                dataToUpdate = true
-                                            }
-                                            else {
-                                                dataToUpdate = false
-                                            }
-                                            let ref = db.collection("users").document(env.currentUser.id)
-                                            ref.collection("shoppingList").document(item.refId)
-                                                .updateData(["isChecked" : dataToUpdate])
-                                                { err in
-                                                    if let err = err {
-                                                        print("Error updating document: \(err)")
-                                                    } else {
-                                                        print("Document successfully updated")
-                                                    }
-                                                }
-                                        }, label: {
-                                            Image(systemName: item.isChecked ? "checkmark.square" : "square")
-                                        })
+                                        Button(action: { checkItemStatus(item: item)},
+                                                label: {
+                                                Image(systemName: item.isChecked ? "checkmark.square" : "square")
+                                               })
                                     }
                                 }
-                                .onDelete(perform: {indexSet in
-                                    items.remove(atOffsets: indexSet)
-                                })
                             }
                             else {
                                 Text("List is empty")
@@ -82,7 +64,9 @@ struct ShopCartView: View {
                 .navigationBarItems(trailing:
                                         Button(action: {
                                             clearShoppingList(completion: {_ in
-                                                self.items.removeAll()
+                                                withAnimation {
+                                                    self.items.removeAll()
+                                                }
                                             })
                                         }){
                                             Text("Clear")
@@ -151,10 +135,45 @@ struct ShopCartView: View {
         })
         completion(true)
     }
+    private func checkItemStatus(item: Item) {
+        if item.isChecked == false {
+            boolToUpdate = true
+        }
+        else {
+            boolToUpdate = false
+        }
+        let ref = db.collection("users").document(env.currentUser.id)
+        ref.collection("shoppingList").document(item.refId)
+            .updateData(["isChecked" : boolToUpdate])
+            { err in
+                if let err = err {
+                    print("Error updating document: \(err)")
+                } else {
+                    print("Document successfully updated")
+                }
+            }
+    }
     private func addNewItem() {
         let refId = UUID().uuidString
-        self.items.append(Item(refId: refId, title: halfModalTextFieldOneVal, isChecked: false))
+        let item = Item(refId: refId, title: halfModalTextFieldOneVal, isChecked: false)
+        
+        addToShoppingList(refId: "\(item.refId)", dataToSave: item.dictionary)
+        self.items.append(item)
         halfModalTextFieldOneVal = ""
+    }
+    private func addToShoppingList(refId: String, dataToSave: [String:Any]) {
+
+        let ref = db.collection("users").document(env.currentUser.id)
+        let docRef = ref.collection("shoppingList").document(refId)
+        print("Setting data")
+        docRef.setData(dataToSave) { error in
+            if let err = error {
+                print("error \(err)")
+            }
+            else {
+                print("Item uploaded succefully")
+            }
+        }
     }
     private func hideModal() {
         
@@ -174,19 +193,3 @@ struct ShopCartView_Previews: PreviewProvider {
     }
 }
 
-struct Item: Identifiable {
-    
-    var id = UUID().uuidString
-    var refId: String
-    var title: String
-    var isChecked: Bool
-    
-    var dictionary: [String: Any] {
-        return [
-            "id" : id,
-            "refId" : refId,
-            "title" : title,
-            "isChecked" : isChecked
-        ]
-    }
-}

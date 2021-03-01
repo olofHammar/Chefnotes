@@ -93,7 +93,9 @@ struct ScanView: View {
                     Section(header: Text("Text found in image"), footer: Text("Click item to edit or save to recipe")) {
                         List {
                             if wordList.count > 0 {
+                                
                                 ForEach(wordList) { item in
+                                    
                                     Button(action: {setSelectedItemData(word: item)}) {
                                         Text(item.title)
                                             .foregroundColor(.black)
@@ -112,7 +114,7 @@ struct ScanView: View {
                         }
                     }
                     Section {
-                        TextField("Selected text", text: $stringToEdit)
+                        TextEditor(text: $stringToEdit)
                         //TextEditor(text: $stringToEdit)
                         Button(action: {
                             print("\(ingredients.count)")
@@ -208,9 +210,12 @@ struct ScanView: View {
         print("\(steps.count) instruction added")
     }
     private func removeFromWordList() {
-        wordList.remove(at: stringId)
+        if selectedItem != nil {
+            wordList.remove(at: stringId)
+        }
         count = 0
         stringToEdit = ""
+        selectedItem = nil
     }
     
     private func showActionSheet() {
