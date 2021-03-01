@@ -18,6 +18,7 @@ struct RecipeDetailView: View {
     
     @State private var ingredients = [Ingredient]()
     @State private var steps = [Step]()
+    @State private var recipe = RecipePost(refId: "", title: "", serves: 0, author: "", authorId: "", category: "", image: "")
     
     var thisRecipe: RecipePost
     let db = Firestore.firestore()
@@ -53,11 +54,7 @@ struct RecipeDetailView: View {
                                 .frame(width: UIScreen.main.bounds.width, height: 400)
                                 .clipped()
                          })
-                //                                recipeImage
-                //                                    .resizable()
-                //                                    .scaledToFill()
-                //                                    .frame(width: UIScreen.main.bounds.width, height: 400)
-                //                                    .clipped()
+
                 HStack {
                     Text(thisRecipe.title)
                         .subtitleFontStyle()
@@ -150,10 +147,10 @@ struct RecipeDetailView: View {
         }
     }
     
-    func showEditView() {
+    private func showEditView() {
         isPresented.toggle()
     }
-    func checkIsFavorite() {
+    private func checkIsFavorite() {
         if env.favoriteRecipes.count > 0 {
             for i in 0...env.favoriteRecipes.count-1 {
                 if env.favoriteRecipes[i].refId == thisRecipe.refId {
@@ -166,7 +163,7 @@ struct RecipeDetailView: View {
             }
         }
     }
-    func listenForSteps() {
+    private func listenForSteps() {
         let itemRef = db.collection("recipe").document("\(thisRecipe.refId)")
         itemRef.collection("steps").addSnapshotListener { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
@@ -183,7 +180,7 @@ struct RecipeDetailView: View {
             }
         }
     }
-    func listenForIngredients() {
+    private func listenForIngredients() {
         let itemRef = db.collection("recipe").document("\(thisRecipe.refId)")
         itemRef.collection("ingredients").addSnapshotListener { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
@@ -197,7 +194,6 @@ struct RecipeDetailView: View {
                 let amount = data["amount"] as? Double ?? 0.0
                 let amountUnit = data["amountUnit"] as? String ?? ""
                 let orderNumber = data["orderNumber"] as? Int ?? 0
-                //print("\(ingredients)")
                 
                 return Ingredient(name: name, amount: amount, amountUnit: amountUnit, orderNumber: orderNumber)
             }

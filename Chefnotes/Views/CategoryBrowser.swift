@@ -29,7 +29,8 @@ struct CategoryBrowser: View {
                             NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
                                 RecipeBrowseView(recipe: recipe)
                                     .padding()
-                            }.buttonStyle(PlainButtonStyle())
+                            }
+                            .buttonStyle(PlainButtonStyle())
                             Spacer()
                         }
                     }
@@ -38,7 +39,8 @@ struct CategoryBrowser: View {
                                 NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
                                     RecipeBrowseView(recipe: recipe)
                                         .padding()
-                                }.buttonStyle(PlainButtonStyle())
+                                }
+                                .buttonStyle(PlainButtonStyle())
                                 Spacer()
                         }
                     }
@@ -50,7 +52,8 @@ struct CategoryBrowser: View {
                             NavigationLink(destination: RecipeDetailView(thisRecipe: recipe)) {
                                 RecipeBrowseView(recipe: recipe)
                                     .padding()
-                            }.buttonStyle(PlainButtonStyle())
+                            }
+                            .buttonStyle(PlainButtonStyle())
                             Spacer()
                         }
                     }

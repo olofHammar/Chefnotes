@@ -40,7 +40,9 @@ struct SearchView: View {
             .navigationBarTitle("Search View")
             .navigationBarTitleDisplayMode(.inline)
             
-        }.onAppear() {
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear() {
             listenForRecipes()
         }
     }

@@ -59,4 +59,21 @@ class GlobalEnviroment: ObservableObject {
     }
 }
 
+struct Item: Identifiable {
+    
+    var id = UUID().uuidString
+    var refId: String
+    var title: String
+    var isChecked: Bool
+    
+    var dictionary: [String: Any] {
+        return [
+            "id" : id,
+            "refId" : refId,
+            "title" : title,
+            "isChecked" : isChecked
+        ]
+    }
+}
+
 

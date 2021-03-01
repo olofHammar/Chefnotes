@@ -110,7 +110,9 @@ struct MyBookView: View {
             .navigationBarTitle("My Book")
             .navigationBarTitleDisplayMode(.inline)
             .background(Color("ColorBackground"))
-        }.onAppear() {
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear() {
             env.getFavoriteRecipes()
         }
         
