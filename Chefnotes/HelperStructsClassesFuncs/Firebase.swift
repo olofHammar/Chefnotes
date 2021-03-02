@@ -128,7 +128,7 @@ func updateOtherUsersFavorites(userIds: [String], refString: String, dataToUpdat
                             print("error \(err)")
                         }
                         else {
-                            print("Data updated succefully and such")
+                            print("All favorites are now updated")
                         }
                     }
                 }

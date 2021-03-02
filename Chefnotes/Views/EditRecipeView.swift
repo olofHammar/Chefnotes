@@ -140,9 +140,7 @@ struct EditRecipeView: View {
                                     else {
                                         Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
                                     }
-                                }.onDelete(perform: {indexSet in
-                                    ingredients.remove(atOffsets: indexSet)
-                                })
+                                }.onDelete(perform: self.deleteIngredient)
                                 .onMove(perform: moveIngredient)
                             }
                             else {
@@ -161,9 +159,7 @@ struct EditRecipeView: View {
                         if steps.count > 0 {
                             ForEach(steps, id: \.id) { thisStep in
                                 Text("\(thisStep.orderNumber+1) " + thisStep.description)
-                            }.onDelete(perform: {indexSet in
-                                steps.remove(atOffsets: indexSet)
-                            })
+                            }.onDelete(perform: self.deleteStep)
                             .onMove(perform: moveInstruction)
                         }
                         else {
@@ -258,6 +254,22 @@ struct EditRecipeView: View {
         .onAppear() {
             getCategory(recipe: thisRecipe)
             oldImageUrl = thisRecipe.image
+        }
+    }
+    private func deleteIngredient(at indexSet: IndexSet) {
+        self.ingredients.remove(atOffsets: indexSet)
+        var count = 0
+        for i in 0..<ingredients.count {
+            ingredients[i].orderNumber = count
+            count += 1
+        }
+    }
+    private func deleteStep(at indexSet: IndexSet) {
+        self.steps.remove(atOffsets: indexSet)
+        var count = 0
+        for i in 0..<steps.count {
+            steps[i].orderNumber = count
+            count += 1
         }
     }
     private func moveIngredient(from source: IndexSet, to destination: Int) {
@@ -373,10 +385,7 @@ struct EditRecipeView: View {
 //    }
     private func checkRecipeStatus() {
         if image == nil {
-            updateRecipePost(imageUrl: "") {_ in
-                self.isLoading = false
-                showUpdateAlert()
-            }
+            updateRecipePost(imageUrl: "") 
         }
         else if ingredients.isEmpty || steps.isEmpty || thisRecipe.title == "" {
             let alertView = SPAlertView(title: "Couldn't save recipe", message: "Check that no fields are left blank", preset: SPAlertIconPreset.error)
@@ -405,10 +414,7 @@ struct EditRecipeView: View {
                 filePath.downloadURL (completion: {(url, error) in
                     if url != nil {
                         self.newImageAdded = true
-                        self.updateRecipePost(imageUrl: (url?.absoluteString)!) {_ in
-                            self.isLoading = false
-                            showUpdateAlert()
-                        }
+                        self.updateRecipePost(imageUrl: (url?.absoluteString)!)
                     }
                     else {
                         print("Error")
@@ -437,7 +443,7 @@ struct EditRecipeView: View {
             return
         }
     }
-    private func updateRecipePost(imageUrl: String, completion: @escaping (Any) -> Void) {
+    private func updateRecipePost(imageUrl: String) {
         isLoading = true
         
         var updatedRecipePost = RecipePost(id: thisRecipe.id, refId: thisRecipe.refId, title: thisRecipe.title, serves: thisRecipe.serves, author: "\(self.env.currentUser.firstName) \(self.env.currentUser.lastName)", authorId: Auth.auth().currentUser?.uid ?? "", category: categoryOptions[categoryOptionTag], image: thisRecipe.image)
@@ -465,8 +471,10 @@ struct EditRecipeView: View {
                 print("\(self.users.count)")
                 updateOtherUsersFavorites(userIds: self.users, refString: thisRecipe.refId, dataToUpdate: updatedRecipePost.dictionary, completion: { _ in })
             })
+            
+            self.isLoading = false
+            showUpdateAlert()            
         })
-        completion(true)
     }
     func getUsers(completion: @escaping (Any) -> Void) {
         

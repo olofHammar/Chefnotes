@@ -109,9 +109,7 @@ struct NewPostView: View {
                                     ForEach(ingredients, id: \.id) { ingredient in
                                         Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
 
-                                    }.onDelete(perform: {indexSet in
-                                        ingredients.remove(atOffsets: indexSet)
-                                     })
+                                    }.onDelete(perform: self.deleteIngredient)
                                     .onMove(perform: moveIngredient)
                                 }
                                 else {
@@ -131,9 +129,7 @@ struct NewPostView: View {
                                 if steps.count > 0 {
                                     ForEach(steps, id: \.id) { thisStep in
                                         Text("\(thisStep.orderNumber+1) " + thisStep.description)
-                                    }.onDelete(perform: {indexSet in
-                                        steps.remove(atOffsets: indexSet)
-                                     })
+                                    }.onDelete(perform: self.deleteStep)
                                     .onMove(perform: moveInstruction)
                                 }
                                 else {
@@ -152,7 +148,6 @@ struct NewPostView: View {
                                 Text("Save Recipe")
                             }
                             .blueButtonStyle()
-                            //.padding(.bottom)
                         }
                         .listRowBackground(Color("ColorBackgroundButton"))
                         .background(Color("ColorBackgroundButton"))
@@ -226,7 +221,22 @@ struct NewPostView: View {
             }
             .navigationTitle("Write recipe")
     }
-    
+    private func deleteIngredient(at indexSet: IndexSet) {
+        self.ingredients.remove(atOffsets: indexSet)
+        var count = 0
+        for i in 0..<ingredients.count {
+            ingredients[i].orderNumber = count
+            count += 1
+        }
+    }
+    private func deleteStep(at indexSet: IndexSet) {
+        self.steps.remove(atOffsets: indexSet)
+        var count = 0
+        for i in 0..<steps.count {
+            steps[i].orderNumber = count
+            count += 1
+        }
+    }
     private func moveIngredient(from source: IndexSet, to destination: Int) {
         ingredients.move(fromOffsets: source, toOffset: destination)
         var count = 0
