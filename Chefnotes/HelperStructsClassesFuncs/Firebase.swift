@@ -91,6 +91,7 @@ func deleteIngredients(refId: String, completion: @escaping (Any) -> Void) {
             return }
         for doc in docs {
             docRef.document(doc.documentID).delete()
+            print("Ingredients deleted")
         }
     })
     completion(true)
@@ -141,6 +142,28 @@ func updateOtherUsersFavorites(userIds: [String], refString: String, dataToUpdat
     }
     else {
         print("no users")
+    }
+}
+func deleteOtherUsersFavoriteRecipe(userIds: [String], refString: String) {
+    
+    let db = Firestore.firestore()
+    if userIds.count > 0 {
+        for i in 0..<userIds.count {
+            let ref = db.collection("users").document(userIds[i])
+            let docRef = ref.collection("favoriteRecipes").document(refString)
+            docRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    docRef.delete()
+                    print("Removed from user favorites")
+                }
+                else {
+                    print("No document found")
+                }
+            }
+        }
+    }
+    else {
+        print("No users found")
     }
 }
 
