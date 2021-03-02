@@ -10,6 +10,11 @@ import Firebase
 import SPAlert
 import AVKit
 
+/*
+ In this view I use googles AVKit to let users scan images using camera or phone library.
+ I save all items found in image in wordList and display the array in a list. The user can then select item and save as either title, ingredient or step. When selecting an item that item is passed into a texfield so that the user can edit the item upon saving it.
+ */
+
 struct ReadItem: Identifiable {
     var id = UUID().uuidString
     var title: String = ""
@@ -36,7 +41,7 @@ struct ScanView: View {
     
     
     var body: some View {
-
+        
         ZStack {
             VStack {
                 Form {
@@ -76,31 +81,19 @@ struct ScanView: View {
                         ])
                     }
                     Section {
-                        Button(action: {
-                            if image != nil {
-                                textRecognition(image: image, completion: {_ in
-                                    inProcess = false
-                                })
-                            }
-                            else {
-                                let alertView = SPAlertView(title: "Could't scan image", message: "Please select image to scan", preset: SPAlertIconPreset.error)
-                                alertView.present(duration: 3)
-                            }
-                        }){
+                        Button(action: { scanImage()})
+                        {
                             Text("Scan image")
                         }
                     }
                     Section(header: Text("Text found in image"), footer: Text("Click item to edit or save to recipe")) {
                         List {
                             if wordList.count > 0 {
-                                
                                 ForEach(wordList) { item in
-                                    
                                     Button(action: {setSelectedItemData(word: item)}) {
                                         Text(item.title)
                                             .foregroundColor(.black)
                                     }
-                                   // .buttonStyle(PlainButtonStyle())
                                     .listRowBackground(self.selectedItem == item.title ? Color(UIColor.systemGray4).opacity(0.6) : Color(UIColor.white))
                                 }
                                 .onDelete(perform: {indexSet in
@@ -110,31 +103,19 @@ struct ScanView: View {
                             else {
                                 Text("List is empty")
                             }
-                            
                         }
                     }
                     Section {
                         TextEditor(text: $stringToEdit)
-                        //TextEditor(text: $stringToEdit)
-                        Button(action: {
-                            print("\(ingredients.count)")
-                            if !wordList.isEmpty && stringToEdit != "" {
-                                showSelectionSheet.toggle()
-                            }
-                            else {
-                                let alertView = SPAlertView(title: "Could't add item", message: "List of scanned items or selected text is empty", preset: SPAlertIconPreset.error)
-                                alertView.present(duration: 3)
-                            }
-                        }) {
+                        Button(action: { showSelections() })
+                        {
                             Text("Save item as...")
                         }
                         
                     }
                     Section {
-                        Button (action: {
-                            showSaveView()
-                            print("\(ingredients.count) ingredients & \(steps.count) instructions added.")
-                        }) {
+                        Button (action: { showSaveView() })
+                        {
                             Text("Next")
                         }
                         .blueButtonStyle()
@@ -154,12 +135,12 @@ struct ScanView: View {
                 .actionSheet(isPresented: $showSelectionSheet) {
                     ActionSheet(title: Text("Select item type"), message: nil, buttons: [
                         .default(Text("Title"), action: {
-                            saveTitle(completion: {_ in
-                            removeFromWordList()})}),
+                                    saveTitle(completion: {_ in
+                                                removeFromWordList()})}),
                         .default(Text("Ingredient"), action: { saveIngredient(completion: {_ in
-                            removeFromWordList()})}),
+                                                                                removeFromWordList()})}),
                         .default(Text("Instruction"), action: {saveInstruction(completion: {_ in
-                            removeFromWordList()})}),
+                                                                                removeFromWordList()})}),
                         .cancel()
                     ])
                 }
@@ -172,12 +153,26 @@ struct ScanView: View {
     func showSaveView() {
         self.isPresented.toggle()
     }
-//    private func clearScanView() {
-//        image = nil
-//        wordList.removeAll()
-//        ingredients.removeAll()
-//        instructions.removeAll()
-//    }
+    private func showSelections() {
+        if !wordList.isEmpty && stringToEdit != "" {
+            showSelectionSheet.toggle()
+        }
+        else {
+            let alertView = SPAlertView(title: "Could't add item", message: "List of scanned items or selected text is empty", preset: SPAlertIconPreset.error)
+            alertView.present(duration: 3)
+        }
+    }
+    private func scanImage() {
+        if image != nil {
+            textRecognition(image: image, completion: {_ in
+                inProcess = false
+            })
+        }
+        else {
+            let alertView = SPAlertView(title: "Could't scan image", message: "Please select image to scan", preset: SPAlertIconPreset.error)
+            alertView.present(duration: 3)
+        }
+    }
     private func setSelectedItemData(word: ReadItem) {
         count = 0
         stringToEdit = word.title
@@ -196,6 +191,9 @@ struct ScanView: View {
         completion(true)
     }
     private func saveIngredient(completion: @escaping (Any) -> Void) {
+        /*
+         Since I can't extract amount and unit from scan I save these ingredients as strings and set amount and amountUnit to "0 -" this will be unique for scanned ingredients. This way I can just remove "0 -" from the ingredient later when loading into lists.
+         */
         let ingredient = Ingredient(name: stringToEdit, amount: 0, amountUnit: "-", orderNumber: ingredients.count)
         ingredients.append(ingredient)
         
@@ -222,9 +220,8 @@ struct ScanView: View {
         showSheet.toggle()
     }
     
-    func textRecognition(image: UIImage?, completion: @escaping (Any) -> Void) {
+    private func textRecognition(image: UIImage?, completion: @escaping (Any) -> Void) {
         self.inProcess = true
-        print("start scan")
         let vision = Vision.vision()
         let options = VisionCloudTextRecognizerOptions()
         options.languageHints = ["en", "sv"]
@@ -232,7 +229,7 @@ struct ScanView: View {
         
         let visionImage = VisionImage(image: image!)
         
-        let cameraPosition = AVCaptureDevice.Position.back  // Set to the capture device you used.
+        let cameraPosition = AVCaptureDevice.Position.back  
         let metadata = VisionImageMetadata()
         metadata.orientation = imageOrientation(
             deviceOrientation: UIDevice.current.orientation,
@@ -258,7 +255,7 @@ struct ScanView: View {
                     let lineLanguages = line.recognizedLanguages
                     let lineCornerPoints = line.cornerPoints
                     let lineFrame = line.frame
-                    
+                    //I choose to use lineText so every line of text found is saved as a string
                     self.wordList.append(ReadItem.init(title: lineText))
                     for element in line.elements {
                         let elementText = element.text
@@ -273,7 +270,7 @@ struct ScanView: View {
         }
     }
     
-    func imageOrientation(
+    private func imageOrientation(
         deviceOrientation: UIDeviceOrientation,
         cameraPosition: AVCaptureDevice.Position
     ) -> VisionDetectorImageOrientation {

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//This view contains the circleImage used in the logo and the category list.
+
 struct CircleImageView: View {
     
     var image: Image

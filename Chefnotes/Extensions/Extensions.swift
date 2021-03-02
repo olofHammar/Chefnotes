@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 import URLImage
 
+//This file contains extentions used in the project
 //MARK ---------------------------> Buttons
 extension Button {
     
@@ -155,21 +156,11 @@ extension Array where Element == Ingredient {
     }
 }
 
-//MARK ---------------------------> Checkbox
-
-struct CheckView: View {
-   @Binding var isChecked: Bool
-    
-   var title: String
-   func toggle(){isChecked = !isChecked}
-    
-   var body: some View {
-       Button(action: toggle){
-           HStack{
-               Image(systemName: isChecked ? "checkmark.square": "square")
-               Text(title)
-           }
-       }
-   }
+//MARK ---------------------------> UIApplication
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
+
 

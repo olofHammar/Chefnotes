@@ -8,6 +8,10 @@
 import SwiftUI
 import Firebase
 
+/*
+ This is the first view presented. This view contains one horizontal scroll with users favorite recipes and one vertical scroll where user can select a category of recipes.
+ */
+
 let categoryList: [Category] = [
     Category(id: 0, title: "Basics", imageName: "pickles"),
     Category(id: 1, title: "Starters", imageName: "carrot"),
@@ -28,27 +32,21 @@ struct MyBookView: View {
     }
     
     @EnvironmentObject var env: GlobalEnviroment
-    //@State var favoriteRecipeList = [RecipePost]()
-    //@State var refIds = [String]()
     private let db = Firestore.firestore()
     
     var body: some View {
         NavigationView {
             ScrollView {
-                Spacer()
-                    .frame(height: 30)
-                
+                Spacer().frame(height: 30)
                 HStack {
                     Text("Favorites")
                         .subtitleFontStyle()
-                        Button(action: {
-                            print("\(env.favoriteRecipes.count)")
-                        }) {
-                            NavigationLink (destination: CategoryBrowser(category: favoriteCat)) {
+                    Button(action: {})
+                    {
+                        NavigationLink (destination: CategoryBrowser(category: favoriteCat)) {
                             Text("See all")
-                            }
-                        }.smallTextButtonStyle()
-                    
+                        }
+                    }.smallTextButtonStyle()
                 }
                 .padding(.top, 50)
                 .padding(.leading)
@@ -57,6 +55,7 @@ struct MyBookView: View {
                 ScrollView([.horizontal], showsIndicators: false) {
                     HStack (spacing: 50){
                         ForEach(env.favoriteRecipes) { recipe in
+                            //I use geometryReader to "zoom in" on item at center of view
                             GeometryReader { proxy in
                                 VStack {
                                     let scale = getScale(proxy: proxy)
@@ -80,13 +79,11 @@ struct MyBookView: View {
                 HStack {
                     Text("Categories")
                         .subtitleFontStyle()
-                    Button(action: {
-                        //TODO
-                    }) {
+                    Button(action: {})
+                    {
                         NavigationLink (destination: CategoryBrowser(category: showAllMyRecipes)) {
-                        Text("See all")
+                            Text("See all")
                         }
-                        
                     }.smallTextButtonStyle()
                 }.padding(.horizontal)
                 
@@ -100,8 +97,8 @@ struct MyBookView: View {
                 Spacer()
             }
             .navigationBarItems(trailing:
-                                    Button(action: {
-                                    }) {
+                                    Button(action: {})
+                                    {
                                         NavigationLink(destination: SettingsView()) {
                                             Image(systemName: "person.circle")
                                                 .personSettingsImageStyle()
@@ -115,7 +112,6 @@ struct MyBookView: View {
         .onAppear() {
             env.getFavoriteRecipes()
         }
-        
     }
     
     private func getScale(proxy: GeometryProxy) -> CGFloat {
@@ -124,60 +120,13 @@ struct MyBookView: View {
         let x = proxy.frame(in: .global).minX
         
         let newX = (x - (UIScreen.main.bounds.size.width/3))
-        //abs = absolut värde
+        //abs = absolute value
         let difference = abs(newX)
         if difference < 100 {
             scale = 1 + (100 - difference) / 500
         }
-        
         return scale
     }
-//    func getFavoriteRefs(completion: @escaping (Any) -> Void) {
-//
-//        let db = Firestore.firestore()
-//        let ref = db.collection("users").document(env.currentUser.id)
-//        ref.collection("favoriteRecipes").addSnapshotListener() { (querySnapshot, err) in
-//            if let err = err {
-//                print("Error getting documents: \(err)")
-//            } else {
-//                for document in querySnapshot!.documents {
-//                    let data = document.data()
-//                    let refId = data["refId"] as? String ?? ""
-//                    self.refIds.append(refId)
-//                }
-//            }
-//            completion(true)
-//            print("completed")
-//        }
-//    }
-//    func loadFavoriteRecipes() {
-//        let db = Firestore.firestore()
-//        print("started")
-//        for i in 0..<self.refIds.count {
-//            print("\(i)")
-//            let ref = db.collection("recipe").whereField("refId", isEqualTo: refIds[i])
-//            ref.addSnapshotListener { (querySnapshot, err) in
-//                if let err = err {
-//                    print("Error getting documents: \(err)")
-//                } else {
-//                    for document in querySnapshot!.documents {
-//                        let data = document.data()
-//                        let refId = data["refId"] as? String ?? ""
-//                        let title = data["title"] as? String ?? ""
-//                        let serves = data["serves"] as? Int ?? 0
-//                        let author = data["author"] as? String ?? ""
-//                        let authorId = data["authorId"] as? String ?? ""
-//                        let category = data["category"] as? String ?? ""
-//                        let image = data["image"] as? String ?? ""
-//                        print("\(document.documentID) => \(document.data())")
-//                        let recipe = RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
-//                        self.favoriteRecipeList.append(recipe)
-//                        print("\(self.favoriteRecipeList.count)")
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
 
 struct MyBookView_Previews: PreviewProvider {

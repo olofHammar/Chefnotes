@@ -9,13 +9,16 @@ import SwiftUI
 import Firebase
 import SPAlert
 
+/*
+ This view contains the favorite button. I use a binding bool to pass the bool from recipe detail view. When clicked I add or delete the recipe from the users favorite recipes list and update the star image to be filled or not depending on bool value.
+ */
+
 struct FavoriteButton: View {
     
-    @EnvironmentObject var env: GlobalEnviroment
     @Binding var isSet: Bool
     let recipe: RecipePost
     private let db = Firestore.firestore()
-
+    
     var body: some View {
         
         Button(action: {
@@ -25,7 +28,7 @@ struct FavoriteButton: View {
                     
                     let alertView = SPAlertView(title: "Recipe added!", message: "The recipe has been saved to your favorite recipes.", preset: SPAlertIconPreset.done)
                     alertView.present(duration: 2)
- 
+                    
                 })
             }
             else if isSet == false {
@@ -40,7 +43,7 @@ struct FavoriteButton: View {
                 .foregroundColor(isSet ? Color.yellow : Color.gray)
         }
     }
-    func addFavorite(completion: @escaping (Any) -> Void, showDetails: Bool = false) {
+    func addFavorite(completion: @escaping (Any) -> Void) {
         let db = Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")")
         let docRef = db.collection("favoriteRecipes").document(recipe.refId)
         docRef.setData(recipe.dictionary) { error in
@@ -49,14 +52,13 @@ struct FavoriteButton: View {
             }
             else {
                 completion(true)
-                if showDetails {
-                    print("Data uploaded \(recipe.dictionary)")
-                }
+                print("Recipe added to favorites: \(recipe.dictionary)")
+                
             }
             
         }
     }
-    private func deleteFavorite(completion: @escaping (Any) -> Void, showDetails: Bool = false) {
+    private func deleteFavorite(completion: @escaping (Any) -> Void) {
         let db = Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")")
         let docRef = db.collection("favoriteRecipes").document(recipe.refId)
         docRef.delete() { error in
@@ -65,9 +67,7 @@ struct FavoriteButton: View {
             }
             else {
                 completion(true)
-                if showDetails {
-                    print("Data uploaded \(recipe.dictionary)")
-                }
+                print("Recipe deleted from favorites: \(recipe.dictionary)")
             }
         }
     }

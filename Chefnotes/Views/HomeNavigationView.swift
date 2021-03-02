@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//This is the tab view for bottom navigation.
+
 struct HomeNavigationView: View {
     
     @State private var selectedIndex = 0

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//This view contains the basic build for the half modal
+
 struct HalfModalView<Content:View>: View {
     
     @GestureState private var dragState = DragState.inactive
@@ -20,7 +22,7 @@ struct HalfModalView<Content:View>: View {
             isShown = false
         }
     }
-    //modalHeight sätter höjden på HalfModalView
+    //modalHeight sets the height for HalfModalView
     var modalHeight: CGFloat = 400
     
     var content: () -> Content
@@ -33,7 +35,7 @@ struct HalfModalView<Content:View>: View {
             .onEnded(onDragEnded)
         
         return Group {
-            //Background. Bakgrundens opacity ändras när modal dras upp och ner.
+            //Background. This is the backgrounf of the half modal. I change the opacity depending on the modal height.
             ZStack{
                 Spacer()
                     .edgesIgnoringSafeArea(.all)
@@ -44,14 +46,13 @@ struct HalfModalView<Content:View>: View {
                     .gesture(
                         TapGesture()
                             .onEnded { _ in
-                                //Varje gång vi stänger halfModal med tapGesture så stänger vi också tangentbordet om det är uppe
-                                //Vi sätter också isShown till false
+                                //Everytime the half modal closes the keyboard is also discarded.
                                 UIApplication.shared.endEditing()
                                 self.isShown = false
                             }
                     )
             }
-            //Foreground
+            //Foreground. This is the foreground of the half modal.
             VStack{
                 Spacer()
                 ZStack{
@@ -67,7 +68,7 @@ struct HalfModalView<Content:View>: View {
                         Spacer().frame(height:65)
                     }
                 }
-                //offset läser av när användaren drar halfModal neråt
+                //offset reads when the user drag the half modal down
                 .offset(y: isShown ? ((self.dragState.isDragging && dragState.translation.height >= 1) ? dragState.translation.height : 0) : modalHeight)
                 .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
                 .gesture(drag)

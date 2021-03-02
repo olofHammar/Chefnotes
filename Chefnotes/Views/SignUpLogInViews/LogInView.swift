@@ -9,6 +9,10 @@ import SwiftUI
 import Firebase
 import SPAlert
 
+/*
+ In this view the user can sign in to account. I use firebase auth function signInWithEmailAndPassword and if sign in is success is check the password against the firestore user with the same email. If password match I set the user logging in to environment object current user.
+ */
+
 struct LogInView: View {
     
     init() {
@@ -43,32 +47,30 @@ struct LogInView: View {
                             TextField("Enter E-mail", text: $email)
                             SecureField("Enter password", text: $password)
                         }
-                    Section {
-                        
-                        Button(action: {
-                            signIn(email: email, password: password)
-                        }){Text("Log in")}
-                        .blueButtonStyle()
+                        Section {
+                            
+                            Button(action: { signIn(email: email, password: password) })
+                            {
+                                Text("Log in")
+                                
+                            }
+                            .blueButtonStyle()
+                            .listRowBackground(Color("ColorBackgroundButton"))
+                            
+                            Button(action: { self.signUpVisible.toggle() })
+                            {
+                                HStack {
+                                    Spacer()
+                                    Text("Or click here to sign up").font(.footnote)
+                                    Spacer()
+                                }
+                            }
+                            .background(Color.clear)
+                            .foregroundColor(.blue)
+                            .sheet(isPresented: $signUpVisible, content:{ SignUpView() })
+                        }
                         .listRowBackground(Color("ColorBackgroundButton"))
                         
-                        Button(action: {
-                            self.signUpVisible.toggle()
-                        }) {
-                            HStack {
-                                Spacer()
-                            Text("Or click here to sign up").font(.footnote)
-                                Spacer()
-                            }
-                        }
-                        .background(Color.clear)
-                        .foregroundColor(.blue)
-                        .sheet(isPresented: $signUpVisible, content:
-                                {
-                                    SignUpView()
-                                })
-                    }
-                    .listRowBackground(Color("ColorBackgroundButton"))
-
                     }
                     .padding(.bottom, 100)
                 }
@@ -104,7 +106,6 @@ struct LogInView: View {
                                     email: document.data()["email"] as? String ?? "" )
                             }
                             isLoggedIn = true
-                            
                         }
                     }
                 }

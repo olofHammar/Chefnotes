@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//This file contains the searchbar used in searchView
+
 struct SearchBar: View {
     
     @Binding var searchText: String

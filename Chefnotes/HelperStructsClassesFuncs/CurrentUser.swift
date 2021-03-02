@@ -10,9 +10,13 @@ import SwiftUI
 import Combine
 import Firebase
 
+/*
+ This file contains the class for users. It also contains a globalEnvironment class in which I create two environment objects, one containing the current user and one containing the currents users list of favorite recipes. I also have a function which loads all of the current users favorite recipes into the list.
+ Finally this file contains the struct for the items in the users shopping list.
+ */
+
 class CurrentUser: Identifiable {
-    
-    
+        
     var id : String
     var firstName: String
     var lastName: String

@@ -8,6 +8,10 @@
 import Foundation
 import SwiftUI
 
+/*
+ This struct handles light/dark-mode. I use AppStorage to save the latest selected colorScheme,
+ so that when the app restarts it starts up in the last selected colorScheme
+ */
 public struct DarkModeViewModifier: ViewModifier {
 
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
@@ -15,6 +19,6 @@ public struct DarkModeViewModifier: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .environment(\.colorScheme, isDarkMode ? .dark : .light)
-            .preferredColorScheme(isDarkMode ? .dark : .light) // tint on status bar
+            .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 }

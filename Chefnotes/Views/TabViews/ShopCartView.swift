@@ -8,6 +8,10 @@
 import SwiftUI
 import Firebase
 
+/*
+ This view contains the users shopping list. The list is sorted by bool isChecked, so all checked items is at bottom of list and unchecked at top. When item is clicked I check current bool value and update to the oppsite in firebase. 
+ */
+
 struct ShopCartView: View {
     
     @EnvironmentObject var env: GlobalEnviroment
@@ -17,7 +21,6 @@ struct ShopCartView: View {
     @State private var halfModalHeight: CGFloat = 300
     @State private var halfModalTextFieldOneVal = ""
     @State private var items = [Item]()
-    //@State private var isChecked = false
     @State var boolToUpdate = false
     let db = Firestore.firestore()
     
@@ -38,7 +41,6 @@ struct ShopCartView: View {
                                                 .font(.system(size: 21, weight: .medium))
                                                 .foregroundColor(.blue)
                                         }.buttonStyle(PlainButtonStyle())
-                                        
                                         Text(filteredText)
                                         Spacer()
                                     }

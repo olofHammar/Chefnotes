@@ -9,6 +9,10 @@ import SwiftUI
 import Firebase
 import SPAlert
 
+/*
+ In this view the user can create a new account. I first create an account in firebase auth and then I use that authId to create a new user in firestore. The userId and documentId are set to be the same as the authId
+ */
+
 struct SignUpView: View {
     
     init() {
@@ -43,7 +47,8 @@ struct SignUpView: View {
                     
                     Section {
                     Button(action: {saveUserInAuth(email: email, password: password)})
-                        {Text("Sign up")}
+                        {
+                        Text("Sign up")}
                         .blueButtonStyle()
                         .listRowBackground(Color("ColorBackground"))
                     }
@@ -56,23 +61,18 @@ struct SignUpView: View {
     func saveUserInAuth(email: String, password: String) {
         
         session.unbind()
-        print(self.session.session ?? "empty")
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             
             if let err = error{
-                
                 let alertView = SPAlertView(title: "Error ", message: "\(err.localizedDescription)", preset: SPAlertIconPreset.error)
-                
                 alertView.present(duration: 3)
                 return
             }
             else {
                 saveUserToFirestore()
-                print(self.session.session ?? "empty")
             }
         }
     }
-    
     func saveUserToFirestore() {
         
         let dataToSave: [String:Any] = [
@@ -104,12 +104,9 @@ struct SignUpView: View {
             }
         }
     }
-    
 }
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
         SignUpView()
-        
-        
     }
 }

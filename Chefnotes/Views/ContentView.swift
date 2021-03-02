@@ -8,6 +8,9 @@
 import SwiftUI
 import Firebase
 
+/*
+ In this view I call the session class onAppear to see if there is a logged in user. While this is loading I display a loading screen. When loading is completed I navigate the user to either the HomeNavigationView or LogInView depending on value returned from session class.
+ */
 
 struct ContentView: View {
     
@@ -16,9 +19,9 @@ struct ContentView: View {
     @State private var selectedIndex = 0
     @State private var showModally = false
     @State var userIsLoaded = false
-
+    
     var body: some View {
-
+        
         Group {
             if userIsLoaded {
                 if (session.session == nil) {
@@ -28,16 +31,16 @@ struct ContentView: View {
                 }
             }
             else {
-                    ZStack {
-                        Color("ColorBackground")
-                        CircleImageView(image: Image("aubergine"))
-                            .frame(width: 200)
-
-                        Image("chefnotes_logo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 300, height: 250)
-                    }
+                ZStack {
+                    Color("ColorBackground")
+                    CircleImageView(image: Image("aubergine"))
+                        .frame(width: 200)
+                    
+                    Image("chefnotes_logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 300, height: 250)
+                }
             }
         }.onAppear {
             self.session.listen(completion: { _ in

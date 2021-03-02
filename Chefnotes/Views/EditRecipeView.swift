@@ -10,6 +10,10 @@ import URLImage
 import Firebase
 import SPAlert
 
+/*
+ This view lets the user edit or delete their own recipePosts. I pass the recipe from detail view. When updating or deleting a recipe I also load all users from firestore and update or delete their list of favorite recipes if the user has this specific recipe in its list.
+ */
+
 struct EditRecipeView: View {
     
     @EnvironmentObject var env: GlobalEnviroment
@@ -40,8 +44,6 @@ struct EditRecipeView: View {
     @State var categoryOptionTag: Int = 0
     var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
     var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
-    
-    
     
     var body: some View {
         
@@ -279,6 +281,7 @@ struct EditRecipeView: View {
             oldImageUrl = thisRecipe.image
         }
     }
+    //When deleting or moving ingredient/step I update the ordernumber.
     private func deleteIngredient(at indexSet: IndexSet) {
         self.ingredients.remove(atOffsets: indexSet)
         var count = 0
@@ -374,6 +377,7 @@ struct EditRecipeView: View {
             return nil
         }
     }
+    //I use enum newStepOrIngredient from recipe class to determend what and how to save item
     private func addNewItem() {
         if halfModalTextFieldTwoVal == "" {
             let alertView = SPAlertView(title: newItemType == .Step ? "Please add a step" : "Please add a ingredient", message: "Check that no fields are left blank" , preset: SPAlertIconPreset.error)
@@ -401,6 +405,7 @@ struct EditRecipeView: View {
             }
         }
     }
+    //Before updating I check if image has been changed and that everything is filled in.
     private func checkRecipeStatus() {
         if image == nil {
             updateRecipePost(imageUrl: "") 
@@ -431,6 +436,7 @@ struct EditRecipeView: View {
             } else {
                 filePath.downloadURL (completion: {(url, error) in
                     if url != nil {
+                        //if url isn't nil new image has been added
                         self.newImageAdded = true
                         self.updateRecipePost(imageUrl: (url?.absoluteString)!)
                     }
@@ -441,6 +447,7 @@ struct EditRecipeView: View {
             }
         }
     }
+    //I delete old image if new image has been selected
     private func deleteOldImage() {
         if newImageAdded {
             

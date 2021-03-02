@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//This view contains the row view for app-information in settings
+
 struct FormRowStaticView: View {
     
     var icon: String

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//This view contains the row view for the category list in my book view.
+
 struct CategoryListView: View {
     
     var category: Category

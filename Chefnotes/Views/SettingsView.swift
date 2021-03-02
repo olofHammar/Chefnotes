@@ -9,6 +9,10 @@ import SwiftUI
 import Firebase
 import SPAlert
 
+/*
+ This view conrains the user settings. Here I use a picker to swich between light/dark mode and user can update email and password.
+ */
+
 struct SettingsView: View {
     
     @AppStorage("isDarkMode") private var isDarkMode = false
@@ -42,9 +46,8 @@ struct SettingsView: View {
                     }
                     Section(header: Text("About User")) {
                         FormRowUserView(icon: "person", color: Color.pink, firstText: "User", secondText: "\(env.currentUser.firstName) \(env.currentUser.lastName)")
-                        Button(action: {
-                            changeEmail = true
-                        }) {
+                        Button(action: { changeEmail = true })
+                        {
                             HStack {
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -64,15 +67,13 @@ struct SettingsView: View {
                         if changeEmail {
                             TextField("Current e-mail", text:$currentEmail )
                             TextField("New e-mail", text: $newEmail)
-                            Button(action: {
-                                updateEmail()
-                            }){
+                            Button(action: { updateEmail() })
+                            {
                                 Text("Update e-mail")
                             }
                         }
-                        Button(action: {
-                            changePassword = true
-                        }) {
+                        Button(action: { changePassword = true })
+                        {
                             HStack {
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -108,9 +109,8 @@ struct SettingsView: View {
                     }
                     .padding(.vertical, 3)
                     Section {
-                        Button(action: {
-                            showSignOutAlert()
-                        }) {
+                        Button(action: { showSignOutAlert() })
+                        {
                             FormRowUserView(icon: "figure.walk", color: Color.orange, firstText: "Sign Out", secondText: "")
                         }
                         .alert(isPresented: self.$showAlert, content: {
@@ -138,7 +138,7 @@ struct SettingsView: View {
         let user = Auth.auth().currentUser
         
         if currentPassword == env.currentUser.password {
-            
+            //I have to get this credential if user has been signed in for long.
             let credential = EmailAuthProvider.credential(withEmail: env.currentUser.email, password: env.currentUser.password)
             
             user?.reauthenticate(with: credential, completion: { (result, error) in

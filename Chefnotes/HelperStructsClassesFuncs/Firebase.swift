@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 import Firebase
 
+//This file contains all reusable firebase function in the project
+
 func fireStoreSubmitData(docRefString: String, dataToSave: [String:Any], completion: @escaping (Any) -> Void, showDetails: Bool = false) {
     
     let docRef = Firestore.firestore().document(docRefString)

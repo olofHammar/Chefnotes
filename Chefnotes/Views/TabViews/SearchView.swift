@@ -9,6 +9,10 @@ import SwiftUI
 import Firebase
 import URLImage
 
+/*
+ This view loads all recipes in database and lets user search for recipes. Searchbar is set to filter title, category and author.
+ */
+
 struct SearchView: View {
     
     @EnvironmentObject var env: GlobalEnviroment
@@ -22,7 +26,6 @@ struct SearchView: View {
         NavigationView {
             ZStack {
                 ScrollView{
-                    
                     VStack{
                         SearchBar(searchText: $searchText, isSearching: $isSearching)
                         Spacer()

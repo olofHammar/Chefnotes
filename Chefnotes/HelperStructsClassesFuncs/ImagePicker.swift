@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+//This file contains the imagePicker used in several views.
+
 //MARK ---------->> imagePicker - UIViewControllerRepresentable
 
 struct imagePicker: UIViewControllerRepresentable {
@@ -18,7 +20,7 @@ struct imagePicker: UIViewControllerRepresentable {
     typealias UIViewControllerType = UIImagePickerController
     typealias Coordinator = ImagePickerCoordinator
     
-    //sourcetype är om du väljer en bild från kamera eller bildgalleri
+    //I set the default source to camera, but user is always presented with a choice of source.
     var sourceType: UIImagePickerController.SourceType = .camera
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<imagePicker>) -> UIImagePickerController {

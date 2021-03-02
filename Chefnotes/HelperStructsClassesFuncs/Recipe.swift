@@ -11,6 +11,12 @@ import Combine
 import FirebaseFirestoreSwift
 
 
+/*
+ This file contains all structs used to create recipes. When a recipe is created I use the recipePosts refId as the documentId and in this document I save the recipePost and two subcollections containing ingredients and steps.
+ This way I can load just the needed data. In for example search view I dont need ingredients and steps so I load only the recipePost.
+ I use dictionary to save everything in firestore.
+ */
+
 struct RecipePost: Identifiable {
     
     @EnvironmentObject var env: GlobalEnviroment

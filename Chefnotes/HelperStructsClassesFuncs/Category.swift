@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+//This file contains the struct for categories
+
 struct Category: Identifiable {
     var id : Int
     var title: String
