@@ -37,7 +37,6 @@
 		E4B484F625C9F847001028EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4B484F525C9F847001028EB /* GoogleService-Info.plist */; };
 		E4B4852F25CA0D2E001028EB /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4852E25CA0D2E001028EB /* LogInView.swift */; };
 		E4B4853425CA0E18001028EB /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4853325CA0E18001028EB /* SignUpView.swift */; };
-		E4CDD33E25CB1DCA005BDE2F /* CustomColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD33D25CB1DCA005BDE2F /* CustomColors.swift */; };
 		E4CDD34325CB1E2B005BDE2F /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD34225CB1E2B005BDE2F /* Category.swift */; };
 		E4CDD34B25CB2046005BDE2F /* CategoryBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */; };
 		E4CDD35025CB2064005BDE2F /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */; };
@@ -46,7 +45,6 @@
 		E4CDD36725CB2843005BDE2F /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36625CB2843005BDE2F /* CircleImageView.swift */; };
 		E4CDD36F25CB2E51005BDE2F /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */; };
 		E4D7902425DBF68C00FE9223 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D7902325DBF68C00FE9223 /* SearchBar.swift */; };
-		E4E40F6125D48761003E2707 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E40F6025D48761003E2707 /* ImageLoader.swift */; };
 		E4E40F6625D57FDA003E2707 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E40F6525D57FDA003E2707 /* RecipeDetailView.swift */; };
 		E4E7340425E67AF800098BD9 /* FormRowStaticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7340325E67AF800098BD9 /* FormRowStaticView.swift */; };
 		E4E7340925E67DA700098BD9 /* FormRowUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7340825E67DA700098BD9 /* FormRowUserView.swift */; };
@@ -114,7 +112,6 @@
 		E4B484F525C9F847001028EB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E4B4852E25CA0D2E001028EB /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		E4B4853325CA0E18001028EB /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
-		E4CDD33D25CB1DCA005BDE2F /* CustomColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColors.swift; sourceTree = "<group>"; };
 		E4CDD34225CB1E2B005BDE2F /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		E4CDD34A25CB2046005BDE2F /* CategoryBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBrowser.swift; sourceTree = "<group>"; };
 		E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
@@ -123,7 +120,6 @@
 		E4CDD36625CB2843005BDE2F /* CircleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
 		E4CDD36E25CB2E51005BDE2F /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		E4D7902325DBF68C00FE9223 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
-		E4E40F6025D48761003E2707 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		E4E40F6525D57FDA003E2707 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		E4E7340325E67AF800098BD9 /* FormRowStaticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormRowStaticView.swift; sourceTree = "<group>"; };
 		E4E7340825E67DA700098BD9 /* FormRowUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormRowUserView.swift; sourceTree = "<group>"; };
@@ -190,7 +186,7 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		E4A28E7225CA9CDB00331B25 /* ReusableAndSubViews */ = {
+		E4A28E7225CA9CDB00331B25 /* ReusableAndDesignViews */ = {
 			isa = PBXGroup;
 			children = (
 				E4A28E7325CA9D0800331B25 /* AuthTextField.swift */,
@@ -204,7 +200,7 @@
 				E4CDD35425CB21E6005BDE2F /* RecipeBrowseView.swift */,
 				E4CDD34F25CB2064005BDE2F /* CategoryListView.swift */,
 			);
-			path = ReusableAndSubViews;
+			path = ReusableAndDesignViews;
 			sourceTree = "<group>";
 		};
 		E4A28E8F25CAAC4A00331B25 /* Views */ = {
@@ -229,8 +225,6 @@
 			isa = PBXGroup;
 			children = (
 				E4A28E9125CAAC8500331B25 /* SessionStore.swift */,
-				E4CDD33D25CB1DCA005BDE2F /* CustomColors.swift */,
-				E4E40F6025D48761003E2707 /* ImageLoader.swift */,
 				E45A1B0825D1633B000667C9 /* Firebase.swift */,
 				E4E7340D25E69B4700098BD9 /* ColorScheme.swift */,
 				E45A1B1025D17921000667C9 /* ImagePicker.swift */,
@@ -290,7 +284,7 @@
 				E4B484C725C9F7B5001028EB /* ChefnotesApp.swift */,
 				E425B1E225CC1D6200528882 /* Extensions */,
 				E4A28E9025CAAC6600331B25 /* HelperStructsClassesFuncs */,
-				E4A28E7225CA9CDB00331B25 /* ReusableAndSubViews */,
+				E4A28E7225CA9CDB00331B25 /* ReusableAndDesignViews */,
 				E4A28E8F25CAAC4A00331B25 /* Views */,
 				E4B484CB25C9F7B6001028EB /* Assets.xcassets */,
 				E4B484D025C9F7B6001028EB /* Info.plist */,
@@ -602,11 +596,9 @@
 			files = (
 				E4CDD34B25CB2046005BDE2F /* CategoryBrowser.swift in Sources */,
 				E4A28E6E25CA244100331B25 /* HomeNavigationView.swift in Sources */,
-				E4CDD33E25CB1DCA005BDE2F /* CustomColors.swift in Sources */,
 				E486DE5D25CD5307001EEC86 /* HalfModalView.swift in Sources */,
 				E4A28E9225CAAC8500331B25 /* SessionStore.swift in Sources */,
 				E4E7340425E67AF800098BD9 /* FormRowStaticView.swift in Sources */,
-				E4E40F6125D48761003E2707 /* ImageLoader.swift in Sources */,
 				E40A833E25DD2A6400FF9B4D /* ScanView.swift in Sources */,
 				E45A1B0925D1633B000667C9 /* Firebase.swift in Sources */,
 				E4E40F6625D57FDA003E2707 /* RecipeDetailView.swift in Sources */,

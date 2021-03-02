@@ -94,9 +94,7 @@ struct ScanSaveView: View {
                                 if ingredients.count > 0 {
                                     ForEach(ingredients, id: \.id) { ingredient in
                                         Text("\(ingredient.name)")
-                                    }.onDelete(perform: {indexSet in
-                                        ingredients.remove(atOffsets: indexSet)
-                                     })
+                                    }.onDelete(perform: self.deleteIngredient)
                                     .onMove(perform: moveIngredient)
                                 }
                                 else {
@@ -110,9 +108,7 @@ struct ScanSaveView: View {
                                 if steps.count > 0 {
                                     ForEach(steps, id: \.id) { thisStep in
                                         Text("\(thisStep.orderNumber+1) " + thisStep.description)
-                                    }.onDelete(perform: {indexSet in
-                                        steps.remove(atOffsets: indexSet)
-                                     })
+                                    }.onDelete(perform: self.deleteStep)
                                     .onMove(perform: moveInstruction)
                                 }
                                 else {
@@ -149,6 +145,22 @@ struct ScanSaveView: View {
                         .scaleEffect(3)
                 }
             }.modifier(DarkModeViewModifier())
+        }
+    }
+    private func deleteIngredient(at indexSet: IndexSet) {
+        self.ingredients.remove(atOffsets: indexSet)
+        var count = 0
+        for i in 0..<ingredients.count {
+            ingredients[i].orderNumber = count
+            count += 1
+        }
+    }
+    private func deleteStep(at indexSet: IndexSet) {
+        self.steps.remove(atOffsets: indexSet)
+        var count = 0
+        for i in 0..<steps.count {
+            steps[i].orderNumber = count
+            count += 1
         }
     }
     private func moveIngredient(from source: IndexSet, to destination: Int) {

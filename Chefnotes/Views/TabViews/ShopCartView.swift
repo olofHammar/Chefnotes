@@ -29,16 +29,16 @@ struct ShopCartView: View {
                     Section(header: Text("My shoppinglist")) {
                         List {
                             if items.count > 0 {
-                                ForEach(items.sorted(by:{ !$0.isChecked && $1.isChecked})) { item in
+                                ForEach(items.sorted(by:{!$0.isChecked && $1.isChecked})) { item in
                                     HStack {
                                         let filteredText = item.title.replacingOccurrences(of: "0 -", with: "")
-                                        Button(action: {
-                                                checkItemStatus(item: item)},
-                                                label: {
-                                                Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
-                                                    .font(.system(size: 21, weight: .medium))
-                                                    .foregroundColor(.blue)
-                                                })
+                                        Button(action: { checkItemStatus(item: item)})
+                                        {
+                                            Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
+                                                .font(.system(size: 21, weight: .medium))
+                                                .foregroundColor(.blue)
+                                        }.buttonStyle(PlainButtonStyle())
+                                        
                                         Text(filteredText)
                                         Spacer()
                                     }
@@ -62,7 +62,7 @@ struct ShopCartView: View {
                     }
                 }
                 .padding()
-                .background(Color("ColorBackground"))
+                .background(Color("ColorBackgroundButton"))
                 .navigationTitle("Shopping list")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(trailing:
@@ -92,7 +92,6 @@ struct ShopCartView: View {
                             }
                             .blueButtonStyle()
                             .listRowBackground(Color("ColorBackgroundButton"))
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         }
                     }
                 }
@@ -138,10 +137,10 @@ struct ShopCartView: View {
     }
     private func checkItemStatus(item: Item) {
         if item.isChecked == false {
-                boolToUpdate = true
+            boolToUpdate = true
         }
         else {
-                boolToUpdate = false
+            boolToUpdate = false
         }
         let ref = db.collection("users").document(env.currentUser.id)
         ref.collection("shoppingList").document(item.refId)
@@ -163,7 +162,7 @@ struct ShopCartView: View {
         halfModalTextFieldOneVal = ""
     }
     private func addToShoppingList(refId: String, dataToSave: [String:Any]) {
-
+        
         let ref = db.collection("users").document(env.currentUser.id)
         let docRef = ref.collection("shoppingList").document(refId)
         print("Setting data")
