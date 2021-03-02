@@ -9,16 +9,9 @@ import Foundation
 import SwiftUI
 import Combine
 
-extension UIApplication {
-    func endEditing() {
-        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-}
+//This file contains the functions used to structure our halfModalView
 
-/*
- Mark -------------------> HalfModalHeight
- Denna funktion tar emot ett övre och undre värde som anger vart i proccessen vi är när vi drar våran modal upp och ner
- */
+// Mark -------------------> HalfModalHeight
 func fractionProgress(lowerLimit: Double = 0, upperLimit: Double, current: Double, inverted: Bool = false) -> Double {
     var val: Double = 0
     if current >= upperLimit {

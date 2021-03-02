@@ -10,6 +10,11 @@ import Firebase
 import Combine
 import URLImage
 
+/*
+ This class uses the function listen to check if there is a user signed in with firebase auth.
+ It also has a function to sign out current user.
+ */
+
 class SessionStore: ObservableObject {
     
     @Published var session: AuthUser? { didSet { self.didChange.send(self) }}

@@ -9,6 +9,11 @@ import SwiftUI
 import Firebase
 import URLImage
 
+/*
+ This view contains the recipe browse view used in category browser and search view.
+ I use a ZStack in which I put a gradient blsck fade from top and bottom to center below the recipe image to make sure the text is more or less visable no matter how bright the image is. I then put the text on top of this.
+ */
+
 struct RecipeBrowseView: View {
     
     var recipe: RecipePost
@@ -45,7 +50,6 @@ struct RecipeBrowseView: View {
                             .frame(width: geo.size.width)
                      })
             }
-            
             LinearGradient(gradient: Gradient(colors: [Color.clear, Color.clear, Color.black.opacity(0.5)]), startPoint: .bottom, endPoint: .top)
                 .frame(width: UIScreen.main.bounds.width-40, height: postHeight)
             
@@ -63,23 +67,16 @@ struct RecipeBrowseView: View {
                     }
                     .padding(.leading)
                     .foregroundColor(.white)
-                    
                     Spacer()
                 }
                 .padding(.top)
-                
                 Spacer()
             }
             VStack {
-                
                 Spacer()
-                
                 HStack{
-                    
                     VStack(alignment: .leading){
-                        
                         HStack {
-                            
                             Image(systemName: "person.2")
                             Text("Serves: ")
                             Text("\(recipe.serves)")
@@ -87,7 +84,6 @@ struct RecipeBrowseView: View {
                     }
                     .foregroundColor(.white)
                     .padding()
-                    
                     Spacer()
                 }
                 .font(.system(size: 15, weight: .bold))

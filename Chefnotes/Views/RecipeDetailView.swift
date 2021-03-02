@@ -10,6 +10,10 @@ import Firebase
 import URLImage
 import SPAlert
 
+/*
+ This view contains the recipe in detail. The user can select recipe as favorite and add ingredients to users shopping list. I use the passed recipes refId to load subcollections of ingredients and steps.
+ */
+
 struct RecipeDetailView: View {
     
     @EnvironmentObject var env: GlobalEnviroment
@@ -95,6 +99,9 @@ struct RecipeDetailView: View {
                 VStack(alignment: .leading, spacing: 5) {
                     ForEach(ingredients) { ingredient in
                         VStack(alignment: .leading, spacing: 5) {
+                            /*
+                             Since scanned ingredients only consists of a string I display these different than the regular ingredients.
+                             */
                             if ingredient.amountUnit == "-" {
                                 Text("\(ingredient.name)")
                             }
@@ -132,6 +139,7 @@ struct RecipeDetailView: View {
             }
         }
         .background(Color("ColorBackground"))
+        //This BarItem will only be seen if you are the author of the recipe
         .navigationBarItems(trailing:
                                 NavigationLink(destination: EditRecipeView(thisRecipe: thisRecipe, ingredients: ingredients, steps: steps.sorted(by: {$0.orderNumber < $1.orderNumber}))) {
                                     if thisRecipe.authorId == env.currentUser.id {
@@ -150,6 +158,7 @@ struct RecipeDetailView: View {
     private func showEditView() {
         isPresented.toggle()
     }
+    //Get the boolean value for favroite button.
     private func checkIsFavorite() {
         if env.favoriteRecipes.count > 0 {
             for i in 0...env.favoriteRecipes.count-1 {

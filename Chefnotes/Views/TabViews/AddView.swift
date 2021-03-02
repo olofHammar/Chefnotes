@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/*
+ In this view the user can select to either create a recipe from the apps template or by using the apps photo scanner.
+ */
+
 struct AddView: View {
     
     @State private var isPresented = false
@@ -16,7 +20,6 @@ struct AddView: View {
         NavigationView {
             ZStack {
                 Color("ColorBackground")
-                
                 VStack {
                     HStack {
                         Text("Write recipe")
@@ -24,25 +27,21 @@ struct AddView: View {
                             .fontWeight(.bold)
                         Spacer()
                     }.padding(.leading)
-
-                    Button(action: {
-                        //self.isPresented.toggle()
-                    }) {
+                    Button(action: {})
+                    {
                         NavigationLink(
                             destination: NewPostView(),
                             label: {
-                        HStack {
-                            CircleImageView(image: Image("phone_color"))
-                                .frame(width: UIScreen.main.bounds.size.width/3)
-                                .padding()
-                        }.frame(width: UIScreen.main.bounds.size.width/1.1)
-                        .background(Color("ColorWhiteLightBlack"))
-                        .cornerRadius(12)
-                        .shadow(radius: 5)
-                        
-                    })
+                                HStack {
+                                    CircleImageView(image: Image("phone_color"))
+                                        .frame(width: UIScreen.main.bounds.size.width/3)
+                                        .padding()
+                                }.frame(width: UIScreen.main.bounds.size.width/1.1)
+                                .background(Color("ColorWhiteLightBlack"))
+                                .cornerRadius(12)
+                                .shadow(radius: 5)
+                            })
                     }
-                        
                     Text("Use our simple templates to create your own recipes")
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
@@ -50,8 +49,6 @@ struct AddView: View {
                         .foregroundColor(.secondary)
                         .padding(.top, 5)
                         .padding(.bottom, 5)
-                    
-                    
                     HStack {
                         Text("Scan recipe")
                             .font(.title2)
@@ -59,9 +56,8 @@ struct AddView: View {
                             .padding(.top)
                         Spacer()
                     }.padding(.leading)
-                    Button(action: {
-                       // self.isPresented.toggle()
-                    }) {
+                    Button(action: {})
+                    {
                         NavigationLink(
                             destination: ScanView(),
                             label: {
@@ -74,9 +70,7 @@ struct AddView: View {
                                 .cornerRadius(12)
                                 .shadow(radius: 5)
                             })
-                        
                     }
-                    
                     Text("Take a picture of a recipe and scan it in to your book")
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
@@ -93,7 +87,7 @@ struct AddView: View {
                 .navigationTitle("Add new recipe")
                 .navigationBarTitleDisplayMode(.inline)
             }.background(Color("ColorBackground"))
-        }//.padding(.bottom, 40).background(grayBlue)
+        }
     }
 }
 

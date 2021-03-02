@@ -9,6 +9,9 @@ import SwiftUI
 import Firebase
 import SPAlert
 
+/*
+ In this view I pass all the data found in scan view to here. The user can then edit the recipe and select image etc, just like when creating a new post.
+ */
 struct ScanSaveView: View {
     
     @Environment(\.presentationMode) var presentationMode

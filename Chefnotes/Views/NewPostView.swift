@@ -9,16 +9,19 @@ import SwiftUI
 import SPAlert
 import Firebase
 
+/*
+ In this view the user can create new recipes. I used Form to make the process easy to follow.
+ I use keyboard extension keyboardAwarePadding so that all textfields get pushed up when keyboard is visible.
+ */
+
 struct NewPostView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var env: GlobalEnviroment
-    
     @State private var isLoading = false
     @State private var showSheet = false
     @State private var showHalfModal = false
     @State private var showImagePicker = false
-    
     @State private var halfModalTitle = ""
     @State private var halfModalPlaceHolder = ""
     @State private var halfModalHeight: CGFloat = 400
@@ -28,19 +31,16 @@ struct NewPostView: View {
     @State private var ingredientUnitIndex = 0
     @State private var sourceType: UIImagePickerController.SourceType = .camera
     @State private var image: UIImage?
-    
     @State private var title = ""
     @State private var author = ""
     @State private var category = ""
     @State private var ingredients = [Ingredient]()
     @State private var steps = [Step]()
     @State private var serves = 1
-    
     @State private var categoryOptionTag: Int = 0
     private var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
     private var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
-    //private var actionToComplete = 2
-    //private var actionsCompleted = 0
+
     var body: some View {
         
             ZStack {
@@ -142,7 +142,6 @@ struct NewPostView: View {
                                 Text("Add steps")
                             }
                         }
-
                         Section {
                             Button (action: {checkRecipeStatus()}) {
                                 Text("Save Recipe")
@@ -211,7 +210,7 @@ struct NewPostView: View {
                         }
                     }
                 }
-                
+                //IsLoading is displayed while uploading recipe
                 if isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .primary))
@@ -283,10 +282,10 @@ struct NewPostView: View {
         }
     }
     private func hideModal() {
-        
         UIApplication.shared.endEditing()
         showHalfModal = false
     }
+    //I use enum from recipe class to determend which item to save and how.
     private func addNewItem() {
         if halfModalTextFieldTwoVal == "" {
             let alertView = SPAlertView(title: newItemType == .Step ? "Please add a step" : "Please add a ingredient", message: "Check that no fields are left blank" , preset: SPAlertIconPreset.error)
@@ -324,6 +323,7 @@ struct NewPostView: View {
         image = nil
         serves = 1
     }
+    //Before user can load recipe every section must be filled out
     private func checkRecipeStatus() {
         if image == nil {
             let alertView = SPAlertView(title: "Couldn't save recipe", message: "Select an image for your recipe", preset: SPAlertIconPreset.error)
@@ -338,7 +338,7 @@ struct NewPostView: View {
             uploadImage()
         }
     }
-    
+    //I start with uploading image and when finished I move on to save recipe
     private func uploadImage() {
         
         let storageRef = Storage.storage().reference()
@@ -365,6 +365,7 @@ struct NewPostView: View {
             }
         }
     }
+    //When saving recipe I save the post with two subcollection in the same document.
     private func saveRecipePost(imageUrl: String) {
         let refId = UUID().uuidString
         

@@ -8,6 +8,9 @@
 import SwiftUI
 import URLImage
 
+/*
+ This is the view for the favorite recipes diplayed in myBook view. I use URLImage to load the image into the view, while loading I display a progressView. Below the image I display the recipe title and author.
+ */
 struct RecipeView: View {
     
     var favorite: RecipePost
