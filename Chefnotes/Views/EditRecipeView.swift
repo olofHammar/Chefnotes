@@ -173,16 +173,28 @@ struct EditRecipeView: View {
                         }
                     }
                     Section {
-                        Button (action: { checkRecipeStatus() }) {
+                        Button(action: { checkRecipeStatus() }) {
                             Text("Update Recipe")
                         }
                         .blueButtonStyle()
-                        .padding(.bottom)
                     }
                     .listRowBackground(Color("ColorBackgroundButton"))
                     .background(Color("ColorBackgroundButton"))
-
-                    
+                    Section {
+                        Button(action: { deleteRecipePost(completion: {_ in
+                            showDeleteAlert()
+                        }) }) {
+                            HStack{
+                                Spacer()
+                            Text("Delete Recipe")
+                                .foregroundColor(.red)
+                                Spacer()
+                            }
+                        }
+                        .background(Color.clear)
+                        .padding(.bottom)
+                    }
+                    .listRowBackground(Color("ColorBackgroundButton"))
                 }
             }
             .sheet(isPresented: $showImagePicker) {
@@ -375,14 +387,6 @@ struct EditRecipeView: View {
             }
         }
     }
-//    private func saveNewSteps(refId: String) {
-//        if steps.count > 0 {
-//            for i in 0...steps.count-1 {
-//                let step = steps[i].dictionary
-//                fireStoreSubmitSteps(docRefString: "recipe/\(refId)", dataToSave: step) { _ in}
-//            }
-//        }
-//    }
     private func checkRecipeStatus() {
         if image == nil {
             updateRecipePost(imageUrl: "") 
@@ -476,7 +480,24 @@ struct EditRecipeView: View {
             showUpdateAlert()            
         })
     }
-    func getUsers(completion: @escaping (Any) -> Void) {
+    private func deleteRecipePost(completion: @escaping (Any) -> Void) {
+        let db = Firestore.firestore()
+        isLoading = true
+        getUsers(completion: {_ in
+            deleteOtherUsersFavoriteRecipe(userIds: self.users, refString: thisRecipe.refId)
+        })
+        deleteIngredients(refId: thisRecipe.refId, completion: {_ in})
+        deleteSteps(refId: thisRecipe.refId, completion: {_ in})
+        deleteOldImage()
+        db.collection("recipe").document(thisRecipe.refId).delete() { err in
+            if let err = err {
+                print("Error removing document: \(err)")
+            } else {
+                print("Document successfully removed!")
+            }
+        }
+    }
+    private func getUsers(completion: @escaping (Any) -> Void) {
         
         let db = Firestore.firestore()
         db.collection("users").getDocuments() { (querySnapshot, err) in
@@ -491,8 +512,13 @@ struct EditRecipeView: View {
             }
         }
     }
-    func showUpdateAlert() {
+    private func showUpdateAlert() {
         let alertView = SPAlertView(title: "Recipe updated!", message: "The recipe has been updated in your book.", preset: SPAlertIconPreset.done)
+        alertView.present(duration: 2)
+    }
+    private func showDeleteAlert() {
+        isLoading = false
+        let alertView = SPAlertView(title: "Recipe deleted!", message: "The recipe has been deleted from your book.", preset: SPAlertIconPreset.done)
         alertView.present(duration: 2)
     }
 }
