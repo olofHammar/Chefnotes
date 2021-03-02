@@ -24,6 +24,7 @@ struct EditRecipeView: View {
     @State var showSheet = false
     @State var isLoading = false
     @State var showHalfModal = false
+    @State private var showingDeleteAlert = false
     
     @State var halfModalTitle = ""
     @State var halfModalPlaceHolder = ""
@@ -181,9 +182,7 @@ struct EditRecipeView: View {
                     .listRowBackground(Color("ColorBackgroundButton"))
                     .background(Color("ColorBackgroundButton"))
                     Section {
-                        Button(action: { deleteRecipePost(completion: {_ in
-                            showDeleteAlert()
-                        }) }) {
+                        Button(action: { showDeleteRecipeAlert() }) {
                             HStack{
                                 Spacer()
                             Text("Delete Recipe")
@@ -196,6 +195,18 @@ struct EditRecipeView: View {
                     }
                     .listRowBackground(Color("ColorBackgroundButton"))
                 }
+            }
+            .alert(isPresented: $showingDeleteAlert) {
+                Alert(
+                    title: Text("Are you sure you want to delete this recipe?"),
+                    message: Text("There is no undo"),
+                    primaryButton: .destructive(Text("Delete")) {
+                        deleteRecipePost(completion: {_ in
+                            showDeleteAlert()
+                        })
+                    },
+                    secondaryButton: .cancel()
+                )
             }
             .sheet(isPresented: $showImagePicker) {
                 VStack{
@@ -302,6 +313,9 @@ struct EditRecipeView: View {
     }
     private func showActionSheet() {
         showSheet.toggle()
+    }
+    private func showDeleteRecipeAlert() {
+        showingDeleteAlert.toggle()
     }
     private func getCategory(recipe: RecipePost) {
         if thisRecipe.category == "Basics" {
@@ -483,6 +497,7 @@ struct EditRecipeView: View {
     private func deleteRecipePost(completion: @escaping (Any) -> Void) {
         let db = Firestore.firestore()
         isLoading = true
+        newImageAdded = true
         getUsers(completion: {_ in
             deleteOtherUsersFavoriteRecipe(userIds: self.users, refString: thisRecipe.refId)
         })
