@@ -24,6 +24,7 @@ struct SignUpView: View {
     @State private var lastName: String = ""
     @State private var password: String = ""
     @State private var email: String = ""
+    @State private var isLoading = false
     @State private var docRef: DocumentReference!
     
     
@@ -54,16 +55,22 @@ struct SignUpView: View {
                     }
                     }
                 }
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                        .scaleEffect(3)
+                }
             }
             .navigationBarTitle("Create Account")
         }.modifier(DarkModeViewModifier())
     }
     func saveUserInAuth(email: String, password: String) {
-        
+        isLoading = true
         session.unbind()
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             
             if let err = error{
+                isLoading = false
                 let alertView = SPAlertView(title: "Error ", message: "\(err.localizedDescription)", preset: SPAlertIconPreset.error)
                 alertView.present(duration: 3)
                 return
@@ -93,10 +100,13 @@ struct SignUpView: View {
                 print("error = \(error)")
             }
             else {
+                isLoading = false
+                session.signOut()
+                session.unbind()
                 let alertView = SPAlertView(title: "Account created succefully", message: "Go to back to login to enter your account", preset: SPAlertIconPreset.done)
                 
                 alertView.present(duration: 3)
-                print("no error")
+                print("\(Auth.auth().currentUser?.email)")
                 firstName = ""
                 lastName = ""
                 password = ""
