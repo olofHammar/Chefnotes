@@ -29,54 +29,46 @@ struct LogInView: View {
     
     var body: some View {
         
-        NavigationView {
-            ZStack {
-                Color("ColorBackgroundButton")
-                VStack {
+      //  NavigationView {
+            // Color("ColorBackgroundButton")
+            Form {
+                Section {
                     ZStack {
                         CircleImageView(image: Image("aubergine"))
                             .frame(width: 200)
-                        
                         Image("chefnotes_logo")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 300, height: 250)
                     }
-                    Form {
-                        Section {
-                            TextField("Enter E-mail", text: $email)
-                            SecureField("Enter password", text: $password)
-                        }
-                        Section {
-                            
-                            Button(action: { signIn(email: email, password: password) })
-                            {
-                                Text("Log in")
-                                
-                            }
-                            .blueButtonStyle()
-                            .listRowBackground(Color("ColorBackgroundButton"))
-                            
-                            Button(action: { self.signUpVisible.toggle() })
-                            {
-                                HStack {
-                                    Spacer()
-                                    Text("Or click here to sign up").font(.footnote)
-                                    Spacer()
-                                }
-                            }
-                            .background(Color.clear)
-                            .foregroundColor(.blue)
-                            .sheet(isPresented: $signUpVisible, content:{ SignUpView() })
-                        }
-                        .listRowBackground(Color("ColorBackgroundButton"))
-                        
-                    }
-                    .padding(.bottom, 100)
+                }.listRowBackground(Color("ColorBackgroundButton"))
+                Section {
+                    TextField("Enter E-mail", text: $email)
+                    SecureField("Enter password", text: $password)
                 }
-            }
-            .navigationBarTitle("Log in")
-        }
+                Section {
+                    Button(action: { signIn(email: email, password: password) })
+                    {
+                        Text("Log in")
+                    }
+                    .blueButtonStyle()
+                    .listRowBackground(Color("ColorBackgroundButton"))
+                    
+                    Button(action: { self.signUpVisible.toggle() })
+                    {
+                        HStack {
+                            Spacer()
+                            Text("Or click here to sign up").font(.footnote)
+                            Spacer()
+                        }
+                    }
+                    .background(Color.clear)
+                    .foregroundColor(.blue)
+                    .sheet(isPresented: $signUpVisible, content:{ SignUpView() })
+                }
+                .listRowBackground(Color("ColorBackgroundButton"))
+            }.background(Color("ColorBackgroundButton"))
+       // }
     }
     
     func signIn(email: String, password: String) {

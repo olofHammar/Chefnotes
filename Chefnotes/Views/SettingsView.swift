@@ -91,6 +91,7 @@ struct SettingsView: View {
                             }
                         }
                         if changePassword {
+                            
                             TextField("Current password", text: $currentPassword)
                                 .autocapitalization(.none)
                             TextField("New password", text: $newPassword)
