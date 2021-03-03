@@ -203,10 +203,7 @@ struct EditRecipeView: View {
                     title: Text("Are you sure you want to delete this recipe?"),
                     message: Text("There is no undo"),
                     primaryButton: .destructive(Text("Delete")) {
-                        deleteRecipePost(completion: {_ in
-                            isLoading = false
-                            showDeleteAlert()
-                        })
+                        deleteRecipePost()
                     },
                     secondaryButton: .cancel()
                 )
@@ -502,7 +499,7 @@ struct EditRecipeView: View {
             showUpdateAlert()            
         })
     }
-    private func deleteRecipePost(completion: @escaping (Any) -> Void) {
+    private func deleteRecipePost() {
         let db = Firestore.firestore()
         isLoading = true
         newImageAdded = true
@@ -517,9 +514,10 @@ struct EditRecipeView: View {
                 print("Error removing document: \(err)")
             } else {
                 print("Document successfully removed!")
+                isLoading = false
+                showDeleteAlert()
             }
         }
-        completion(true)
     }
     private func getUsers(completion: @escaping (Any) -> Void) {
         

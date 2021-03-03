@@ -29,7 +29,7 @@ struct LogInView: View {
     
     var body: some View {
         
-      //  NavigationView {
+        NavigationView {
             // Color("ColorBackgroundButton")
             Form {
                 Section {
@@ -68,7 +68,7 @@ struct LogInView: View {
                 }
                 .listRowBackground(Color("ColorBackgroundButton"))
             }.background(Color("ColorBackgroundButton"))
-       // }
+        }
     }
     
     func signIn(email: String, password: String) {
