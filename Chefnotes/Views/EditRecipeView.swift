@@ -204,6 +204,7 @@ struct EditRecipeView: View {
                     message: Text("There is no undo"),
                     primaryButton: .destructive(Text("Delete")) {
                         deleteRecipePost(completion: {_ in
+                            isLoading = false
                             showDeleteAlert()
                         })
                     },
@@ -518,6 +519,7 @@ struct EditRecipeView: View {
                 print("Document successfully removed!")
             }
         }
+        completion(true)
     }
     private func getUsers(completion: @escaping (Any) -> Void) {
         
