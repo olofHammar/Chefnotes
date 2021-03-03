@@ -77,7 +77,7 @@ struct NewPostView: View {
                         }
                         .padding(.top)
                         Section(header: Text("Enter title")) {
-                            TextField("Add title", text: $title).KeyboardAwarePadding()
+                            TextField("Add title", text: $title)
                         }
                         Section(header: Text("Select category")) {
                             HStack {

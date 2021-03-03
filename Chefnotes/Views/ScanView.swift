@@ -106,14 +106,13 @@ struct ScanView: View {
                         }
                     }
                     Section {
-                        TextEditor(text: $stringToEdit)
+                        TextField("This field can be edited", text: $stringToEdit)
                         Button(action: { showSelections() })
                         {
                             Text("Save item as...")
                         }
-                        
                     }
-                    Section {
+                    Section (footer: Text("Make sure to add and edit ingredients and instruction here. This can not be done in the next step.").multilineTextAlignment(.center)) {
                         Button (action: { showSaveView() })
                         {
                             Text("Next")
@@ -123,6 +122,7 @@ struct ScanView: View {
                             ScanSaveView(title: $title, ingredients: $ingredients, steps: $steps, wordList: $wordList, passedImage: $image)
                         }
                     }
+                    .padding(.bottom)
                     .listRowBackground(Color("ColorBackgroundButton"))
                     .background(Color("ColorBackgroundButton"))
                 }

@@ -104,7 +104,7 @@ struct EditRecipeView: View {
                     .padding(.top)
                     
                     Section(header: Text("Edit title")) {
-                        TextField("Add title", text: $thisRecipe.title).KeyboardAwarePadding()
+                        TextField("Add title", text: $thisRecipe.title)
                     }
                     
                     Section(header: Text("Edit category")) {

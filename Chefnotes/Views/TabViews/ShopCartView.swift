@@ -38,7 +38,7 @@ struct ShopCartView: View {
                                         Button(action: { checkItemStatus(item: item)})
                                         {
                                             Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
-                                                .font(.system(size: 21, weight: .medium))
+                                                .font(.system(size: 27, weight: .light))
                                                 .foregroundColor(.blue)
                                         }.buttonStyle(PlainButtonStyle())
                                         Text(filteredText)

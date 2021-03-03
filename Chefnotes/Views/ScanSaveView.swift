@@ -65,8 +65,8 @@ struct ScanSaveView: View {
                             .padding(.bottom)
                         }
                         .padding(.top)
-                        Section(header: Text("Enter title")) {
-                            TextField("Add title", text: $title).KeyboardAwarePadding()
+                        Section(header: Text("Title")) {
+                            TextField("Add title", text: $title)
                         }
                         Section(header: Text("Select category")) {
                             HStack {
