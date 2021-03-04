@@ -50,8 +50,9 @@ struct LogInView: View {
                     Button(action: { signIn(email: email, password: password) })
                     {
                         Text("Log in")
+                            .blueButtonStyle()
                     }
-                    .blueButtonStyle()
+                    .buttonStyle(PlainButtonStyle())
                     .listRowBackground(Color("ColorBackgroundButton"))
                     
                     Button(action: { self.signUpVisible.toggle() })

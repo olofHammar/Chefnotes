@@ -116,8 +116,8 @@ struct ScanView: View {
                         Button (action: { showSaveView() })
                         {
                             Text("Next")
-                        }
-                        .blueButtonStyle()
+                                .blueButtonStyle()
+                        }.buttonStyle(PlainButtonStyle())
                         .fullScreenCover(isPresented: $isPresented) {
                             ScanSaveView(title: $title, ingredients: $ingredients, steps: $steps, wordList: $wordList, passedImage: $image)
                         }

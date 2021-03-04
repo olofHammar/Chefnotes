@@ -121,8 +121,9 @@ struct ScanSaveView: View {
                         Section {
                             Button (action: { checkRecipeStatus()}) {
                                 Text("Save Recipe")
+                                    .blueButtonStyle()
                             }
-                            .blueButtonStyle()
+                            .buttonStyle(PlainButtonStyle())
                             .padding(.bottom)
                         }
                         .listRowBackground(Color("ColorBackgroundButton"))

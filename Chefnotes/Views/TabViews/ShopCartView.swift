@@ -58,8 +58,9 @@ struct ShopCartView: View {
                             self.showHalfModal.toggle()
                         }){
                             Text("Add item")
+                                .blueButtonStyle()
                         }
-                        .blueButtonStyle()
+                        .buttonStyle(PlainButtonStyle())
                         .listRowBackground(Color("ColorBackgroundButton"))
                     }
                 }
@@ -91,8 +92,9 @@ struct ShopCartView: View {
                             Button (action: {self.hideModal()})
                             {
                                 Text("Done")
+                                    .blueButtonStyle()
                             }
-                            .blueButtonStyle()
+                            .buttonStyle(PlainButtonStyle())
                             .listRowBackground(Color("ColorBackgroundButton"))
                         }
                     }
