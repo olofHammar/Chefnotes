@@ -43,7 +43,7 @@ class SessionStore: ObservableObject {
             return false
         }
     }
-
+    
     func unbind () {
         if let handle = handle {
             Auth.auth().removeStateDidChangeListener(handle)

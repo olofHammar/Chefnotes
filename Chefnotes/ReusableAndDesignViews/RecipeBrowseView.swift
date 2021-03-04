@@ -25,30 +25,30 @@ struct RecipeBrowseView: View {
         
         ZStack {
             GeometryReader { geo in
-            URLImage(url: url,
-                     empty: {
-                        Image("default_image")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: UIScreen.main.bounds.width, height: 400)
-                            .clipped()
-                     },
-                     inProgress: { progress in
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .primary))
-                            .scaleEffect(3)
-                            .frame(width: UIScreen.main.bounds.width, height: 400)
-                     },
-                     failure: { error, retry in
-                        Text("Failed loading image")
-                            .frame(width: UIScreen.main.bounds.width, height: 400)
-                     },
-                     content: { image, info in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: geo.size.width)
-                     })
+                URLImage(url: url,
+                         empty: {
+                            Image("default_image")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: UIScreen.main.bounds.width, height: 400)
+                                .clipped()
+                         },
+                         inProgress: { progress in
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                                .scaleEffect(3)
+                                .frame(width: UIScreen.main.bounds.width, height: 400)
+                         },
+                         failure: { error, retry in
+                            Text("Failed loading image")
+                                .frame(width: UIScreen.main.bounds.width, height: 400)
+                         },
+                         content: { image, info in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: geo.size.width)
+                         })
             }
             LinearGradient(gradient: Gradient(colors: [Color.clear, Color.clear, Color.black.opacity(0.5)]), startPoint: .bottom, endPoint: .top)
                 .frame(width: UIScreen.main.bounds.width-40, height: postHeight)

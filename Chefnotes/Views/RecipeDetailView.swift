@@ -58,7 +58,7 @@ struct RecipeDetailView: View {
                                 .frame(width: UIScreen.main.bounds.width, height: 400)
                                 .clipped()
                          })
-
+                
                 HStack {
                     Text(thisRecipe.title)
                         .subtitleFontStyle()
@@ -84,16 +84,16 @@ struct RecipeDetailView: View {
                         .subtitleFontStyle()
                         .padding()
                     Spacer()
-                        Button(action: {
-                            uploadList(completion: {_ in
-                                showAlertItemAdded()
-                            })
-                        }){
-                            Image(systemName: "cart")
-                            Text("Add to shoppinglist")
-                                .font(.subheadline)
-                        }.padding(.trailing)
-                        
+                    Button(action: {
+                        uploadList(completion: {_ in
+                            showAlertItemAdded()
+                        })
+                    }){
+                        Image(systemName: "cart")
+                        Text("Add to shoppinglist")
+                            .font(.subheadline)
+                    }.padding(.trailing)
+                    
                     
                 }
                 VStack(alignment: .leading, spacing: 5) {
@@ -209,7 +209,7 @@ struct RecipeDetailView: View {
         }
     }
     private func addToShoppingList(refId: String, dataToSave: [String:Any]) {
-
+        
         let ref = db.collection("users").document(env.currentUser.id)
         let docRef = ref.collection("shoppingList").document(refId)
         print("Setting data")

@@ -155,7 +155,7 @@ struct EditRecipeView: View {
                                 self.showHalfModal.toggle()}) {
                             Text("Add ingredients")
                         }
-                    }
+                                }
                     Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
                                 .overlay(Text("Edit steps"), alignment: .leading)) {
                         
@@ -174,7 +174,7 @@ struct EditRecipeView: View {
                         }) {
                             Text("Add steps")
                         }
-                    }
+                                }
                     Section {
                         Button(action: { checkRecipeStatus() }) {
                             Text("Update Recipe")
@@ -188,8 +188,8 @@ struct EditRecipeView: View {
                         Button(action: { showDeleteRecipeAlert() }) {
                             HStack{
                                 Spacer()
-                            Text("Delete Recipe")
-                                .foregroundColor(.red)
+                                Text("Delete Recipe")
+                                    .foregroundColor(.red)
                                 Spacer()
                             }
                         }
