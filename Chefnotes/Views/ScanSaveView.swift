@@ -108,15 +108,15 @@ struct ScanSaveView: View {
                         Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
                                     .overlay(Text("Added instructions"), alignment: .leading)) {
                             
-                                if steps.count > 0 {
-                                    ForEach(steps, id: \.id) { thisStep in
-                                        Text("\(thisStep.orderNumber+1) " + thisStep.description)
-                                    }.onDelete(perform: self.deleteStep)
-                                    .onMove(perform: moveInstruction)
-                                }
-                                else {
-                                    Text("List is empty")
-                                }
+                            if steps.count > 0 {
+                                ForEach(steps, id: \.id) { thisStep in
+                                    Text("\(thisStep.orderNumber+1) " + thisStep.description)
+                                }.onDelete(perform: self.deleteStep)
+                                .onMove(perform: moveInstruction)
+                            }
+                            else {
+                                Text("List is empty")
+                            }
                         }
                         Section {
                             Button (action: { checkRecipeStatus()}) {
@@ -128,7 +128,7 @@ struct ScanSaveView: View {
                         }
                         .listRowBackground(Color("ColorBackgroundButton"))
                         .background(Color("ColorBackgroundButton"))
-
+                        
                     }
                     .navigationTitle("Save recipe")
                     .navigationBarTitleDisplayMode(.inline)

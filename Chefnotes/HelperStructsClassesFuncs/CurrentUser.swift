@@ -16,7 +16,7 @@ import Firebase
  */
 
 class CurrentUser: Identifiable {
-        
+    
     var id : String
     var firstName: String
     var lastName: String
@@ -36,17 +36,17 @@ class GlobalEnviroment: ObservableObject {
     
     @Published var currentUser: CurrentUser = CurrentUser.init(id: "", firstName: "", lastName: "", password: "", email: "")
     @Published var favoriteRecipes = [RecipePost]()
-            
+    
     func getFavoriteRecipes() {
-
+        
         let db = Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")")
         let docRef = db.collection("favoriteRecipes")
-            docRef.addSnapshotListener { (querySnapshot, error) in
+        docRef.addSnapshotListener { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
                 print("No documents")
                 return
             }
-                self.favoriteRecipes = documents.map { queryDocumentSnapshot -> RecipePost in
+            self.favoriteRecipes = documents.map { queryDocumentSnapshot -> RecipePost in
                 
                 let data = queryDocumentSnapshot.data()
                 let refId = data["refId"] as? String ?? ""

@@ -40,187 +40,187 @@ struct NewPostView: View {
     @State private var categoryOptionTag: Int = 0
     private var categoryOptions = ["Basics", "Starters", "Snacks", "Vegetarian", "Meat", "Fish & Seafood", "Pasta", "Baking", "Deserts"]
     private var amountUnit = ["g", "kg", "ml", "l", "tsp", "tbs", "psc", "sprigs"]
-
+    
     var body: some View {
         
-            ZStack {
+        ZStack {
+            VStack {
+                Form {
+                    Section(header: Text("Add image"), footer: Text("Click the default-image to select a new image.")) {
+                        ZStack {
+                            Button(action: { showActionSheet() }) {
+                                if image != nil {
+                                    Image(uiImage: image!)
+                                        .newRecipeImageStyle()
+                                }
+                                else {
+                                    Image("default_image")
+                                        .newRecipeImageStyle()
+                                }
+                            }
+                            .actionSheet(isPresented: $showSheet) {
+                                ActionSheet(title: Text("Add a picture to your post"), message: nil, buttons: [
+                                    .default(Text("Camera"), action: {
+                                        self.showImagePicker = true
+                                        self.sourceType = .camera
+                                    }),
+                                    .default(Text("Library"), action: {
+                                        self.showImagePicker = true
+                                        self.sourceType = .photoLibrary
+                                    }),
+                                    .cancel()
+                                ])
+                            }
+                        }
+                        .padding(.vertical)
+                        .padding(.bottom)
+                    }
+                    .padding(.top)
+                    Section(header: Text("Enter title")) {
+                        TextField("Add title", text: $title)
+                    }
+                    Section(header: Text("Select category")) {
+                        HStack {
+                            Picker("Category", selection: $categoryOptionTag) {
+                                Text("Basics").tag(0)
+                                Text("Starters").tag(1)
+                                Text("Snacks").tag(2)
+                                Text("Vegetarian").tag(3)
+                                Text("Meat").tag(4)
+                                Text("Fish & Seafood").tag(5)
+                                Text("Pasta").tag(6)
+                                Text("Baking").tag(7)
+                                Text("Deserts").tag(8)
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            Spacer()
+                            Text(categoryOptions[categoryOptionTag])
+                        }
+                    }
+                    Section(header: Text("Select number of servings")) {
+                        Stepper(value: $serves, in: 1...50) {
+                            Text("Serves: \(serves)")
+                        }
+                    }
+                    Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
+                                .overlay(Text("Added ingredients"), alignment: .leading)) {
+                        List {
+                            if ingredients.count > 0 {
+                                ForEach(ingredients, id: \.id) { ingredient in
+                                    Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
+                                    
+                                }.onDelete(perform: self.deleteIngredient)
+                                .onMove(perform: moveIngredient)
+                            }
+                            else {
+                                Text("List is empty")
+                            }
+                        }
+                        Button(action: {
+                                self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: halfModalHeight)
+                                self.showHalfModal.toggle()}) {
+                            Text("Add ingredients")
+                        }
+                                }
+                    
+                    Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
+                                .overlay(Text("Added instructions"), alignment: .leading)) {
+                        
+                        if steps.count > 0 {
+                            ForEach(steps, id: \.id) { thisStep in
+                                Text("\(thisStep.orderNumber+1) " + thisStep.description)
+                            }.onDelete(perform: self.deleteStep)
+                            .onMove(perform: moveInstruction)
+                        }
+                        else {
+                            Text("List is empty")
+                        }
+                        Button(action: {
+                            self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
+                            self.showHalfModal.toggle()
+                        }) {
+                            Text("Add steps")
+                        }
+                                }
+                    Section {
+                        Button (action: {checkRecipeStatus()}) {
+                            Text("Save Recipe")
+                                .blueButtonStyle()
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                    .listRowBackground(Color("ColorBackgroundButton"))
+                    .background(Color("ColorBackgroundButton"))
+                }
+            }
+            .sheet(isPresented: $showImagePicker) {
+                VStack{
+                    imagePicker(image: self.$image, isPresented: $showImagePicker, sourceType: self.sourceType)
+                }
+            }
+            HalfModalView(isShown: $showHalfModal) {
                 VStack {
                     Form {
-                        Section(header: Text("Add image"), footer: Text("Click the default-image to select a new image.")) {
-                            ZStack {
-                                Button(action: { showActionSheet() }) {
-                                        if image != nil {
-                                            Image(uiImage: image!)
-                                                .newRecipeImageStyle()
-                                        }
-                                        else {
-                                            Image("default_image")
-                                                .newRecipeImageStyle()
-                                        }
-                                }
-                                .actionSheet(isPresented: $showSheet) {
-                                    ActionSheet(title: Text("Add a picture to your post"), message: nil, buttons: [
-                                        .default(Text("Camera"), action: {
-                                            self.showImagePicker = true
-                                            self.sourceType = .camera
-                                        }),
-                                        .default(Text("Library"), action: {
-                                            self.showImagePicker = true
-                                            self.sourceType = .photoLibrary
-                                        }),
-                                        .cancel()
-                                    ])
-                                }
-                            }
-                            .padding(.vertical)
-                            .padding(.bottom)
-                        }
-                        .padding(.top)
-                        Section(header: Text("Enter title")) {
-                            TextField("Add title", text: $title)
-                        }
-                        Section(header: Text("Select category")) {
-                            HStack {
-                                Picker("Category", selection: $categoryOptionTag) {
-                                    Text("Basics").tag(0)
-                                    Text("Starters").tag(1)
-                                    Text("Snacks").tag(2)
-                                    Text("Vegetarian").tag(3)
-                                    Text("Meat").tag(4)
-                                    Text("Fish & Seafood").tag(5)
-                                    Text("Pasta").tag(6)
-                                    Text("Baking").tag(7)
-                                    Text("Deserts").tag(8)
+                        if newItemType == .Ingredient {
+                            Section(header: Text("Enter \(self.halfModalPlaceHolder)")) {
+                                HStack {
+                                    TextField("Quantity", text: $halfModalTextFieldOneVal)
+                                        .keyboardType(.decimalPad)
+                                    
+                                    Picker("Unit", selection: $ingredientUnitIndex) {
+                                        Text("g").tag(0)
+                                        Text("kg").tag(1)
+                                        Text("ml").tag(2)
+                                        Text("l").tag(3)
+                                        Text("tsp").tag(4)
+                                        Text("tbs").tag(5)
+                                        Text("psc").tag(6)
+                                        Text("sprigs").tag(7)
+                                    }
+                                    .pickerStyle(MenuPickerStyle())
+                                    Spacer()
+                                    Text(amountUnit[ingredientUnitIndex])
+                                        .padding()
                                 }
                                 .pickerStyle(MenuPickerStyle())
-                                Spacer()
-                                Text(categoryOptions[categoryOptionTag])
+                                TextField("\(self.halfModalPlaceHolder)", text: $halfModalTextFieldTwoVal)
                             }
                         }
-                        Section(header: Text("Select number of servings")) {
-                            Stepper(value: $serves, in: 1...50) {
-                                Text("Serves: \(serves)")
-                            }
-                        }
-                        Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
-                                    .overlay(Text("Added ingredients"), alignment: .leading)) {
-                            List {
-                                if ingredients.count > 0 {
-                                    ForEach(ingredients, id: \.id) { ingredient in
-                                        Text("\(ingredient.amount.stringWithoutZeroFractions) \(ingredient.amountUnit) \(ingredient.name)")
-
-                                    }.onDelete(perform: self.deleteIngredient)
-                                    .onMove(perform: moveIngredient)
-                                }
-                                else {
-                                    Text("List is empty")
-                                }
-                            }
-                            Button(action: {
-                                    self.updateHalfModal(placeHolder: "Ingredient", itemType: .Ingredient, height: halfModalHeight)
-                                    self.showHalfModal.toggle()}) {
-                                Text("Add ingredients")
-                            }
-                        }
-
-                        Section(header: EditButton().frame(maxWidth: .infinity, alignment: .trailing)
-                                    .overlay(Text("Added instructions"), alignment: .leading)) {
+                        else if newItemType == .Step {
+                            TextField("\(self.halfModalPlaceHolder)", text: $halfModalTextFieldTwoVal)
                             
-                                if steps.count > 0 {
-                                    ForEach(steps, id: \.id) { thisStep in
-                                        Text("\(thisStep.orderNumber+1) " + thisStep.description)
-                                    }.onDelete(perform: self.deleteStep)
-                                    .onMove(perform: moveInstruction)
-                                }
-                                else {
-                                    Text("List is empty")
-                                }
-                            Button(action: {
-                                self.updateHalfModal(placeHolder: "Step", itemType: .Step, height: halfModalHeight)
-                                self.showHalfModal.toggle()
-                            }) {
-                                Text("Add steps")
+                        }
+                        Button(action: {self.addNewItem()}) {
+                            if newItemType == .Ingredient {
+                                Text("Add ingredient")
+                            }
+                            else {
+                                Text("Add step")
                             }
                         }
                         Section {
-                            Button (action: {checkRecipeStatus()}) {
-                                Text("Save Recipe")
+                            Button (action: {
+                                self.hideModal()
+                            }) {
+                                Text("Done")
                                     .blueButtonStyle()
                             }
                             .buttonStyle(PlainButtonStyle())
-                        }
-                        .listRowBackground(Color("ColorBackgroundButton"))
-                        .background(Color("ColorBackgroundButton"))
-                    }
-                }
-                .sheet(isPresented: $showImagePicker) {
-                    VStack{
-                        imagePicker(image: self.$image, isPresented: $showImagePicker, sourceType: self.sourceType)
-                    }
-                }
-                HalfModalView(isShown: $showHalfModal) {
-                    VStack {
-                        Form {
-                            if newItemType == .Ingredient {
-                                Section(header: Text("Enter \(self.halfModalPlaceHolder)")) {
-                                    HStack {
-                                        TextField("Quantity", text: $halfModalTextFieldOneVal)
-                                            .keyboardType(.decimalPad)
-                                        
-                                        Picker("Unit", selection: $ingredientUnitIndex) {
-                                            Text("g").tag(0)
-                                            Text("kg").tag(1)
-                                            Text("ml").tag(2)
-                                            Text("l").tag(3)
-                                            Text("tsp").tag(4)
-                                            Text("tbs").tag(5)
-                                            Text("psc").tag(6)
-                                            Text("sprigs").tag(7)
-                                        }
-                                        .pickerStyle(MenuPickerStyle())
-                                        Spacer()
-                                        Text(amountUnit[ingredientUnitIndex])
-                                            .padding()
-                                    }
-                                    .pickerStyle(MenuPickerStyle())
-                                    TextField("\(self.halfModalPlaceHolder)", text: $halfModalTextFieldTwoVal)
-                                }
-                            }
-                            else if newItemType == .Step {
-                                TextField("\(self.halfModalPlaceHolder)", text: $halfModalTextFieldTwoVal)
-                                
-                            }
-                            Button(action: {self.addNewItem()}) {
-                                if newItemType == .Ingredient {
-                                    Text("Add ingredient")
-                                }
-                                else {
-                                    Text("Add step")
-                                }
-                            }
-                            Section {
-                                Button (action: {
-                                    self.hideModal()
-                                }) {
-                                    Text("Done")
-                                        .blueButtonStyle()
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                                .listRowBackground(Color("ColorBackgroundButton"))
-                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
-                            }
+                            .listRowBackground(Color("ColorBackgroundButton"))
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         }
                     }
                 }
-                //IsLoading is displayed while uploading recipe
-                if isLoading {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .primary))
-                        .scaleEffect(3)
-                }
-                
             }
-            .navigationTitle("Write recipe")
+            //IsLoading is displayed while uploading recipe
+            if isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                    .scaleEffect(3)
+            }
+            
+        }
+        .navigationTitle("Write recipe")
     }
     private func deleteIngredient(at indexSet: IndexSet) {
         self.ingredients.remove(atOffsets: indexSet)

@@ -53,24 +53,24 @@ struct SearchView: View {
         
         db.collection("recipe")
             .addSnapshotListener { (querySnapshot, error) in
-            guard let documents = querySnapshot?.documents else {
-                print("No documents")
-                return
+                guard let documents = querySnapshot?.documents else {
+                    print("No documents")
+                    return
+                }
+                self.recipes = documents.map { queryDocumentSnapshot -> RecipePost in
+                    
+                    let data = queryDocumentSnapshot.data()
+                    let refId = data["refId"] as? String ?? ""
+                    let title = data["title"] as? String ?? ""
+                    let serves = data["serves"] as? Int ?? 0
+                    let author = data["author"] as? String ?? ""
+                    let authorId = data["authorId"] as? String ?? ""
+                    let category = data["category"] as? String ?? ""
+                    let image = data["image"] as? String ?? ""
+                    
+                    return RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
+                }
             }
-            self.recipes = documents.map { queryDocumentSnapshot -> RecipePost in
-                
-                let data = queryDocumentSnapshot.data()
-                let refId = data["refId"] as? String ?? ""
-                let title = data["title"] as? String ?? ""
-                let serves = data["serves"] as? Int ?? 0
-                let author = data["author"] as? String ?? ""
-                let authorId = data["authorId"] as? String ?? ""
-                let category = data["category"] as? String ?? ""
-                let image = data["image"] as? String ?? ""
-                
-                return RecipePost(refId: refId, title: title, serves: serves, author: author, authorId: authorId, category: category, image: image)
-            }
-        }
     }
 }
 
