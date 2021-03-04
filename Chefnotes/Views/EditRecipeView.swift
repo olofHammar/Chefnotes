@@ -178,8 +178,9 @@ struct EditRecipeView: View {
                     Section {
                         Button(action: { checkRecipeStatus() }) {
                             Text("Update Recipe")
+                                .blueButtonStyle()
                         }
-                        .blueButtonStyle()
+                        .buttonStyle(PlainButtonStyle())
                     }
                     .listRowBackground(Color("ColorBackgroundButton"))
                     .background(Color("ColorBackgroundButton"))
@@ -258,8 +259,9 @@ struct EditRecipeView: View {
                                 self.hideModal()
                             }) {
                                 Text("Done")
+                                    .blueButtonStyle()
                             }
-                            .blueButtonStyle()
+                            .buttonStyle(PlainButtonStyle())
                             .listRowBackground(Color("ColorBackgroundButton"))
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                         }

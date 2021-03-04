@@ -145,8 +145,9 @@ struct NewPostView: View {
                         Section {
                             Button (action: {checkRecipeStatus()}) {
                                 Text("Save Recipe")
+                                    .blueButtonStyle()
                             }
-                            .blueButtonStyle()
+                            .buttonStyle(PlainButtonStyle())
                         }
                         .listRowBackground(Color("ColorBackgroundButton"))
                         .background(Color("ColorBackgroundButton"))
@@ -202,8 +203,9 @@ struct NewPostView: View {
                                     self.hideModal()
                                 }) {
                                     Text("Done")
+                                        .blueButtonStyle()
                                 }
-                                .blueButtonStyle()
+                                .buttonStyle(PlainButtonStyle())
                                 .listRowBackground(Color("ColorBackgroundButton"))
                                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                             }

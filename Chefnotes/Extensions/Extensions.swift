@@ -14,16 +14,6 @@ import URLImage
 //MARK ---------------------------> Buttons
 extension Button {
     
-    func blueButtonStyle() -> some View {
-        self
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
-            .padding()
-            .font(.headline)
-            .foregroundColor(.white)
-            .background(Color.blue)
-            .cornerRadius(12)
-    }
-    
     func smallTextButtonStyle() -> some View {
         self
             .padding(.horizontal)
@@ -34,6 +24,16 @@ extension Button {
 //MARK ---------------------------> Text
 
 extension Text {
+    
+    func blueButtonStyle() -> some View {
+        self
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+            .padding()
+            .font(.headline)
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(12)
+    }
     
     func subtitleFontStyle() -> some View {
         self

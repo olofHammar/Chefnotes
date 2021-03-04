@@ -45,14 +45,17 @@ struct SignUpView: View {
                         Section(footer: Text("Your password must be at least six figures long")) {
                             SecureField("Create password", text: $password)
                         }
-                    
-                    Section {
-                    Button(action: {saveUserInAuth(email: email, password: password)})
-                        {
-                        Text("Sign up")}
-                        .blueButtonStyle()
-                        .listRowBackground(Color("ColorBackground"))
-                    }
+                        
+                        Section {
+                            Button(action: {saveUserInAuth(email: email, password: password)})
+                            {
+                                Text("Sign up")
+                                    .blueButtonStyle()
+                                
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .listRowBackground(Color("ColorBackground"))
+                        }
                     }
                 }
                 if isLoading {
@@ -101,12 +104,14 @@ struct SignUpView: View {
             }
             else {
                 isLoading = false
+                /*
+                 Since auth signs in user when created I sign the user out here. This is to avoid bugs if a user is created and another user tries to log in on the same device close after.
+                 */
                 session.signOut()
                 session.unbind()
                 let alertView = SPAlertView(title: "Account created succefully", message: "Go to back to login to enter your account", preset: SPAlertIconPreset.done)
                 
                 alertView.present(duration: 3)
-                print("\(Auth.auth().currentUser?.email)")
                 firstName = ""
                 lastName = ""
                 password = ""
